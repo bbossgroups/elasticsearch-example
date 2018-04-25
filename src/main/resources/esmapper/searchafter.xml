@@ -1,0 +1,36 @@
+<properties>
+    <property name="searchAfterDSL">
+        <![CDATA[{
+            #*
+               以demoId,_uid为searchAfter的分页条件 _uid值格式type#_id 由索引类型加#号加id拼接而成
+               如果按照多个字段的值做searchAter分页，则用逗号分隔每个值
+            *#
+            #if($searchAfterId) ## 第一次检索的时候，没有searchAfterId变量，只有做翻页操作的时候才会传递代表分页起点的searchAfterId变量进来
+                 "search_after": [#[demoId],"demo#[searchAfterId,quoted=false,lpad=#]"],
+            #end
+            "size": $pageSize, ##searchAfter分页每页最多显示的记录条数
+            #*
+                searchAfter分页检索时，必须用翻页字段作为排序字段，这里是_uid,如果是多个字段，则按照searchAfter的顺序来设置对应的排序属性
+            *#
+            "sort": [
+                {"demoId": "asc"},
+                {"_uid": "asc"}
+            ],
+            ## 其他检索条件，按照时间范围查询数据，所有数据按照上面的searchAter机制进行分页
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "range": {
+                                "agentStarttime": {
+                                    "gte": #[startTime],
+                                    "lt": #[endTime]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }]]>
+    </property>
+</properties>
