@@ -11,7 +11,7 @@ maven坐标
 ```
 <dependency>
     <groupId>com.bbossgroups.plugins</groupId>
-    <artifactId>bboss-plugin-elasticsearch-</artifactId>
+    <artifactId>bboss-elasticsearch-rest-booter</artifactId>
     <version>5.0.6.1</version>
 </dependency>
 ```
