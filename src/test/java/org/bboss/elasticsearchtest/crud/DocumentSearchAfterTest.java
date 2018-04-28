@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.text.ParseException;
 
 public class DocumentSearchAfterTest {
+
 	@Test
 	public void testSeachAfter() throws ParseException {
 		DocumentSearchAfter documentSearchAfter = new DocumentSearchAfter();

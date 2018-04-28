@@ -25,7 +25,8 @@ public class Helloworld {
 
 		date = new Date(1520930340000l);
 		//创建es客户端工具，验证环境
-		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
+		clientUtil = ElasticSearchHelper.getRestClientUtil();
 		//验证环境,获取es状态
 		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
 

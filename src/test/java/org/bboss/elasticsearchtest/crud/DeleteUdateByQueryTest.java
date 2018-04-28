@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.text.ParseException;
 
 public class DeleteUdateByQueryTest {
+
 	@Test
 	public void testDeleteByQuery() throws ParseException {
 		DeleteUdateByQuery deleteUdateByQuery = new DeleteUdateByQuery();
