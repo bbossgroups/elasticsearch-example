@@ -45,3 +45,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/target/
+/.classpath
+/.project
+/.settings/
+/README.md.bak
+/common-1.log
+/eshelloword-booter.iml
+
+eshelloword-booter.iml
