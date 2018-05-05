@@ -17,6 +17,7 @@ package org.bboss.elasticsearchtest.crud;/*
 import org.frameworkset.elasticsearch.ElasticSearchException;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 
 import java.text.DateFormat;
@@ -27,20 +28,45 @@ import java.util.*;
 public class DocumentCRUD {
 	private String mappath = "esmapper/demo.xml";
 	public void testCreateIndice(){
-		//创建加载配置文件的客户端工具，单实例多线程安全，第一次运行要预加载，有点慢
+		//创建加载配置文件的客户端工具，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
 		try {
-			//先删除mapping
-			clientUtil.dropIndice("demo");
+			//判读索引表demo是否存在，存在返回true，不存在返回false
+			boolean exist = clientUtil.existIndice("demo");
+
+			//如果索引表demo已经存在先删除mapping
+			if(exist)
+				clientUtil.dropIndice("demo");
+			//创建索引表demo
+			clientUtil.createIndiceMapping("demo",//索引表名称
+					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//再创建mapping
-		clientUtil.createIndiceMapping("demo",//索引表名称
-				"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
-	}
 
+	}
+	public void testCreateTempate() throws ParseException{
+
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
+		//创建模板
+		String response = clientUtil.createTempate("demotemplate_1",//模板名称
+				"demoTemplate");//模板对应的脚本名称，在esmapper/demo.xml中配置
+		System.out.println("createTempate-------------------------");
+		System.out.println(response);
+		//获取模板
+		/**
+		 * 指定模板
+		 * /_template/demoTemplate_1
+		 * /_template/demoTemplate*
+		 * 所有模板 /_template
+		 *
+		 */
+		String template = clientUtil.executeHttp("/_template/demotemplate_1",ClientUtil.HTTP_GET);
+		System.out.println("HTTP_GET-------------------------");
+		System.out.println(template);
+
+	}
 	public void testAddAndUpdateDocument() throws ParseException {
 		//创建创建/修改/获取/删除文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();

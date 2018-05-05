@@ -285,4 +285,43 @@
     <property name="updatePartDocument">
         <![CDATA[{"applicationName" : #[applicationName],"agentStarttime" : #[agentStarttime],"contentbody" : #[contentbody]}]]>
     </property>
+
+    <property name="demoTemplate">
+        <![CDATA[{
+            "index_patterns": "demo-*", ## 5.x版本中请使用语法："template": "demo-*"
+            "settings": {
+                "number_of_shards": 30,
+                "number_of_replicas" : 2,
+                "index.refresh_interval": "5s"
+            },
+            "mappings": {
+                "demo": {
+                    "properties": {
+                        "contentbody": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "agentStarttime": {
+                            "type": "date",
+                            "format":"yyyy-MM-dd HH:mm:ss.SSS||yyyy-MM-dd'T'HH:mm:ss.SSS||yyyy-MM-dd HH:mm:ss||epoch_millis"
+                        },
+                        "applicationName": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }]]>
+    </property>
 </properties>
