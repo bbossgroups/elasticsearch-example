@@ -46,6 +46,15 @@ public class DocumentCRUD {
 		}
 
 	}
+	public void updateDemoIndice(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
+		//修改索引表demo中type为demo的mapping结构，增加email字段，对应的dsl片段updateDemoIndice定义在esmapper/demo.xml文件中
+		String response = clientUtil.executeHttp("demo/_mapping/demo","updateDemoIndice",ClientUtil.HTTP_PUT);
+		System.out.println(response);
+		//获取修改后的索引mapping结构
+		String mapping = clientUtil.getIndice("demo");
+		System.out.println(mapping);
+	}
 	public void testCreateTempate() throws ParseException{
 
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);

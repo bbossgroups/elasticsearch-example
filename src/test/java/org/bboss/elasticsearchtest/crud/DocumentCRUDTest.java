@@ -45,6 +45,9 @@ public class DocumentCRUDTest {
 		//带sourcefilter的文档检索操作
 		documentCRUD.testSearchSourceFilter();
 
+		documentCRUD.updateDemoIndice();
+
+
 
 	}
 

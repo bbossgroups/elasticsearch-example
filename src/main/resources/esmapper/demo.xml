@@ -324,4 +324,18 @@
             }
         }]]>
     </property>
+
+    <!--
+    修改demo 索引表的结构，增加email字段
+    https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html
+    -->
+    <property name="updateDemoIndice">
+        <![CDATA[{
+          "properties": {
+            "email": {
+              "type": "keyword"
+            }
+          }
+        }]]>
+    </property>
 </properties>
