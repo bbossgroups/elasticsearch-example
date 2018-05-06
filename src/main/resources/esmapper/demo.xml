@@ -92,7 +92,7 @@
                             "range": {
                                 "agentStarttime": {
                                     "gte": #[startTime],##统计开始时间，startTime为日期类型，#[startTime]自动对日期类型进行正确的格式化处理
-                                    "lt": "$endTime"  ## 统计截止时间,endTime为日期类型参数，但是$endTime变量不会对日期进行格式化处理，会有日期格式问题
+                                    "lt": "$endTime"  ## 统计截止时间,endTime为日期类型参数，但是$endTime变量不会对日期进行格式化处理，会有日期格式问题,这里会报错
                                 }
                             }
                         }
