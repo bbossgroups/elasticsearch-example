@@ -31,10 +31,73 @@
                             }
                         },
                         "name": {
-                            "type": "keyword"
+                            "type": "text"
                         }
                     }
                 }
+            }
+        }]]>
+    </property>
+
+
+
+    <!--
+        一个简单的检索dsl,中有四个变量
+        name 全文检索字段
+        startTime
+        endTime
+        通过map传递变量参数值
+
+        变量语法参考文档：https://my.oschina.net/bboss/blog/1556866
+    -->
+    <property name="testHighlightSearch">
+        <![CDATA[{
+            "query": {
+                "bool": {
+                    "filter": [
+                        {   ## 时间范围检索，返回对应时间范围内的记录，接受long型的值
+                            "range": {
+                                "agentStarttime": {
+                                    "gte": #[startTime],##统计开始时间
+                                    "lt": #[endTime]  ##统计截止时间
+                                }
+                            }
+                        }
+                    ],
+                    "must": [
+                        #*
+                        {
+                            "query_string": {
+                                "query": #[condition],
+                                "analyze_wildcard": true
+                            }
+                        }
+                        *#
+                        {
+                        ## 全文检索参考文档  https://www.elastic.co/guide/en/elasticsearch/reference/6.2/full-text-queries.html
+                            "match_phrase" : {
+                                "name" : {
+                                    "query" : #[condition]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            ## 最多返回1000条记录
+            "size":1000,
+            ## 高亮检索定义，参考文档：https://www.elastic.co/guide/en/elasticsearch/reference/6.2/search-request-highlighting.html
+            "highlight": {
+                "pre_tags": [
+                    "<mark>"
+                ],
+                "post_tags": [
+                    "</mark>"
+                ],
+                "fields": {
+                    "*": {}
+                },
+                "fragment_size": 2147483647
             }
         }]]>
     </property>

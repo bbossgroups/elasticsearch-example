@@ -35,8 +35,9 @@ public class DocumentCRUD {
 			boolean exist = clientUtil.existIndice("demo");
 
 			//如果索引表demo已经存在先删除mapping
-			if(exist)
+			if(exist) {
 				clientUtil.dropIndice("demo");
+			}
 			//创建索引表demo
 			clientUtil.createIndiceMapping("demo",//索引表名称
 					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
@@ -215,7 +216,12 @@ public class DocumentCRUD {
 			demo.setAgentStarttime(new Date());
 			demo.setApplicationName("blackcatdemo"+i);
 			demo.setContentbody("this is content body"+i);
-			demo.setName("刘德华"+i);
+			if(i % 2 == 0) {
+				demo.setName("刘德华喜欢唱歌" + i);
+			}
+			else{
+				demo.setName("张学友不喜欢唱歌" + i);
+			}
 			demos.add(demo);//添加第一个对象到list中
 		}
 
@@ -286,6 +292,7 @@ public class DocumentCRUD {
 				"3",//文档id
 				Demo.class);
 	}
+
 
 	/**
 	 * 检索文档
