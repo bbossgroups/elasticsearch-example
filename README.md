@@ -1,9 +1,7 @@
 #基于bboss es booter demo 的maven工程
 本实例是一个bboss es booter的demo maven工程，可供spring boot项目集成参考
 
-bboss elasticsearch开发视频教程 ,百度网盘免密下载： 
 
-https://pan.baidu.com/s/1kXjAOKn 
 # spring boot工程集成说明
 ## 在spring boot工程中导入以下坐标：
 
@@ -64,6 +62,8 @@ https://my.oschina.net/bboss/blog/1556866
    文档批量修改(elasticsearch不是实时flush记录，所以批量修改后如果立即查询可能查询不到刚修改的效果)
    
    文档检索
+   
+   关键词高亮检索
    
 ## 2.3 参考文档
 https://my.oschina.net/bboss/blog/1556866
