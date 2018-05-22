@@ -15,18 +15,37 @@ package org.bboss.eshelloword;/*
  */
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
+import org.frameworkset.elasticsearch.boot.ElasticSearchBoot;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 
-public class MultiES {
+public class MultiESBooter {
 	public static void main(String[] args){
 
+		/**
+		 * boot操作必须在所有的ClientInterface组件创建之前调用
+		 *  按照默认的配置文件初始化elasticsearch客户端工具
+		 * 	conf/elasticsearch.properties,application.properties,config/application.properties
+		 */
+		//ElasticSearchBoot.boot();
+
+		/**
+		 * boot操作必须在所有的ClientInterface组件创建之前调用
+		 * 根据指定的配置文件初始化elasticsearch客户端工具
+		 * @param configFile 指定1到多个多个ElasticSearch属性配置文件，对应的路径格式为（多个用逗号分隔），例如：
+		 * conf/elasticsearch.properties,application.properties,config/application.properties
+		 * 上述的文件都是在classpath下面即可，如果需要指定绝对路径，格式为：
+		 * file:d:/conf/elasticsearch.properties,file:d:/application.properties,config/application.properties
+		 *
+		 * 说明：带file:前缀表示后面的路径为绝对路径
+		 */
+		ElasticSearchBoot.boot("application.properties");
 		//创建es客户端工具，验证环境
-		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
+
 		ClientInterface configClientUtil = ElasticSearchHelper.getConfigRestClientUtil("logs","esmapper/demo.xml");
 		ClientInterface defaultClientUtil = ElasticSearchHelper.getRestClientUtil();
 		//验证环境,获取es状态
 //		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
-
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
 		//判断索引类型是否存在，抛出异常表示不存在，正常返回表示存在
 		boolean exist = configClientUtil.existIndiceType("twitter","tweet");
 		System.out.println("twitter,tweet exist:"+exist);
