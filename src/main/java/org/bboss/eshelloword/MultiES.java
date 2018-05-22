@@ -17,27 +17,24 @@ package org.bboss.eshelloword;/*
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 
-import java.util.Date;
-
-public class Helloworld {
+public class MultiES {
 	public static void main(String[] args){
-		Date date = new Date(1521788460387L);//1520584740000 1520845980000
 
-		date = new Date(1520930340000L);
 		//创建es客户端工具，验证环境
-//		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
-		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
+		ClientInterface configClientUtil = ElasticSearchHelper.getConfigRestClientUtil("logs","esmapper/demo.xml");
+		ClientInterface defaultClientUtil = ElasticSearchHelper.getRestClientUtil();
 		//验证环境,获取es状态
 //		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
 
 		//判断索引类型是否存在，抛出异常表示不存在，正常返回表示存在
-		boolean exist = clientUtil.existIndiceType("twitter","tweet");
-
+		boolean exist = configClientUtil.existIndiceType("twitter","tweet");
+		System.out.println("twitter,tweet exist:"+exist);
 		//判读索引是否存在，抛出异常表示不存在，正常返回表示存在
-		exist = clientUtil.existIndice("twitter");
-
-		exist = clientUtil.existIndice("agentinfo");
-
+		exist = configClientUtil.existIndice("twitter");
+		System.out.println("twitter exist:"+exist);
+		exist = configClientUtil.existIndice("agentinfo");
+		System.out.println("agentinfo exist:"+exist);
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
 //				new MapResponseHandler());//返回map结构
