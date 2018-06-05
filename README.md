@@ -10,12 +10,12 @@ maven坐标
 <dependency>
     <groupId>com.bbossgroups.plugins</groupId>
     <artifactId>bboss-elasticsearch-rest-booter</artifactId>
-    <version>5.0.7.0</version>
+    <version>5.0.7.1</version>
 </dependency>
 ```
 gradle坐标
 ```
-compile "com.bbossgroups.plugins:bboss-elasticsearch-rest-booter:5.0.7.0"
+compile "com.bbossgroups.plugins:bboss-elasticsearch-rest-booter:5.0.7.1"
 ```
 ## 在spring booter中配置es参数
 修改spring booter项目的application.properties文件，加入以下内容：
