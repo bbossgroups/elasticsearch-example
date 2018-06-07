@@ -14,7 +14,7 @@ elasticsearch.timeZone=Asia/Shanghai
 elasticsearch.ttl=2d
 #在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
 elasticsearch.showTemplate=true
-elasticsearch.discoverHost=true
+elasticsearch.discoverHost=false
 
 ##default连接池配置
 http.timeoutConnection = 400000
@@ -44,7 +44,7 @@ logs.elasticsearch.timeZone=Asia/Shanghai
 logs.elasticsearch.ttl=2d
 #在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
 logs.elasticsearch.showTemplate=true
-logs.elasticsearch.discoverHost=true
+logs.elasticsearch.discoverHost=false
 
 ##logs集群对应的连接池配置
 logs.http.timeoutConnection = 400000
