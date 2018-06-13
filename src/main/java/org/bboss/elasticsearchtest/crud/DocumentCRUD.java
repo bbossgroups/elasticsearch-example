@@ -472,15 +472,8 @@ public class DocumentCRUD {
 		//设置时间范围,时间参数接受long值
 		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00").getTime());
 		params.put("endTime",new Date().getTime());
-		//设置分页参数
-		params.put("from",0);
-		params.put("size",1000);
-		//执行查询，demo为索引表，_search为检索操作action
-		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
-				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-						"searchPagineDatas",//esmapper/demo.xml中定义的dsl语句
-						params,//变量参数
-						Demo.class);//返回的文档封装对象类型
+
+		ESDatas<Demo> esDatas =  null;//返回的文档封装对象类型
 		//保存总记录数
 		long totalSize = 0;
 		//保存每页结果对象列表，最多返回1000条记录
