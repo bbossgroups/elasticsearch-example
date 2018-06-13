@@ -338,8 +338,8 @@
                     ]
                 }
             },
-            ## 最多返回1000条记录
-            "size":1000
+            ## 最多返回pageSize参数对应记录条数
+            "size":#[pageSize]
         }]]>
     </property>
 

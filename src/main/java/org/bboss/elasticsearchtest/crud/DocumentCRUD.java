@@ -230,7 +230,7 @@ public class DocumentCRUD {
 		//批量添加或者修改文档，将两个对象添加到索引表demo中
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos,"refresh");//为了测试效果,启用强制刷新机制
+				demos,"refresh=true");//为了测试效果,启用强制刷新机制
 
 		System.out.println("addDocument-------------------------");
 		System.out.println(response);
@@ -421,10 +421,11 @@ public class DocumentCRUD {
 
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		//设置时间范围,时间参数接受long值
+		//设置时间范围,时间参数接受long值或者日期类型
 		//说明： 也可以接受日期类型，如果传入Date类型的时间并且通过map传参，则需要手动进行日期格式转换成字符串格式的日期串，通过entity传参则不需要
-		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00").getTime());
-		params.put("endTime",new Date().getTime());
+		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00") );
+		params.put("endTime",new Date() );
+		params.put("pageSize",1000);//设置每页返回的记录条数
 
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
@@ -480,15 +481,34 @@ public class DocumentCRUD {
 						"searchPagineDatas",//esmapper/demo.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
-		//获取结果对象列表，最多返回1000条记录
-		List<Demo> demos = esDatas.getDatas();
+		//保存总记录数
+		long totalSize = 0;
+		//保存每页结果对象列表，最多返回1000条记录
+		List<Demo> demos = null;
+		int i = 0; //页码
+		do{//遍历获取每页的记录
+			//设置分页参数
+			params.put("from",i * 1000);//分页起点
+			params.put("size",1000);//每页返回1000条
+			i ++;//往前加页码
+			//执行查询，demo为索引表，_search为检索操作action
+			 esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+					clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+							"searchPagineDatas",//esmapper/demo.xml中定义的dsl语句
+							params,//变量参数
+							Demo.class);//返回的文档封装对象类型
+			demos = esDatas.getDatas();//每页结果对象列表，最多返回1000条记录
+			totalSize = esDatas.getTotalSize();//总记录数
+			if(i * 1000 > totalSize)
+				break;
+		}while(true);
+
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
 //				"searchDatas",//esmapper/demo.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
-		//获取总记录数
-		long totalSize = esDatas.getTotalSize();
+
 		System.out.println(totalSize);
 	}
 
