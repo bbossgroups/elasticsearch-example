@@ -39,6 +39,9 @@ public class MultiESBooter {
 		 * 说明：带file:前缀表示后面的路径为绝对路径
 		 */
 		ElasticSearchBoot.boot("application.properties");
+
+
+		ElasticSearchBoot.boot("file:/xxx/xxx/application.properties");
 		//创建es客户端工具，验证环境
 
 		ClientInterface configClientUtil = ElasticSearchHelper.getConfigRestClientUtil("logs","esmapper/demo.xml");

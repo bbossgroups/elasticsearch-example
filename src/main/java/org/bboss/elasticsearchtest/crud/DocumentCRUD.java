@@ -86,7 +86,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
-		demo.setName("刘德华");
+		demo.setName("刘德华\"\n\t");
 
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -130,7 +130,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is modify content body2");
-		demo.setName("刘德华modify");
+		demo.setName("刘德华modify\t");
 
 		//执行update操作
 		response = clientUtil.addDocument("demo",//索引表
@@ -171,7 +171,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
-		demo.setName("刘德\"华");
+		demo.setName("刘德\"华\t");
 		demos.add(demo);//添加第一个对象到list中
 
 		demo = new Demo();//定义第二个对象
@@ -179,7 +179,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo3");
 		demo.setContentbody("四大\"天王，这种文化很好，中华人民共和国");
-		demo.setName("张学友");
+		demo.setName("张学友\t");
 		demos.add(demo);//添加第二个对象到list中
 
 		//批量添加或者修改文档，将两个对象添加到索引表demo中
@@ -280,13 +280,13 @@ public class DocumentCRUD {
 
 		System.out.println("addDateDocument-------------------------");
 		System.out.println(response);
-		//获取修改后的文档json串
+		//根据文档id获取修改后的文档json串
 		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
 				"2");//w
 		System.out.println("getDocument-------------------------");
 		System.out.println(response);
-		//获取修改后的文档对象
+		//根据文档id获取修改后的文档对象
 		demo = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
 				"3",//文档id
