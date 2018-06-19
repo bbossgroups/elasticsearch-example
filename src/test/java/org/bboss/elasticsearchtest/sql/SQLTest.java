@@ -24,13 +24,13 @@ public class SQLTest {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		String json = clientUtil.executeHttp("/_xpack/sql?format=txt",
 				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
-				ClientInterface.HTTP_POST//esmapper/demo.xml中定义的dsl语句
+				ClientInterface.HTTP_POST
 				);
 		System.out.println(json);
 
 		json = clientUtil.executeHttp("/_xpack/sql?format=json",
 				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
-				ClientInterface.HTTP_POST//esmapper/demo.xml中定义的dsl语句
+				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
 	}
@@ -40,7 +40,7 @@ public class SQLTest {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		String json = clientUtil.executeHttp("/_xpack/sql/translate",
 				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
-				ClientInterface.HTTP_POST//esmapper/demo.xml中定义的dsl语句
+				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
 
