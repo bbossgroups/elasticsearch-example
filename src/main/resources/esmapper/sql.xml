@@ -1,0 +1,13 @@
+<properties>
+    <!--
+        sql query
+
+    -->
+    <property name="sqlQuery">
+        <![CDATA[
+         {"query": "SELECT * FROM dbclobdemo where channelId=#[channelId]"}
+        ]]>
+    </property>
+
+
+</properties>

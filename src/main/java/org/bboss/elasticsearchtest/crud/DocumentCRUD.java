@@ -41,6 +41,9 @@ public class DocumentCRUD {
 			//创建索引表demo
 			clientUtil.createIndiceMapping("demo",//索引表名称
 					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
+
+			String demoIndice = clientUtil.getIndice("demo");//获取最新建立的索引表结构
+			System.out.println(demoIndice);
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +89,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
-		demo.setName("刘德华\"\n\t");
+		demo.setName("刘德华\"\n\t\r");
 
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -179,7 +182,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo3");
 		demo.setContentbody("四大\"天王，这种文化很好，中华人民共和国");
-		demo.setName("张学友\t");
+		demo.setName("张学友\t\n\r");
 		demos.add(demo);//添加第二个对象到list中
 
 		//批量添加或者修改文档，将两个对象添加到索引表demo中
@@ -210,7 +213,7 @@ public class DocumentCRUD {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
-		for(int i = 2 ; i < 1002; i ++) {
+		for(int i = 0 ; i < 20002; i ++) {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
 			demo.setAgentStarttime(new Date());
@@ -231,8 +234,9 @@ public class DocumentCRUD {
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
 				demos,"refresh=true");//为了测试效果,启用强制刷新机制
+		long count = clientUtil.countAll("demo");
 
-		System.out.println("addDocument-------------------------");
+		System.out.println("addDocuments-------------------------" +count);
 		System.out.println(response);
 		//获取第一个文档
 		response = clientUtil.getDocument("demo",//索引表
