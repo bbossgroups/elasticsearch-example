@@ -1,24 +1,24 @@
 #基于bboss es booter demo 的maven工程
-本实例是一个bboss es booter的demo maven工程，可供spring boot项目集成参考
+本实例是一个bboss es booter的demo maven工程，可供各种类型项目集成参考
 
 
-# spring boot工程集成说明
-## 在spring boot工程中导入以下坐标：
+# 工程集成说明
+## 在工程中导入以下坐标：
 
 maven坐标
 ```
 <dependency>
     <groupId>com.bbossgroups.plugins</groupId>
     <artifactId>bboss-elasticsearch-rest-booter</artifactId>
-    <version>5.0.7.2</version>
+    <version>5.0.7.7</version>
 </dependency>
 ```
 gradle坐标
 ```
-compile "com.bbossgroups.plugins:bboss-elasticsearch-rest-booter:5.0.7.2"
+compile "com.bbossgroups.plugins:bboss-elasticsearch-rest-booter:5.0.7.7"
 ```
-## 在spring booter中配置es参数
-修改spring booter项目的application.properties文件，加入以下内容：
+## 在项目中配置es参数
+修改项目的application.properties文件，加入以下内容：
 ```
 elasticUser=elastic
 elasticPassword=changeme
