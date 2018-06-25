@@ -41,6 +41,7 @@
 
 
 
+
     <!--
         一个简单的检索dsl,中有四个变量
         name 全文检索字段
@@ -403,6 +404,14 @@
     </property>
 
 
+    <property name="scriptPianduan">
+        <![CDATA[
+            "params": {
+              "last": #[last],
+              "nick": #[nick]
+            }
+        ]]>
+    </property>
     <property name="scriptDsl">
         <![CDATA[{
           "script": {
@@ -411,10 +420,7 @@
               ctx._source.last = params.last;
               ctx._source.nick = params.nick
             """,
-            "params": {
-              "last": #[last],
-              "nick": #[nick]
-            }
+            @{scriptPianduan}
           }
         }]]>
     </property>
