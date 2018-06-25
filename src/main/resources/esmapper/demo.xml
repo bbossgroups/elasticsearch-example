@@ -401,4 +401,21 @@
           }
         }]]>
     </property>
+
+
+    <property name="scriptDsl">
+        <![CDATA[{
+          "script": {
+            "lang": "painless",
+            "source": @"""
+              ctx._source.last = params.last;
+              ctx._source.nick = params.nick
+            """,
+            "params": {
+              "last": #[last],
+              "nick": #[nick]
+            }
+          }
+        }]]>
+    </property>
 </properties>

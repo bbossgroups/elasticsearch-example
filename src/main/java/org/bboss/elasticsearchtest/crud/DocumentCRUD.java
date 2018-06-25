@@ -50,6 +50,7 @@ public class DocumentCRUD {
 		}
 
 	}
+
 	public void updateDemoIndice(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
 		//修改索引表demo中type为demo的mapping结构，增加email字段，对应的dsl片段updateDemoIndice定义在esmapper/demo.xml文件中
@@ -203,6 +204,15 @@ public class DocumentCRUD {
 				"demo",//索引类型
 				"3",//文档id
 				Demo.class);
+	}
+	public void updateDocumentByScriptQuery(){
+		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
+		clientUtil.updateByQuery("demo/demo/2/_update","scriptDsl");
+		Map<String,Object> params = new HashMap<String,Object>();
+		//设置applicationName1和applicationName2两个变量的值
+		params.put("applicationName1","blackcatdemo2");
+		params.put("applicationName2","blackcatdemo3");
 	}
 
 	/**
