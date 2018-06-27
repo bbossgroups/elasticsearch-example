@@ -327,8 +327,8 @@ public class DocumentCRUD {
 		params.put("applicationName2","blackcatdemo3");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
-		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00").getTime());
-		params.put("endTime",new Date().getTime());
+		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
+		params.put("endTime",new Date());
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
@@ -484,8 +484,8 @@ public class DocumentCRUD {
 		params.put("applicationName2","blackcatdemo3");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
-		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00").getTime());
-		params.put("endTime",new Date().getTime());
+		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
+		params.put("endTime",new Date());
 
 		ESDatas<Demo> esDatas =  null;//返回的文档封装对象类型
 		//保存总记录数
@@ -542,8 +542,8 @@ public class DocumentCRUD {
 //		params.put("applicationName2","blackcatdemo3");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
-		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00").getTime());
-		params.put("endTime",new Date().getTime());
+		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
+		params.put("endTime",new Date());
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
