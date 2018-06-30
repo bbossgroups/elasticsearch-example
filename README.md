@@ -3,47 +3,14 @@
 
 
 # 工程集成说明
-## 在工程中导入以下坐标：
+## 快速集成和应用 
+非spring boot项目：
+https://my.oschina.net/bboss/blog/1801273 
 
-maven坐标
-```
-<dependency>
-    <groupId>com.bbossgroups.plugins</groupId>
-    <artifactId>bboss-elasticsearch-rest-booter</artifactId>
-    <version>5.0.7.7</version>
-</dependency>
-```
-gradle坐标
-```
-compile "com.bbossgroups.plugins:bboss-elasticsearch-rest-booter:5.0.7.7"
-```
-## 在项目中配置es参数
-修改项目的application.properties文件，加入以下内容：
-```
-elasticUser=elastic
-elasticPassword=changeme
+spring boot项目：
+https://my.oschina.net/bboss/blog/1835601
 
-#elasticsearch.rest.hostNames=10.1.236.88:9200
-elasticsearch.rest.hostNames=127.0.0.1:9200
-#elasticsearch.rest.hostNames=10.21.20.168:9200
-#elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
-elasticsearch.dateFormat=yyyy.MM.dd
-elasticsearch.timeZone=Asia/Shanghai
-elasticsearch.ttl=2d
-#在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
-elasticsearch.showTemplate=true
-elasticsearch.discoverHost=true
-
-http.timeoutConnection = 400000
-http.timeoutSocket = 400000
-http.connectionRequestTimeout=400000
-http.retryTime = 1
-http.maxLineLength = -1
-http.maxHeaderCount = 200
-http.maxTotal = 400
-http.defaultMaxPerRoute = 200
-```
-配置项中，只有elasticsearch.rest.hostNames是必选项，其他可选，详细的配置说明，参考文档：
+详细配置说明，参考文档：
 https://my.oschina.net/bboss/blog/1556866
 
 ## demo功能说明：
