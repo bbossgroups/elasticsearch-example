@@ -14,18 +14,35 @@ package org.bboss.elasticsearchtest.script;/*
  *  limitations under the License.
  */
 
-import org.junit.Test;
+public class Rule {
+	private String ruleId;
+	private int ruleCount;
 
-public class ScriptImplTest {
-	@Test
-	public void test(){
-		ScriptImpl script = new ScriptImpl();
-		script.updateDocumentByScriptPath();
+	public String getRuleId() {
+		return ruleId;
 	}
 
-	@Test
-	public void test1(){
-		ScriptImpl script = new ScriptImpl();
-		script.updateDocumentByScriptQueryPath();
+	public void setRuleId(String ruleId) {
+		this.ruleId = ruleId;
 	}
+
+	public int getRuleCount() {
+		return ruleCount;
+	}
+
+	public void setRuleCount(int ruleCount) {
+		this.ruleCount = ruleCount;
+	}
+
+	public boolean isRuleExist() {
+		return ruleExist;
+	}
+
+	public void setRuleExist(boolean ruleExist) {
+		this.ruleExist = ruleExist;
+	}
+
+	private boolean ruleExist;
+
+
 }

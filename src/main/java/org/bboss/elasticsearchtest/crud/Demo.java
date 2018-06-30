@@ -24,7 +24,7 @@ import java.util.Date;
  * 测试实体，可以从ESBaseData对象继承meta属性，检索时会将文档的一下meta属性设置到对象实例中
  */
 public class Demo extends ESBaseData {
-
+	private Object dynamicPriceTemplate;
 	//设定文档标识字段
 	@ESId
 	private Long demoId;
@@ -82,5 +82,13 @@ public class Demo extends ESBaseData {
 
 	public void setDemoId(Long demoId) {
 		this.demoId = demoId;
+	}
+
+	public Object getDynamicPriceTemplate() {
+		return dynamicPriceTemplate;
+	}
+
+	public void setDynamicPriceTemplate(Object dynamicPriceTemplate) {
+		this.dynamicPriceTemplate = dynamicPriceTemplate;
 	}
 }

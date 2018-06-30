@@ -14,18 +14,25 @@ package org.bboss.elasticsearchtest.script;/*
  *  limitations under the License.
  */
 
-import org.junit.Test;
+import java.util.List;
 
-public class ScriptImplTest {
-	@Test
-	public void test(){
-		ScriptImpl script = new ScriptImpl();
-		script.updateDocumentByScriptPath();
+public class DynamicPriceTemplate {
+	private int goodsId;
+	private List<Rule> rules;
+
+	public int getGoodsId() {
+		return goodsId;
 	}
 
-	@Test
-	public void test1(){
-		ScriptImpl script = new ScriptImpl();
-		script.updateDocumentByScriptQueryPath();
+	public void setGoodsId(int goodsId) {
+		this.goodsId = goodsId;
+	}
+
+	public List<Rule> getRules() {
+		return rules;
+	}
+
+	public void setRules(List<Rule> rules) {
+		this.rules = rules;
 	}
 }

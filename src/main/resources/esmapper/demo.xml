@@ -404,11 +404,46 @@
     </property>
 
 
+    <property name="scriptPianduan1">
+        <![CDATA[
+            "params": {
+              "last": #[last],
+              "nick": #[nick],
+              "goodsId": #[dynamicPriceTemplate->goodsId],
+              "rules":[
+                   #foreach($rule in $dynamicPriceTemplate.rules)
+                       #if($velocityCount > 0),#end
+                   {
+
+                        "ruleId": #[dynamicPriceTemplate->rules[$velocityCount]->ruleId],
+                        "ruleCount": #[dynamicPriceTemplate->rules[$velocityCount]->ruleCount],
+                        "ruleExist": #[dynamicPriceTemplate->rules[$velocityCount]->ruleExist]
+
+                    }
+                   #end
+              ]
+            }
+        ]]>
+    </property>
+
     <property name="scriptPianduan">
         <![CDATA[
             "params": {
               "last": #[last],
-              "nick": #[nick]
+              "nick": #[nick],
+              "goodsId": #[dynamicPriceTemplate->goodsId],
+              "rules":[
+                   #foreach($rule in $dynamicPriceTemplate.rules)
+                       #if($velocityCount > 0),#end
+                   {
+
+                        "ruleId": "$rule.ruleId",
+                        "ruleCount": $rule.ruleCount,
+                        "ruleExist":  $rule.ruleExist
+
+                    }
+                   #end
+              ]
             }
         ]]>
     </property>
@@ -418,7 +453,35 @@
             "lang": "painless",
             "source": @"""
               ctx._source.last = params.last;
-              ctx._source.nick = params.nick
+              ctx._source.nick = params.nick;
+              ctx._source.rules = params.rules
+            """,
+            @{scriptPianduan}
+          }
+        }]]>
+    </property>
+
+    <property name="scriptDslByQuery">
+        <![CDATA[{
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "term": {
+                    "_id": #[id]
+                  }
+                }
+              ]
+            }
+          },
+          "script": {
+            "lang": "painless",
+            "source": @"""
+              ctx._source.last = params.last;
+              ctx._source.nick = params.nick;
+              ctx._source.goodsId = params.goodsId;
+              ctx._source.dynamicPriceTemplate.goodsId = params.goodsId;
+              ctx._source.rules = params.rules
             """,
             @{scriptPianduan}
           }

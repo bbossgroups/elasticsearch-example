@@ -14,6 +14,8 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
+import org.bboss.elasticsearchtest.script.DynamicPriceTemplate;
+import org.bboss.elasticsearchtest.script.Rule;
 import org.frameworkset.elasticsearch.ElasticSearchException;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
@@ -176,7 +178,33 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
 		demo.setName("刘德\"华\t");
+		DynamicPriceTemplate dynamicPriceTemplate = new DynamicPriceTemplate();
+		dynamicPriceTemplate.setGoodsId(2);
+		List<Rule> ruleList = new ArrayList<Rule>();
+		Rule rule = new Rule();
+		rule.setRuleCount(100);
+		rule.setRuleExist(true);
+		rule.setRuleId("asdfasdfasdf");
+		ruleList.add(rule);
+
+		rule = new Rule();
+		rule.setRuleCount(101);
+		rule.setRuleExist(false);
+		rule.setRuleId("bbbb");
+		ruleList.add(rule);
+
+		rule = new Rule();
+		rule.setRuleCount(103);
+		rule.setRuleExist(true);
+		rule.setRuleId("ccccc");
+		ruleList.add(rule);
+		dynamicPriceTemplate.setRules(ruleList);
+
+		demo.setDynamicPriceTemplate(dynamicPriceTemplate);
+
 		demos.add(demo);//添加第一个对象到list中
+
+
 
 		demo = new Demo();//定义第二个对象
 		demo.setDemoId(3l);
@@ -185,7 +213,9 @@ public class DocumentCRUD {
 		demo.setContentbody("四大\"天王，这种文化很好，中华人民共和国");
 		demo.setName("张学友\t\n\r");
 		demos.add(demo);//添加第二个对象到list中
-
+		demo.setDynamicPriceTemplate(new HashMap());
+//		dynamicPriceTemplate.setGoodsId(3);
+//		dynamicPriceTemplate.setRules(new ArrayList<Rule>());
 		//批量添加或者修改文档，将两个对象添加到索引表demo中
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
@@ -200,10 +230,11 @@ public class DocumentCRUD {
 		System.out.println("getDocument-------------------------");
 		System.out.println(response);
 		//获取第二个文档
-		demo = clientUtil.getDocument("demo",//索引表
+		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
-				"3",//文档id
-				Demo.class);
+				"3"//文档id
+				 );
+		System.out.println(response);
 	}
 	public void updateDocumentByScriptQuery(){
 		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
