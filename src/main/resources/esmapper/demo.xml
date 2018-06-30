@@ -414,11 +414,9 @@
                    #foreach($rule in $dynamicPriceTemplate.rules)
                        #if($velocityCount > 0),#end
                    {
-
                         "ruleId": #[dynamicPriceTemplate->rules[$velocityCount]->ruleId],
                         "ruleCount": #[dynamicPriceTemplate->rules[$velocityCount]->ruleCount],
                         "ruleExist": #[dynamicPriceTemplate->rules[$velocityCount]->ruleExist]
-
                     }
                    #end
               ]
@@ -483,7 +481,7 @@
               ctx._source.dynamicPriceTemplate.goodsId = params.goodsId;
               ctx._source.rules = params.rules
             """,
-            @{scriptPianduan}
+            @{scriptPianduan1}
           }
         }]]>
     </property>
