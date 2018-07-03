@@ -433,7 +433,7 @@
               "rules":[
                    #foreach($rule in $dynamicPriceTemplate.rules)
                        #if($velocityCount > 0),#end
-                       #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true]
+                       #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true] ## 通过属性serialJson指示框架直接将对象序列化为json数据
                    #end
               ]
             }
@@ -493,7 +493,7 @@
             "source": @"""
               ctx._source.last = params.last;
               ctx._source.nick = params.nick;
-              ctx._source.goodName = #[dynamicPriceTemplate->goodName,escapeCount=2];
+              ctx._source.goodName = #[dynamicPriceTemplate->goodName,escapeCount=2];#*在脚本中，含有特殊字符的goodName需要转义2次*#
               ctx._source.goodsId = #[dynamicPriceTemplate->goodsId];
               ctx._source.dynamicPriceTemplate.goodsId = params.goodsId;
               ctx._source.rules = params.rules
