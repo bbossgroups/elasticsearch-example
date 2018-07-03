@@ -14,7 +14,12 @@ package org.bboss.elasticsearchtest.script;/*
  *  limitations under the License.
  */
 
+import com.frameworkset.util.SimpleStringUtil;
+import org.frameworkset.elasticsearch.serial.SerialUtil;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScriptImplTest {
 	@Test
@@ -27,5 +32,16 @@ public class ScriptImplTest {
 	public void test1(){
 		ScriptImpl script = new ScriptImpl();
 		script.updateDocumentByScriptQueryPath();
+	}
+
+	public static void main(String[] args){
+		Map value = new HashMap();
+		value.put("aaa","\r\n\"");
+		String _value = SerialUtil.object2json(value);
+		value.put("aaa",_value);
+		_value = SerialUtil.object2json(value);
+		System.out.println(_value);
+		value = SimpleStringUtil.json2Object(_value,HashMap.class);
+		System.out.println(_value);
 	}
 }

@@ -18,6 +18,7 @@ import java.util.List;
 
 public class DynamicPriceTemplate {
 	private int goodsId;
+	private String goodName;
 	private List<Rule> rules;
 
 	public int getGoodsId() {
@@ -34,5 +35,13 @@ public class DynamicPriceTemplate {
 
 	public void setRules(List<Rule> rules) {
 		this.rules = rules;
+	}
+
+	public String getGoodName() {
+		return goodName;
+	}
+
+	public void setGoodName(String goodName) {
+		this.goodName = goodName;
 	}
 }

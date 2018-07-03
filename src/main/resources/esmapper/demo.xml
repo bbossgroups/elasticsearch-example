@@ -424,6 +424,22 @@
         ]]>
     </property>
 
+    <property name="scriptPianduan2">
+        <![CDATA[
+            "params": {
+              "last": #[last],
+              "nick": #[nick],
+              "goodsId": #[dynamicPriceTemplate->goodsId],
+              "rules":[
+                   #foreach($rule in $dynamicPriceTemplate.rules)
+                       #if($velocityCount > 0),#end
+                       #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true]
+                   #end
+              ]
+            }
+        ]]>
+    </property>
+
     <property name="scriptPianduan">
         <![CDATA[
             "params": {
@@ -477,11 +493,12 @@
             "source": @"""
               ctx._source.last = params.last;
               ctx._source.nick = params.nick;
-              ctx._source.goodsId = params.goodsId;
+              ctx._source.goodName = #[dynamicPriceTemplate->goodName,escapeCount=2];
+              ctx._source.goodsId = #[dynamicPriceTemplate->goodsId];
               ctx._source.dynamicPriceTemplate.goodsId = params.goodsId;
               ctx._source.rules = params.rules
             """,
-            @{scriptPianduan1}
+            @{scriptPianduan2}
           }
         }]]>
     </property>

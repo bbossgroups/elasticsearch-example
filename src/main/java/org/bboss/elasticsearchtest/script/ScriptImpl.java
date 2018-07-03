@@ -79,6 +79,7 @@ public class ScriptImpl {
 		Map<String,Object> params = new HashMap<String,Object>();
 		DynamicPriceTemplate dynamicPriceTemplate = new DynamicPriceTemplate();
 		dynamicPriceTemplate.setGoodsId(1);
+		dynamicPriceTemplate.setGoodName("asd\"国家");
 		List<Rule> ruleList = new ArrayList<Rule>();
 		Rule rule = new Rule();
 		rule.setRuleCount(100);
@@ -98,6 +99,7 @@ public class ScriptImpl {
 		rule.setRuleId("ccccc");
 		ruleList.add(rule);
 		dynamicPriceTemplate.setRules(ruleList);
+
 
 		//为id为2的文档增加last和nick两个属性
 		params.put("last","gaudreau");
