@@ -96,7 +96,7 @@ public class ScriptImpl {
 		rule = new Rule();
 		rule.setRuleCount(103);
 		rule.setRuleExist(true);
-		rule.setRuleId("ccccc");
+		rule.setRuleId(null);
 		ruleList.add(rule);
 		dynamicPriceTemplate.setRules(ruleList);
 

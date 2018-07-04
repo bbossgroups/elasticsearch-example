@@ -249,13 +249,7 @@
                     "filter": [
                         {  ## 多值检索，查找多个应用名称对应的文档记录
                             "terms": {
-                                "applicationName.keyword":[
-                                #if($applicationNames && $applicationNames.size() > 0)
-                                    #foreach($applicationName in $applicationNames)
-                                         #if($velocityCount > 0),#end "$applicationName"
-                                    #end
-                                #end
-                                ]
+                                "applicationName.keyword":#[applicationNames,serialJson=true]
                             }
                         },
                         {   ## 时间范围检索，返回对应时间范围内的记录，接受long型的值
@@ -432,8 +426,8 @@
               "goodsId": #[dynamicPriceTemplate->goodsId],
               "rules":[
                    #foreach($rule in $dynamicPriceTemplate.rules)
-                       #if($velocityCount > 0),#end
                        #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true] ## 通过属性serialJson指示框架直接将对象序列化为json数据
+                        #if($velocityCount != ($dynamicPriceTemplate.rules.size() - 1)),#end
                    #end
               ]
             }
