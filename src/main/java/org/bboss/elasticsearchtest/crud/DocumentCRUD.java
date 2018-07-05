@@ -235,6 +235,34 @@ public class DocumentCRUD {
 				"3"//文档id
 				 );
 		System.out.println(response);
+		//获取不存在的文档
+		response = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"-3"//文档id
+		);
+		System.out.println(response);
+
+		//获取不存在的文档
+		Demo demo1 = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"-3"//文档id
+		,Demo.class);
+
+		System.out.println(demo1);
+
+		//删除不存在的文档
+		response = clientUtil.deleteDocument("demo",//索引表
+				"demo",//索引类型
+				"-3"//文档id
+		);
+		System.out.println(response);
+		//更新不存在的文档
+		response = clientUtil.updateDocument("demo",//索引表
+				"demo",//索引类型
+				"-3",//文档id
+				demo
+		);
+		System.out.println(response);
 	}
 	public void updateDocumentByScriptQuery(){
 		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全

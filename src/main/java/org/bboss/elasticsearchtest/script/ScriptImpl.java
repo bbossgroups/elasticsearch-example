@@ -46,7 +46,7 @@ public class ScriptImpl {
 		rule = new Rule();
 		rule.setRuleCount(101);
 		rule.setRuleExist(false);
-		rule.setRuleId("bbbb");
+		rule.setRuleId("bbb$b");
 		ruleList.add(rule);
 
 		rule = new Rule();
@@ -84,7 +84,7 @@ public class ScriptImpl {
 		Rule rule = new Rule();
 		rule.setRuleCount(100);
 		rule.setRuleExist(true);
-		rule.setRuleId("asdfasdfasdf");
+		rule.setRuleId("asdfasd$fasdf");
 		ruleList.add(rule);
 
 		rule = new Rule();
@@ -102,7 +102,7 @@ public class ScriptImpl {
 
 
 		//为id为2的文档增加last和nick两个属性
-		params.put("last","gaudreau");
+		params.put("last","gaudre$au");
 		params.put("nick","hockey");
 		params.put("id",3);
 		params.put("dynamicPriceTemplate",dynamicPriceTemplate);

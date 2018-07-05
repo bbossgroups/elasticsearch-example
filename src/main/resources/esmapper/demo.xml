@@ -486,6 +486,7 @@
             "lang": "painless",
             "source": @"""
               ctx._source.last = params.last;
+              ctx._source.lastSpecial = "#[last,quoted=false]";
               ctx._source.nick = params.nick;
               ctx._source.goodName = #[dynamicPriceTemplate->goodName,escapeCount=2];#*在脚本中，含有特殊字符的goodName需要转义2次*#
               ctx._source.goodsId = #[dynamicPriceTemplate->goodsId];
@@ -495,5 +496,24 @@
             @{scriptPianduan2}
           }
         }]]>
+    </property>
+
+    <property name="mapbianli"><![CDATA[
+        ## map遍历实例，通过$item.value直接输出值，如果值中存在的特殊字符，不会对特殊字符进行转义处理，请自行处理
+        #foreach($item in $softTypeMap.entrySet())
+            #if($velocityCount > 0),#end
+            { "match": { "$item.key": "$item.value" } }
+        #end
+    ]]>
+    </property>
+
+
+    <property name="mapbianliescape"><![CDATA[
+        ## map遍历实例，可以通过#[]绑定变量对值中存在的特殊字符进行转义处理
+        #foreach($item in $softTypeMap.entrySet())
+            #if($velocityCount > 0),#end
+            { "match": { "$item.key": #[softTypeMap[$item.key]] } }
+        #end
+    ]]>
     </property>
 </properties>
