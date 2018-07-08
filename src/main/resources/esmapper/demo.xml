@@ -418,22 +418,6 @@
         ]]>
     </property>
 
-    <property name="scriptPianduan2">
-        <![CDATA[
-            "params": {
-              "last": #[last],
-              "nick": #[nick],
-              "goodsId": #[dynamicPriceTemplate->goodsId],
-              "rules":[
-                   #foreach($rule in $dynamicPriceTemplate.rules)
-                       #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true] ## 通过属性serialJson指示框架直接将对象序列化为json数据
-                        #if($velocityCount != ($dynamicPriceTemplate.rules.size() - 1)),#end
-                   #end
-              ]
-            }
-        ]]>
-    </property>
-
     <property name="scriptPianduan">
         <![CDATA[
             "params": {
@@ -469,6 +453,21 @@
         }]]>
     </property>
 
+    <property name="scriptPianduan2">
+        <![CDATA[
+            "params": {
+              "last": #[last],
+              "nick": #[nick],
+              "goodsId": #[dynamicPriceTemplate->goodsId],
+              "rules":[
+                   #foreach($rule in $dynamicPriceTemplate.rules)
+                       #[dynamicPriceTemplate->rules[$velocityCount],serialJson=true] ## 通过属性serialJson指示框架直接将对象序列化为json数据
+                        #if($velocityCount != ($dynamicPriceTemplate.rules.size() - 1)),#end
+                   #end
+              ]
+            }
+        ]]>
+    </property>
     <property name="scriptDslByQuery">
         <![CDATA[{
           "query": {

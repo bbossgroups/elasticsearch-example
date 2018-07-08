@@ -38,7 +38,13 @@ public class DocumentCRUD {
 
 			//如果索引表demo已经存在先删除mapping
 			if(exist) {
-				clientUtil.dropIndice("demo");
+				String r = clientUtil.dropIndice("demo");
+				System.out.println(r);
+				exist = clientUtil.existIndice("demo");
+//				r = clientUtil.dropIndice("demo");
+//				System.out.println(r);
+				String demoIndice = clientUtil.getIndice("demo");//获取最新建立的索引表结构
+				System.out.println(demoIndice);
 			}
 			//创建索引表demo
 			clientUtil.createIndiceMapping("demo",//索引表名称
@@ -235,6 +241,12 @@ public class DocumentCRUD {
 				"3"//文档id
 				 );
 		System.out.println(response);
+		//获取第二个文档
+		NewDemo newDemo = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"3",//文档id
+				NewDemo.class
+		);
 		//获取不存在的文档
 		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
