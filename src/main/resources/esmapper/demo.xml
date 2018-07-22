@@ -167,7 +167,10 @@
             "size":1000
         }]]>
     </property>
-
+    <property name="queryPid"><![CDATA[{
+        "query": { "match": { "pid": #[pid] } }
+     }]]>
+    </property>
     <property name="searchWithCustomEscape">
         <![CDATA[{
             "query": {
@@ -508,11 +511,67 @@
 
 
     <property name="mapbianliescape"><![CDATA[
-        ## map遍历实例，可以通过#[]绑定变量对值中存在的特殊字符进行转义处理
+        ## map<String,List<String>>遍历实例，可以通过#[]绑定变量对值中存在的特殊字符进行转义处理
         #foreach($item in $softTypeMap.entrySet())
-            #if($velocityCount > 0),#end
-            { "match": { "$item.key": #[softTypeMap[$item.key]] } }
+            #if($item.value)
+                #if($velocityCount > 0),#end
+                { "match": { "$item.key": #[softTypeMap[$item.key],serialJson=true] } }
+            #end
         #end
     ]]>
     </property>
+
+    <property name="queryArray">
+        <![CDATA[
+        {
+            "size":10000,
+            "query": {
+                "bool": {
+                    "must": [
+                            #foreach($item in $softTypeMap.entrySet())
+                                #if($velocityCount > 0),#end
+                                { "match":
+                                    {
+                                    #if($item.value)
+                                    "$item.key":
+                                    [
+                                        #foreach($applicationName in $item.value)
+                                             #if($velocityCount > 0),#end #[softTypeMap[$item.key][$velocityCount]]
+                                        #end
+                                    ]
+                                    #end
+                                    }
+                                 }
+                            #end
+                    ]
+                 }
+            }
+        }
+        ]]>
+    </property>
+
+    <property name="queryArray1">
+        <![CDATA[
+        #if($mustShouldMap)
+                        #foreach($item in $mustShouldMap.entrySet())
+                            ,
+                            "must":{
+                                "bool":{
+                                    "should":[
+                                        #foreach($children in $item)
+                                            #if($velocityCount > 0),#end
+                                            { "match": { "$item.key": #[$mustShouldMap[$item.key][$velocityCount]] } }
+                                        #end
+                                    ]
+                                }
+                            }
+                        #end
+                    #end
+
+        ]]>
+    </property>
+
+
+
+
 </properties>
