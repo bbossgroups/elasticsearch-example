@@ -28,7 +28,7 @@ public class Helloworld {
 //		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		//验证环境,获取es状态
-		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
+//		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
 
 		//判断索引类型是否存在，false表示不存在，正常返回true表示存在
 		boolean exist = clientUtil.existIndiceType("twitter","tweet");
@@ -37,10 +37,10 @@ public class Helloworld {
 		exist = clientUtil.existIndice("twitter");
 
 		exist = clientUtil.existIndice("agentinfo");
-
-		System.out.println(response);
+		long count = clientUtil.countAll("agentinfo");
+//		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
-//				new MapResponseHandler());//返回map结构
+//				new ESMapResponseHandler());//返回map结构
 	}
 
 }

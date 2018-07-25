@@ -41,7 +41,7 @@ public class MultiESBooter {
 		ElasticSearchBoot.boot("application.properties");
 
 
-		ElasticSearchBoot.boot("file:/xxx/xxx/application.properties");
+		//ElasticSearchBoot.boot("file:/xxx/xxx/application.properties");
 		//创建es客户端工具，验证环境
 
 		ClientInterface configClientUtil = ElasticSearchHelper.getConfigRestClientUtil("logs","esmapper/demo.xml");
@@ -59,7 +59,7 @@ public class MultiESBooter {
 		System.out.println("agentinfo exist:"+exist);
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
-//				new MapResponseHandler());//返回map结构
+//				new ESMapResponseHandler());//返回map结构
 	}
 
 }
