@@ -37,7 +37,7 @@ public class Helloworld {
 		exist = clientUtil.existIndice("twitter");
 
 		exist = clientUtil.existIndice("agentinfo");
-		long count = clientUtil.countAll("agentinfo");
+//		long count = clientUtil.countAll("agentinfo");
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
 //				new ESMapResponseHandler());//返回map结构

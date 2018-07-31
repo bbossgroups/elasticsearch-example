@@ -1,0 +1,24 @@
+<properties>
+    <!--
+        MatchPhrasePrefixQuery
+        dsl配置之文件
+    -->
+    <property name="testMatchPhrasePrefixQueryTest">
+        <![CDATA[
+         {
+            "from":#[from],
+            "to":#[to],
+            "query": {
+              "match_phrase_prefix": {
+                "about": {
+                  "query": #[queryCondition],
+                  "max_expansions": #[maxExpansions]
+                }
+              }
+            }
+        }
+        ]]>
+    </property>
+
+
+</properties>
