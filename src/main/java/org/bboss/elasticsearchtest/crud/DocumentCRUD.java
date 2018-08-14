@@ -294,6 +294,7 @@ public class DocumentCRUD {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
+		long start = System.currentTimeMillis();
 		for(int i = 0 ; i < 20002; i ++) {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
@@ -310,11 +311,13 @@ public class DocumentCRUD {
 		}
 
 
-
 		//批量添加或者修改文档，将两个对象添加到索引表demo中
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
 				demos,"refresh=true");//为了测试效果,启用强制刷新机制
+		long end = System.currentTimeMillis();
+		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
+
 		long count = clientUtil.countAll("demo");
 
 		System.out.println("addDocuments-------------------------" +count);
