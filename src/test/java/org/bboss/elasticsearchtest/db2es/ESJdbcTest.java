@@ -23,6 +23,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * ES-JDBC测试用例
+ */
 public class ESJdbcTest {
 
 	public void initDBSource(){

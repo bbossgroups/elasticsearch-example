@@ -14,11 +14,14 @@ import org.junit.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * mysql数据导入es测试用例
+ */
 public class TestESJDBC {
 
 	private void initDBSource(){
 		SQLUtil.startNoPool("test",//数据源名称
-				"com.mysql.jdbc.Driver",//oracle驱动
+				"com.mysql.jdbc.Driver",//mysql驱动
 				"jdbc:mysql://localhost:3306/bboss",//mysql链接串
 				"root","123456",//数据库账号和口令
 				"select 1 " //数据库连接校验sql
