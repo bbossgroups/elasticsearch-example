@@ -25,6 +25,20 @@
             <version>5.1.40</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>6.3.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <repositories>
+
+        <repository>
+            <id>elastic</id>
+            <url>https://artifacts.elastic.co/maven</url>
+        </repository>
+    </repositories>
 
 </project>
