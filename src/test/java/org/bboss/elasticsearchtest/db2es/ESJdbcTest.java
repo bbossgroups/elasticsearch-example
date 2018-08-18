@@ -33,7 +33,7 @@ public class ESJdbcTest {
 				"org.elasticsearch.xpack.sql.jdbc.jdbc.JdbcDriver",//ES jdbc驱动
 				"jdbc:es://http://127.0.0.1:9200/timezone=UTC&page.size=250",//es链接串
 				"elastic","changeme",//es x-pack账号和口令
-				"SHOW tables 'dbclob%'" //数据源连接校验sql
+				"SHOW tables 'db%'" //数据源连接校验sql
 		);
 	}
 
@@ -49,6 +49,21 @@ public class ESJdbcTest {
 		 System.out.println(data);
 
 		data =	SQLExecutor.queryListWithDBName(HashMap.class,"es","SELECT SCORE() as score,* FROM dbclobdemo where detailtemplateId=?",1);
+		System.out.println(data);
+	}
+
+	/**
+	 * 执行一个查询
+	 * @throws SQLException
+	 */
+	@Test
+	public void testDBLogSelect() throws SQLException {
+		initDBSource();//启动数据源
+		//执行查询，将结果映射为HashMap集合
+		List<HashMap> data =	SQLExecutor.queryListWithDBName(HashMap.class,"es","SELECT SCORE() as score,* FROM dbdemo ");
+		System.out.println(data);
+
+		data =	SQLExecutor.queryListWithDBName(HashMap.class,"es","SELECT SCORE() as score,* FROM dbdemo where logId=?",204);
 		System.out.println(data);
 	}
 

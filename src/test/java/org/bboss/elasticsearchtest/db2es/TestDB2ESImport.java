@@ -17,7 +17,7 @@ import java.sql.SQLException;
 /**
  * mysql数据导入es测试用例
  */
-public class TestESJDBC {
+public class TestDB2ESImport {
 
 	private void initDBSource(){
 		SQLUtil.startNoPool("test",//数据源名称
@@ -51,6 +51,43 @@ public class TestESJDBC {
 		long escount = ElasticSearchHelper.getRestClientUtil().countAll("dbdemo");
 		System.out.println("dbcount:"+dbcount+","+"escount:"+escount);
 
+	}
+
+	/**
+	 * 从外部application.properties文件中加载数据源配置和es配置
+	 */
+	@Test
+	public void testSimpleLogImportBuilderFromExternalDBConfig(){
+		ImportBuilder importBuilder = ImportBuilder.newInstance();
+		try {
+			//清除测试表
+			ElasticSearchHelper.getRestClientUtil().dropIndice("dbdemo");
+		}
+		catch (Exception e){
+
+		}
+
+
+		//指定导入数据的sql语句，必填项，可以设置自己的提取逻辑
+		importBuilder.setSql("select * from td_sm_log");
+		/**
+		 * es相关配置
+		 */
+		importBuilder
+				.setIndex("dbdemo") //必填项
+				.setIndexType("dbdemo") //必填项
+				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
+				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
+				.setBatchSize(100);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+
+		importBuilder.setParallel(true);
+		importBuilder.setQueue(1000);
+		importBuilder.setThreadCount(10);
+		/**
+		 * 执行数据库表数据导入es操作
+		 */
+		DataStream dataStream = importBuilder.builder();
+		dataStream.db2es();
 	}
 
 	@Test
@@ -202,9 +239,10 @@ public class TestESJDBC {
 				.setIndexType("dbclobdemo") //必填项
 				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(1000);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(1);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
-
+		importBuilder.setParallel(true);
+		importBuilder.setThreadCount(10);
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
