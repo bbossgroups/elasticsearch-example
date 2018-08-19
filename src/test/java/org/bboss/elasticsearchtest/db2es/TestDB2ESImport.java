@@ -80,9 +80,9 @@ public class TestDB2ESImport {
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
 				.setBatchSize(100);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
-		importBuilder.setParallel(true);
-		importBuilder.setQueue(1000);
-		importBuilder.setThreadCount(10);
+		importBuilder.setParallel(true);//设置为多线程并行批量导入
+		importBuilder.setQueue(1000);//设置批量导入线程池等待队列长度
+		importBuilder.setThreadCount(10);//设置批量导入线程池工作线程数量
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
