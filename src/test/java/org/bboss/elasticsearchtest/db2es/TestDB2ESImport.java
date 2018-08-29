@@ -78,11 +78,16 @@ public class TestDB2ESImport {
 				.setIndexType("dbdemo") //必填项
 				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(100);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(10000);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
+		/**
+		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
+		 */
 		importBuilder.setParallel(true);//设置为多线程并行批量导入
-		importBuilder.setQueue(1000);//设置批量导入线程池等待队列长度
-		importBuilder.setThreadCount(10);//设置批量导入线程池工作线程数量
+		importBuilder.setQueue(100);//设置批量导入线程池等待队列长度
+		importBuilder.setThreadCount(20);//设置批量导入线程池工作线程数量
+//		importBuilder.setAsyn(true);//异步方式执行，不等待所有导入作业任务结束，方法快速返回
+		importBuilder.setAsyn(false);//同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
