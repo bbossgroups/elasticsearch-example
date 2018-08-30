@@ -127,7 +127,7 @@ public class TestDB2ESImport {
 
 	}
 	@Test
-	public void testImportBuilder(){
+	public void testImportBuilder() throws SQLException {
 		ImportBuilder importBuilder = ImportBuilder.newInstance();
 		try {
 			//清除测试表
@@ -154,7 +154,7 @@ public class TestDB2ESImport {
 		importBuilder
 				.setIndex("dbclobdemo") //必填项
 				.setIndexType("dbclobdemo") //必填项
-				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");
+				.setRefreshOption("refresh")//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
 				.setEsIdField("documentId")//可选项
 				.setEsParentIdField(null) //可选项,如果不指定，es自动为文档产生id
@@ -182,6 +182,9 @@ public class TestDB2ESImport {
 		 */
 		DataStream dataStream = importBuilder.builder();
 		dataStream.db2es();
+		long dbcount = SQLExecutor.queryObject(long.class,"select count(*) from td_cms_document");
+		long escount = ElasticSearchHelper.getRestClientUtil().countAll("dbclobdemo");
+		System.out.println("dbcount:"+dbcount+","+"escount:"+escount);
 	}
 
 	@Test
