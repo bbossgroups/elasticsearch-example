@@ -60,7 +60,7 @@ public class TestDB2ESImport {
 	public void testSimpleLogImportBuilderFromExternalDBConfig(){
 		ImportBuilder importBuilder = ImportBuilder.newInstance();
 		try {
-			//清除测试表
+			//清除测试表,导入的时候回重建表，测试的时候加上为了看测试效果，实际线上环境不要删表
 			ElasticSearchHelper.getRestClientUtil().dropIndice("dbdemo");
 		}
 		catch (Exception e){
@@ -78,21 +78,26 @@ public class TestDB2ESImport {
 				.setIndexType("dbdemo") //必填项
 				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(10000);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(100);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
 		/**
 		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
 		 */
 		importBuilder.setParallel(true);//设置为多线程并行批量导入
-		importBuilder.setQueue(100);//设置批量导入线程池等待队列长度
-		importBuilder.setThreadCount(20);//设置批量导入线程池工作线程数量
-//		importBuilder.setAsyn(true);//异步方式执行，不等待所有导入作业任务结束，方法快速返回
-		importBuilder.setAsyn(false);//同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
+		importBuilder.setQueue(1);//设置批量导入线程池等待队列长度
+		importBuilder.setThreadCount(2);//设置批量导入线程池工作线程数量
+		importBuilder.setContinueOnError(true);//任务出现异常，是否继续执行作业：true（默认值）继续执行 false 中断作业执行 
+		importBuilder.setAsyn(false);//true 异步方式执行，不等待所有导入作业任务结束，方法快速返回；false（默认值） 同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
+		importBuilder.setRefreshOption("refresh"); // 为了实时验证数据导入的效果，强制刷新数据，生产环境请设置为null或者不指定
+		
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
 		dataStream.db2es();
+		
+		long count = ElasticSearchHelper.getRestClientUtil().countAll("dbdemo");
+		System.out.println("数据导入完毕后索引表dbdemo中的文档数量:"+count);
 	}
 
 	@Test
