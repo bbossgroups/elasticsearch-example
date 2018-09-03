@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 /**
  * mysql数据导入es测试用例
@@ -178,13 +179,26 @@ public class TestDB2ESImport {
 					 .addIgnoreFieldMapping("channel_id");//添加忽略字段
 
 		/**
+		 * 为每条记录添加额外的字段和值
+		 * 可以为基本数据类型，也可以是复杂的对象
+		 */
+		importBuilder.addFieldValue("testF1","f1value");
+		importBuilder.addFieldValue("testInt",0);
+		importBuilder.addFieldValue("testDate",new Date());
+		importBuilder.addFieldValue("testFormateDate","yyyy-MM-dd HH",new Date());
+		TestObject testObject = new TestObject();
+		testObject.setId("testid");
+		testObject.setName("jackson");
+		importBuilder.addFieldValue("testObject",testObject);
+
+		/**
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
 		dataStream.db2es();
 		long dbcount = SQLExecutor.queryObject(long.class,"select count(*) from td_cms_document");
 		long escount = ElasticSearchHelper.getRestClientUtil().countAll("dbclobdemo");
-		System.out.println("dbcount:"+dbcount+","+"escount:"+escount);
+		System.out.println("dbclobdemo:"+dbcount+","+"dbclobdemo:"+escount);
 	}
 
 	@Test
