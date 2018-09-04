@@ -17,8 +17,8 @@
         <![CDATA[
          {
            "slice": {
-                "id": #[sliceId],
-                "max": #[sliceMax]
+                "id": #[sliceId], ## 必须使用sliceId作为变量名称
+                "max": #[sliceMax] ## 必须使用sliceMax作为变量名称
             },
             "size":#[size],
             "query": {"match_all": {}}

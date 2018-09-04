@@ -75,7 +75,7 @@ public class TestScrollAPIQuery {
 		int max = 6;
 		long realTotalSize = 0;
 		Map params = new HashMap();
-		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 100);//每页100条记录
 		ESDatas<Map> sliceResponse = clientUtil.scrollSlice("demo/_search",
 				"scrollSliceQuery", params,"2m",Map.class,true);
@@ -118,7 +118,7 @@ public class TestScrollAPIQuery {
 		int max = 6;
 		long realTotalSize = 0;
 		Map params = new HashMap();
-		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 1000);//每页1000条记录
 		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
 		ESDatas<Map> sliceResponse = clientUtil.scrollSlice("demo/_search",
@@ -146,7 +146,7 @@ public class TestScrollAPIQuery {
 		int max = 6;
 		long realTotalSize = 0;
 		Map params = new HashMap();
-		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 1000);//每页1000条记录
 		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
 		ESDatas<Map> sliceResponse = clientUtil.scrollSlice("demo/_search",
