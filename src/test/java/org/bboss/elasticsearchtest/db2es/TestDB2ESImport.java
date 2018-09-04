@@ -5,15 +5,14 @@ import com.frameworkset.common.poolman.StatementInfo;
 import com.frameworkset.common.poolman.handle.ResultSetHandler;
 import com.frameworkset.common.poolman.util.SQLUtil;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
-import org.frameworkset.elasticsearch.client.DataStream;
-import org.frameworkset.elasticsearch.client.ESJDBC;
-import org.frameworkset.elasticsearch.client.ImportBuilder;
-import org.frameworkset.elasticsearch.client.JDBCRestClientUtil;
+import org.frameworkset.elasticsearch.client.*;
+import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * mysql数据导入es测试用例
@@ -192,11 +191,31 @@ public class TestDB2ESImport {
 		importBuilder.addFieldValue("testObject",testObject);
 
 		/**
+		 * 重新设置es数据结构
+		 */
+		importBuilder.setDataRefactor(new DataRefactor() {
+			public void refactor(ESJDBC esjdbc) throws Exception  {
+				CustomObject customObject = new CustomObject();
+				customObject.setAuthor((String)esjdbc.getValue("author"));
+				customObject.setTitle((String)esjdbc.getValue("title"));
+				customObject.setSubtitle((String)esjdbc.getValue("subtitle"));
+				esjdbc.addFieldValue("docInfo",customObject);//如果还需要构建更多的内部对象，可以继续构建
+
+				//上述三个属性已经放置到docInfo中，如果无需再放置到索引文档中，可以忽略掉这些属性
+				esjdbc.addIgnoreFieldMapping("author");
+				esjdbc.addIgnoreFieldMapping("title");
+				esjdbc.addIgnoreFieldMapping("subtitle");
+			}
+		});
+
+		/**
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
 		dataStream.db2es();
 		long dbcount = SQLExecutor.queryObject(long.class,"select count(*) from td_cms_document");
+		ESDatas<Map> datas = ElasticSearchHelper.getRestClientUtil().searchAll("dbclobdemo",Map.class);
+
 		long escount = ElasticSearchHelper.getRestClientUtil().countAll("dbclobdemo");
 		System.out.println("dbclobdemo:"+dbcount+","+"dbclobdemo:"+escount);
 	}
