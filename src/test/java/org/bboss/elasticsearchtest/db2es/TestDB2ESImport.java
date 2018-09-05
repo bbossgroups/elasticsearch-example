@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
+ * 数据导入文档：https://my.oschina.net/bboss/blog/1832212
  * mysql数据导入es测试用例
  */
 public class TestDB2ESImport {
