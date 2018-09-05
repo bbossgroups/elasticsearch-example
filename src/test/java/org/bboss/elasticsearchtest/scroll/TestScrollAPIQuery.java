@@ -20,7 +20,6 @@ import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +29,6 @@ public class TestScrollAPIQuery {
 	public void testSimleScrollAPI(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
-		List<String > scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		Map params = new HashMap();
 		params.put("size", 10000);//每页10000条记录
 		//scroll上下文有效期1分钟
@@ -50,11 +47,8 @@ public class TestScrollAPIQuery {
 	@Test
 	public void testSimpleSliceScrollApi() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		List<String> scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索,max对应并行度
 		int max = 6;
-		long realTotalSize = 0;
 		Map params = new HashMap();
 		params.put("sliceMax", max);//最多6个slice，不能大于share数
 		params.put("size", 100);//每页100条记录
@@ -72,11 +66,8 @@ public class TestScrollAPIQuery {
 	@Test
 	public void testSimpleSliceScrollApiParral() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		List<String> scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索,max对应并行度
 		int max = 6;
-		long realTotalSize = 0;
 		Map params = new HashMap();
 		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 100);//每页100条记录
@@ -94,8 +85,6 @@ public class TestScrollAPIQuery {
 	public void testSimleScrollAPIHandler(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
-		List<String > scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		Map params = new HashMap();
 		params.put("size", 5000);//每页5000条记录
 		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
@@ -118,11 +107,8 @@ public class TestScrollAPIQuery {
 	@Test
 	public void testSimpleSliceScrollApiHandler() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		List<String> scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索,max对应并行度
 		int max = 6;
-		long realTotalSize = 0;
 		Map params = new HashMap();
 		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 1000);//每页1000条记录
@@ -148,11 +134,8 @@ public class TestScrollAPIQuery {
 	@Test
 	public void testSimpleSliceScrollApiParralHandler() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		List<String> scrollIds = new ArrayList<String>();
-		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索,max对应并行度
 		int max = 6;
-		long realTotalSize = 0;
 		Map params = new HashMap();
 		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
 		params.put("size", 1000);//每页1000条记录
