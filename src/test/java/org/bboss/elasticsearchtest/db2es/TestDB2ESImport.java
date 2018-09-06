@@ -77,20 +77,19 @@ public class TestDB2ESImport {
 		importBuilder
 				.setIndex("dbdemo") //必填项
 				.setIndexType("dbdemo") //必填项
-				.setRefreshOption(null)//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
+				.setRefreshOption("refresh")//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(100);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(1);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
 		/**
 		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
 		 */
 		importBuilder.setParallel(true);//设置为多线程并行批量导入
 		importBuilder.setQueue(1);//设置批量导入线程池等待队列长度
-		importBuilder.setThreadCount(2);//设置批量导入线程池工作线程数量
+		importBuilder.setThreadCount(5);//设置批量导入线程池工作线程数量
 		importBuilder.setContinueOnError(true);//任务出现异常，是否继续执行作业：true（默认值）继续执行 false 中断作业执行 
 		importBuilder.setAsyn(false);//true 异步方式执行，不等待所有导入作业任务结束，方法快速返回；false（默认值） 同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
-		importBuilder.setRefreshOption("refresh"); // 为了实时验证数据导入的效果，强制刷新数据，生产环境请设置为null或者不指定
-		
+		importBuilder.setEsIdField("log_id");
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
@@ -98,8 +97,17 @@ public class TestDB2ESImport {
 		dataStream.db2es();
 		
 		long count = ElasticSearchHelper.getRestClientUtil().countAll("dbdemo");
+		try {
+			Long dbcount = SQLExecutor.queryObject(Long.class, "select count(1) from (" + importBuilder.getSql()+ ") b");
+			System.out.println("数据库记录数dbcount:" + dbcount);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		System.out.println("数据导入完毕后索引表dbdemo中的文档数量:"+count);
 	}
+
+	 
 
 	@Test
 	public void testDB2ESClob() throws SQLException {
