@@ -79,17 +79,19 @@ public class TestDB2ESImport {
 				.setIndexType("dbdemo") //必填项
 				.setRefreshOption("refresh")//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(1);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(50);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
 		/**
 		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
 		 */
 		importBuilder.setParallel(true);//设置为多线程并行批量导入
-		importBuilder.setQueue(1);//设置批量导入线程池等待队列长度
-		importBuilder.setThreadCount(5);//设置批量导入线程池工作线程数量
+		importBuilder.setQueue(10);//设置批量导入线程池等待队列长度
+		importBuilder.setThreadCount(50);//设置批量导入线程池工作线程数量
 		importBuilder.setContinueOnError(true);//任务出现异常，是否继续执行作业：true（默认值）继续执行 false 中断作业执行 
 		importBuilder.setAsyn(false);//true 异步方式执行，不等待所有导入作业任务结束，方法快速返回；false（默认值） 同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
 		importBuilder.setEsIdField("log_id");
+		importBuilder.setDebugResponse(false);//设置是否将每次处理的reponse打印到日志文件中，默认false，不打印响应报文将大大提升性能，只有在需要的时候才，log日志级别同时要设置为INFO
+//		importBuilder.setDiscardBulkResponse(true);//设置是否需要批量处理的响应报文，不需要设置为false，true为需要，默认true，如果不需要响应报文将大大提升处理速度
 		/**
 		 * 执行数据库表数据导入es操作
 		 */
@@ -161,18 +163,18 @@ public class TestDB2ESImport {
 		 * es相关配置
 		 */
 		importBuilder
-				.setIndex("dbclobdemo") //必填项
-				.setIndexType("dbclobdemo") //必填项
+				.setIndex("dbclobdemo") //必填项,索引表名称
+				.setIndexType("dbclobdemo") //必填项，索引类型
 				.setRefreshOption("refresh")//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setEsIdField("documentId")//可选项
+				.setEsIdField("document_id")//可选项,设置文档id对应的数据库字段
 				.setEsParentIdField(null) //可选项,如果不指定，es自动为文档产生id
 				.setRoutingValue(null) //可选项		importBuilder.setRoutingField(null);
-				.setEsDocAsUpsert(true)//可选项
+				.setEsDocAsUpsert(true)//可选项 新增/更新标识，具体看es官方文档
 				.setEsRetryOnConflict(3)//可选项
 				.setEsReturnSource(false)//可选项
-				.setEsVersionField(null)//可选项
-				.setEsVersionType(null)//可选项
+				.setEsVersionField(null)//可选项 乐观锁版本号对应的数据库字段
+				.setEsVersionType(null)//可选项 乐观锁版本类型，具体值看es官方文档
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") //可选项,默认日期格式
 				.setLocale("zh_CN")  //可选项,默认locale
 				.setTimeZone("Etc/UTC")  //可选项,默认时区
@@ -185,6 +187,9 @@ public class TestDB2ESImport {
 		importBuilder.addFieldMapping("document_id","docId")
 					 .addFieldMapping("docwtime","docwTime")
 					 .addIgnoreFieldMapping("channel_id");//添加忽略字段
+
+		importBuilder.setDebugResponse(false);//设置是否将每次处理的reponse打印到日志文件中，默认false
+		importBuilder.setDiscardBulkResponse(true);//设置是否需要批量处理的响应报文，不需要设置为false，true为需要，默认false
 
 		/**
 		 * 为每条记录添加额外的字段和值
