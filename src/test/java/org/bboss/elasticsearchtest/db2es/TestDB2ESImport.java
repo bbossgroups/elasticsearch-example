@@ -81,6 +81,7 @@ public class TestDB2ESImport {
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
 				.setBatchSize(50);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
 
+
 		/**
 		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
 		 */
@@ -154,7 +155,7 @@ public class TestDB2ESImport {
 				.setDbUser("root")
 				.setDbPassword("123456")
 				.setValidateSQL("select 1")
-				.setUsePool(false);//是否使用连接池
+				.setUsePool(true);//是否使用连接池
 
 
 		//指定导入数据的sql语句，必填项，可以设置自己的提取逻辑
@@ -208,17 +209,17 @@ public class TestDB2ESImport {
 		 * 重新设置es数据结构
 		 */
 		importBuilder.setDataRefactor(new DataRefactor() {
-			public void refactor(ESJDBC esjdbc) throws Exception  {
+			public void refactor(Context context) throws Exception  {
 				CustomObject customObject = new CustomObject();
-				customObject.setAuthor((String)esjdbc.getValue("author"));
-				customObject.setTitle((String)esjdbc.getValue("title"));
-				customObject.setSubtitle((String)esjdbc.getValue("subtitle"));
-				esjdbc.addFieldValue("docInfo",customObject);//如果还需要构建更多的内部对象，可以继续构建
+				customObject.setAuthor((String)context.getValue("author"));
+				customObject.setTitle((String)context.getValue("title"));
+				customObject.setSubtitle((String)context.getValue("subtitle"));
+				context.addFieldValue("docInfo",customObject);//如果还需要构建更多的内部对象，可以继续构建
 
 				//上述三个属性已经放置到docInfo中，如果无需再放置到索引文档中，可以忽略掉这些属性
-				esjdbc.addIgnoreFieldMapping("author");
-				esjdbc.addIgnoreFieldMapping("title");
-				esjdbc.addIgnoreFieldMapping("subtitle");
+				context.addIgnoreFieldMapping("author");
+				context.addIgnoreFieldMapping("title");
+				context.addIgnoreFieldMapping("subtitle");
 			}
 		});
 
