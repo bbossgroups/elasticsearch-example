@@ -20,13 +20,15 @@ import java.util.Map;
  */
 public class TestDB2ESImport {
 
-	private void initDBSource(){
-		SQLUtil.startNoPool("test",//数据源名称
+	private void initDBSource() throws SQLException {
+		SQLUtil.startPool("test",//数据源名称
 				"com.mysql.jdbc.Driver",//mysql驱动
-				"jdbc:mysql://localhost:3306/bboss",//mysql链接串
+				"jdbc:mysql://localhost:3306/bboss?useCursorFetch=true",//mysql链接串
 				"root","123456",//数据库账号和口令
-				"select 1 " //数据库连接校验sql
+				"select 1 ", //数据库连接校验sql
+				10000 // jdbcFetchSize
 		);
+//		List<Map> list = SQLExecutor.queryListWithDBName(Map.class,"test","select * from tablename where id > ?",10);
 	}
 	@Test
 	public void testDB2ES() throws SQLException {
@@ -90,7 +92,7 @@ public class TestDB2ESImport {
 		importBuilder.setThreadCount(50);//设置批量导入线程池工作线程数量
 		importBuilder.setContinueOnError(true);//任务出现异常，是否继续执行作业：true（默认值）继续执行 false 中断作业执行 
 		importBuilder.setAsyn(false);//true 异步方式执行，不等待所有导入作业任务结束，方法快速返回；false（默认值） 同步方式执行，等待所有导入作业任务结束，所有作业结束后方法才返回
-		importBuilder.setEsIdField("log_id");
+		importBuilder.setEsIdField("log_id");//设置log_id字段的值作为es 文档的_id属性
 		importBuilder.setDebugResponse(false);//设置是否将每次处理的reponse打印到日志文件中，默认false，不打印响应报文将大大提升性能，只有在需要的时候才，log日志级别同时要设置为INFO
 //		importBuilder.setDiscardBulkResponse(true);//设置是否需要批量处理的响应报文，不需要设置为false，true为需要，默认true，如果不需要响应报文将大大提升处理速度
 		/**
@@ -98,16 +100,18 @@ public class TestDB2ESImport {
 		 */
 		DataStream dataStream = importBuilder.builder();
 		dataStream.db2es();
-		
-		long count = ElasticSearchHelper.getRestClientUtil().countAll("dbdemo");
+
 		try {
-			Long dbcount = SQLExecutor.queryObject(Long.class, "select count(1) from (" + importBuilder.getSql()+ ") b");
+			//查询文档表中文档数量，与数据库中的记录数进行比较
+			long count = ElasticSearchHelper.getRestClientUtil().countAll("dbdemo");
+			//查询数据库中的记录数，与es导入的记录数进行比较，看看导入的数据是否一致
+			Long dbcount = SQLExecutor.queryObjectWithDBName(Long.class, importBuilder.getDbName(),"select count(1) from (select * from td_sm_log) b");
 			System.out.println("数据库记录数dbcount:" + dbcount);
+			System.out.println("数据导入完毕后索引表dbdemo中的文档数量:"+count);
 		}
 		catch (Exception e){
 			e.printStackTrace();
 		}
-		System.out.println("数据导入完毕后索引表dbdemo中的文档数量:"+count);
 	}
 
 	 
