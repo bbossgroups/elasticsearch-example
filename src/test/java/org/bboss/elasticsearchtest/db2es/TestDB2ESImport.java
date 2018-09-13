@@ -81,7 +81,8 @@ public class TestDB2ESImport {
 				.setIndexType("dbdemo") //必填项
 				.setRefreshOption("refresh")//可选项，null表示不实时刷新，importBuilder.setRefreshOption("refresh");表示实时刷新
 				.setUseJavaName(true) //可选项,将数据库字段名称转换为java驼峰规范的名称，例如:doc_id -> docId
-				.setBatchSize(50);  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setBatchSize(50)  //可选项,批量导入es的记录数，默认为-1，逐条处理，> 0时批量处理
+				.setJdbcFetchSize(10000);//设置数据库的查询fetchsize
 
 
 		/**
