@@ -87,6 +87,9 @@ public class TestDB2ESImport {
 
 		/**
 		 * 一次、作业创建一个内置的线程池，实现多线程并行数据导入elasticsearch功能，作业完毕后关闭线程池
+		 * es服务端调优文档
+		 * https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html
+		 * https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-search-speed.html#_replicas_might_help_with_throughput_but_not_always
 		 */
 		importBuilder.setParallel(true);//设置为多线程并行批量导入
 		importBuilder.setQueue(10);//设置批量导入线程池等待队列长度
