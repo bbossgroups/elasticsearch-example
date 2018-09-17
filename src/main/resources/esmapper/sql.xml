@@ -16,7 +16,13 @@
     <property name="sqlPagineQuery">
         <![CDATA[
          {
-            "query": "SELECT * FROM dbclobdemo where channelId=#[channelId]",
+         ## 指示sql语句中的回车换行符会被替换掉开始符,注意dsl注释不能放到sql语句中，否则会有问题，因为sql中的回车换行符会被去掉，导致回车换行符后面的语句变道与注释一行
+         ##  导致dsl模板解析的时候部分sql段会被去掉
+            "query": #"""
+                    SELECT * FROM dbclobdemo
+                        where channelId=#[channelId]
+             """,
+             ## 指示sql语句中的回车换行符会被替换掉结束符
             "fetch_size": #[fetchSize]
          }
         ]]>
