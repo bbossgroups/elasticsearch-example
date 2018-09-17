@@ -20,6 +20,9 @@
          ##  导致dsl模板解析的时候部分sql段会被去掉
             "query": #"""
                     SELECT * FROM dbclobdemo
+
+
+
                         where channelId=#[channelId]
              """,
              ## 指示sql语句中的回车换行符会被替换掉结束符
