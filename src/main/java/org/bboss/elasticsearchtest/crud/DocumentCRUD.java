@@ -287,7 +287,7 @@ public class DocumentCRUD {
 	}
 
 	/**
-	 * 批量导入1000条数据
+	 * 批量导入20002条数据
 	 */
 	public void testBulkAddDocuments() {
 		//创建批量创建文档的客户端对象，单实例多线程安全

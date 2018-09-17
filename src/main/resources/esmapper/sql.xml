@@ -8,6 +8,18 @@
          {"query": "SELECT * FROM dbclobdemo where channelId=#[channelId]"}
         ]]>
     </property>
+    <!--
+        分页sql query
+        每页显示 fetch_size对应的记录条数
 
+    -->
+    <property name="sqlPagineQuery">
+        <![CDATA[
+         {
+            "query": "SELECT * FROM dbclobdemo where channelId=#[channelId]",
+            "fetch_size": #[fetchSize]
+         }
+        ]]>
+    </property>
 
 </properties>

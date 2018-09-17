@@ -16,6 +16,8 @@ package org.bboss.elasticsearchtest.sql;/*
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.entity.sql.SQLRestResponse;
+import org.frameworkset.elasticsearch.entity.sql.SQLRestResponseHandler;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -132,11 +134,24 @@ public class SQLOrmTest {
 	public void testTranslate(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		String json = clientUtil.executeHttp("/_xpack/sql/translate",
-				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
+				"{\"query\": \"SELECT * FROM dbclobdemo limit 5\",\"fetch_size\": 5}",
 				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
 
+	}
+
+	/**
+	 * 低阶的检索方法
+	 */
+	@Test
+	public void testSQLRestResponse(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		SQLRestResponse sqlRestResponse = clientUtil.executeHttp("/_xpack/sql",
+																	"{\"query\": \"SELECT * FROM dbclobdemo where documentId = 1\"}",
+																	ClientInterface.HTTP_POST,
+																		new SQLRestResponseHandler());
+		System.out.println(sqlRestResponse);
 	}
 
 
