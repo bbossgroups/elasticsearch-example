@@ -8,6 +8,13 @@
          {"query": "SELECT * FROM dbclobdemo where channelId=#[channelId]"}
         ]]>
     </property>
+
+
+    <property name="sqlQueryWithStringParam">
+        <![CDATA[
+         {"query": "SELECT * FROM dbclobdemo where channelId=#[channelId] and docTitle='#[channelId,quoted=false]'"} ## sql中特定的字符串参数语法
+        ]]>
+    </property>
     <!--
         分页sql query
         每页显示 fetch_size对应的记录条数
