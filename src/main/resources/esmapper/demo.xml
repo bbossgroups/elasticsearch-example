@@ -32,6 +32,17 @@
                         },
                         "name": {
                             "type": "text"
+                        },
+                        "contrastStatus":{
+                            "type":"int"
+                        },
+                        "orderId": {
+                            "type": "text",
+                            "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
                         }
                     }
                 }

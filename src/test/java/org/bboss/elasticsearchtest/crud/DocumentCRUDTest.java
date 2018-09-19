@@ -70,6 +70,7 @@ public class DocumentCRUDTest {
 		documentCRUD.testSearchSourceFilter();
 
 		documentCRUD.updateDemoIndice();
+		documentCRUD.testTerm();
 
 
 
@@ -113,5 +114,22 @@ public class DocumentCRUDTest {
 
 		//带sourcefilter的文档检索操作
 		documentCRUD.testSearchSourceFilter();
+	}
+
+
+	//先完整执行一边，ok
+	//现在单步debug功能，整个功能演示完毕
+	@Test
+	public void testC() throws ParseException {
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+
+		//批量添加文档
+		documentCRUD.testBulkAddDocuments();
+
+
+
+
 	}
 }

@@ -1,0 +1,24 @@
+<properties>
+    <property name="queryOrderList">
+        <![CDATA[{
+		     "from": 0,
+			"size": 200,
+			"query": {
+				"bool": {
+					"filter": [
+						{
+							"term": {
+								"orderId.keyword":  "NFZF15045871807281445364228"
+							}
+						},
+						{
+							"term": {
+								"contrastStatus": 2
+							}
+						}
+					]
+				}
+			}
+		}]]>
+    </property>
+</properties>

@@ -99,7 +99,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
 		demo.setName("刘德华\"\n\t\r");
-
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
 		String response = clientUtil.addDocument("demo",//索引表
@@ -143,7 +144,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is modify content body2");
 		demo.setName("刘德华modify\t");
-
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		//执行update操作
 		response = clientUtil.addDocument("demo",//索引表
 				"demo",//索引类型
@@ -184,6 +186,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
 		demo.setName("刘德\"华\t");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		DynamicPriceTemplate dynamicPriceTemplate = new DynamicPriceTemplate();
 		dynamicPriceTemplate.setGoodsId(2);
 		List<Rule> ruleList = new ArrayList<Rule>();
@@ -218,6 +222,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo3");
 		demo.setContentbody("四大\"天王，这种文化很好，中华人民共和国");
 		demo.setName("张学友\t\n\r");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		demos.add(demo);//添加第二个对象到list中
 		demo.setDynamicPriceTemplate(new HashMap());
 //		dynamicPriceTemplate.setGoodsId(3);
@@ -307,6 +313,9 @@ public class DocumentCRUD {
 			else{
 				demo.setName("张学友不喜欢唱歌" + i);
 			}
+
+			demo.setOrderId("NFZF15045871807281445364228");
+			demo.setContrastStatus(2);
 			demos.add(demo);//添加第一个对象到list中
 		}
 
@@ -351,6 +360,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("bulk update content body2");
 		demo.setName("刘\n德华bulk update ");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		demos.add(demo);
 
 		demo = new Demo();
@@ -359,6 +370,8 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo3");
 		demo.setContentbody("bulk update 四大天王，这种文化很好，中华人民共和国");
 		demo.setName("张学友bulk update ");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		demos.add(demo);
 
 		//批量修改文档
@@ -645,9 +658,26 @@ public class DocumentCRUD {
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("bulk update content body2");
 		demo.setName("刘德华bulk update ");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 		clientUtil.addDocument("demo",//索引表
 				"demo",//索引类型
 				"updatePartDocument",
 				demo);
+	}
+
+
+	public void testTerm(){
+
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/orderQuery.xml");
+		ESDatas<Demo> esDatas =clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+				"queryOrderList",//esmapper/demo.xml中定义的dsl语句
+				Demo.class);
+		//获取结果对象列表，最多返回1000条记录
+		List<Demo> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
 	}
 }

@@ -33,6 +33,18 @@ public class SQLOrmTest {
 	 * 代码中的sql检索，返回Map类型集合，亦可以返回自定义的对象集合
 	 */
 	@Test
+	public void testDemoQuery(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		List<Map> json = clientUtil.sql(Map.class,"{\"query\": \"SELECT * FROM demo\"}");
+
+
+		System.out.println(json);
+	}
+
+	/**
+	 * 代码中的sql检索，返回Map类型集合，亦可以返回自定义的对象集合
+	 */
+	@Test
 	public void testMapQuery(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		List<Map> json = clientUtil.sql(Map.class,"{\"query\": \"SELECT * FROM dbclobdemo\"}");

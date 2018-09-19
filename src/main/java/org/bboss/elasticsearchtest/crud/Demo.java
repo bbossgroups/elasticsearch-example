@@ -41,6 +41,8 @@ public class Demo extends ESBaseData {
 
 	protected Date agentStarttime;
 	private String applicationName;
+	private String orderId;
+	private int contrastStatus;
 
 	public String getName() {
 		return name;
@@ -90,5 +92,21 @@ public class Demo extends ESBaseData {
 
 	public void setDynamicPriceTemplate(Object dynamicPriceTemplate) {
 		this.dynamicPriceTemplate = dynamicPriceTemplate;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public int getContrastStatus() {
+		return contrastStatus;
+	}
+
+	public void setContrastStatus(int contrastStatus) {
+		this.contrastStatus = contrastStatus;
 	}
 }
