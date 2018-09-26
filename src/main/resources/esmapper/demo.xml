@@ -34,7 +34,7 @@
                             "type": "text"
                         },
                         "contrastStatus":{
-                            "type":"int"
+                            "type":"integer"
                         },
                         "orderId": {
                             "type": "text",

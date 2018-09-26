@@ -98,7 +98,7 @@ public class DocumentCRUD {
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
 		demo.setContentbody("this is content body2");
-		demo.setName("刘德华\"\n\t\r");
+		demo.setName("刘德华");
 		demo.setOrderId("NFZF15045871807281445364228");
 		demo.setContrastStatus(2);
 
