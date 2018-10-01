@@ -117,7 +117,7 @@ public class DocumentCRUDTest {
 	}
 
 
-	//先完整执行一边，ok
+	//测试批量插入和查询的性能
 	//现在单步debug功能，整个功能演示完毕
 	@Test
 	public void testC() throws ParseException {

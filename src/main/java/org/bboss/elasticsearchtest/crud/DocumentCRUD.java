@@ -297,7 +297,7 @@ public class DocumentCRUD {
 	 */
 	public void testBulkAddDocuments() {
 		//创建批量创建文档的客户端对象，单实例多线程安全
-		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
 		long start = System.currentTimeMillis();
@@ -320,23 +320,39 @@ public class DocumentCRUD {
 		}
 
 
-		//批量添加或者修改文档，将两个对象添加到索引表demo中
+		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos,"refresh=true");//为了测试效果,启用强制刷新机制
+				demos);//为了测试效果,启用强制刷新机制
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
+		start = System.currentTimeMillis();
+		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		ESDatas<Map> datas = clientUtil.scroll("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}","1m",Map.class);
+		end = System.currentTimeMillis();
+		System.out.println("scroll SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		int max = 6;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("size", 1000);//每页1000条记录
 
+//		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
+		//scroll上下文有效期1分钟
+		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		start = System.currentTimeMillis();
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
+		end = System.currentTimeMillis();
+		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
 		long count = clientUtil.countAll("demo");
 
 		System.out.println("addDocuments-------------------------" +count);
-		System.out.println(response);
+		//System.out.println(response);
 		//获取第一个文档
 		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
 				"2");//w
-		System.out.println("getDocument-------------------------");
-		System.out.println(response);
+//		System.out.println("getDocument-------------------------");
+//		System.out.println(response);
 		//获取第二个文档
 		demo = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
