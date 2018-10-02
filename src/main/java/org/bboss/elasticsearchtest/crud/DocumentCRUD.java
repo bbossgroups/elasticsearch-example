@@ -29,6 +29,15 @@ import java.util.*;
 
 public class DocumentCRUD {
 	private String mappath = "esmapper/demo.xml";
+	public static void main(String[] args){
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+
+		//批量添加文档
+		documentCRUD.testBulkAddDocuments();
+
+	}
 	public void testCreateIndice(){
 		//创建加载配置文件的客户端工具，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
@@ -39,19 +48,19 @@ public class DocumentCRUD {
 			//如果索引表demo已经存在先删除mapping
 			if(exist) {
 				String r = clientUtil.dropIndice("demo");
-				System.out.println(r);
+				System.out.println("clientUtil.dropIndice(\"demo\") response:"+r);
 				exist = clientUtil.existIndice("demo");
 //				r = clientUtil.dropIndice("demo");
 //				System.out.println(r);
 				String demoIndice = clientUtil.getIndice("demo");//获取最新建立的索引表结构
-				System.out.println(demoIndice);
+				System.out.println("after dropIndice clientUtil.getIndice(\"demo\") response:"+demoIndice);
 			}
 			//创建索引表demo
 			clientUtil.createIndiceMapping("demo",//索引表名称
 					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
 
 			String demoIndice = clientUtil.getIndice("demo");//获取最新建立的索引表结构
-			System.out.println(demoIndice);
+			System.out.println("after createIndiceMapping clientUtil.getIndice(\"demo\") response:"+demoIndice);
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -298,6 +307,7 @@ public class DocumentCRUD {
 	public void testBulkAddDocuments() {
 		//创建批量创建文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
 		long start = System.currentTimeMillis();
@@ -323,7 +333,7 @@ public class DocumentCRUD {
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos);//为了测试效果,启用强制刷新机制
+				demos,"refresh=true");//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
@@ -336,13 +346,18 @@ public class DocumentCRUD {
 		params.put("sliceMax", max);//最多6个slice，不能大于share数
 		params.put("size", 1000);//每页1000条记录
 
-//		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
 		//scroll上下文有效期1分钟
 		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
 		start = System.currentTimeMillis();
 		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
 		end = System.currentTimeMillis();
 		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		if(datas != null){
+			System.out.println("scrollSlice SearchAll datas.getTotalSize():"+datas.getTotalSize());
+			if(datas.getDatas() != null)
+				System.out.println("scrollSlice SearchAll datas.getDatas().size():"+datas.getDatas().size());
+		}
 		long count = clientUtil.countAll("demo");
 
 		System.out.println("addDocuments-------------------------" +count);
