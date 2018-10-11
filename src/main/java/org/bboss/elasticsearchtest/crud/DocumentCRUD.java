@@ -346,7 +346,7 @@ public class DocumentCRUD {
 		params.put("sliceMax", max);//最多6个slice，不能大于share数
 		params.put("size", 1000);//每页1000条记录
 
-		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,false);
 		//scroll上下文有效期1分钟
 		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
 		start = System.currentTimeMillis();
@@ -408,10 +408,18 @@ public class DocumentCRUD {
 		//批量修改文档
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos);
+				demos,"refresh=true");
 
 		System.out.println("addDateDocument-------------------------");
 		System.out.println(response);
+		demo.setContrastStatus(3);
+		response = clientUtil.updateDocuments("demo",//索引表
+				"demo",//索引类型
+				demos,"refresh=true");
+
+		System.out.println("addDateDocument-------------------------");
+		System.out.println(response);
+
 		//根据文档id获取修改后的文档json串
 		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
@@ -703,6 +711,20 @@ public class DocumentCRUD {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/orderQuery.xml");
 		ESDatas<Demo> esDatas =clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
 				"queryOrderList",//esmapper/demo.xml中定义的dsl语句
+				Demo.class);
+		//获取结果对象列表，最多返回1000条记录
+		List<Demo> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+
+	public void testDirectDslQuery(){
+		String queryAll = "{\"query\": {\"match_all\": {}}}";
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Demo> esDatas =clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+				queryAll,//queryAll变量对应的dsl语句
 				Demo.class);
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
