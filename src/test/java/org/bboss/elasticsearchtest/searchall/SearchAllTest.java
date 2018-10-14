@@ -116,4 +116,88 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
+
+	@Test
+	public void testSearchAllParrrel(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas = clientInterface.searchAll("demo",Map.class,6);
+		List<Map> dataList = esDatas.getDatas();
+		System.out.println("TotalSize:"+esDatas.getTotalSize());
+		if(dataList != null) {
+			System.out.println("dataList.size:" + dataList.size());
+		}
+		else
+		{
+			System.out.println("dataList.size:0");
+		}
+	}
+
+	@Test
+	public void testSearchAllFethchSizeParrrel(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas = clientInterface.searchAll("demo",10000,Map.class,6);
+		List<Map> dataList = esDatas.getDatas();
+		System.out.println("TotalSize:"+esDatas.getTotalSize());
+		if(dataList != null) {
+			System.out.println("dataList.size:" + dataList.size());
+		}
+		else
+		{
+			System.out.println("dataList.size:0");
+		}
+	}
+
+	@Test
+	public void testSearchAllHandlerParrrel(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas = clientInterface.searchAll("demo", new ScrollHandler<Map>() {
+			public void handle(ESDatas<Map> esDatas) throws Exception {
+				List<Map> dataList = esDatas.getDatas();
+				System.out.println("TotalSize:"+esDatas.getTotalSize());
+				if(dataList != null) {
+					System.out.println("dataList.size:" + dataList.size());
+				}
+				else
+				{
+					System.out.println("dataList.size:0");
+				}
+			}
+		},Map.class,6);
+		List<Map> dataList = esDatas.getDatas();
+		System.out.println("TotalSize:"+esDatas.getTotalSize());
+		if(dataList != null) {
+			System.out.println("dataList.size:" + dataList.size());
+		}
+		else
+		{
+			System.out.println("dataList.size:0");
+		}
+	}
+
+	@Test
+	public void testSearchAllFethchSizeHandlerParrrel(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas = clientInterface.searchAll("demo",10000,new ScrollHandler<Map>() {
+			public void handle(ESDatas<Map> esDatas) throws Exception {
+				List<Map> dataList = esDatas.getDatas();
+				System.out.println("TotalSize:"+esDatas.getTotalSize());
+				if(dataList != null) {
+					System.out.println("dataList.size:" + dataList.size());
+				}
+				else
+				{
+					System.out.println("dataList.size:0");
+				}
+			}
+		},Map.class,6);
+		List<Map> dataList = esDatas.getDatas();
+		System.out.println("TotalSize:"+esDatas.getTotalSize());
+		if(dataList != null) {
+			System.out.println("dataList.size:" + dataList.size());
+		}
+		else
+		{
+			System.out.println("dataList.size:0");
+		}
+	}
 }
