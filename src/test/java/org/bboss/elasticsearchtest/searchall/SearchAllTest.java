@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>Description: </p>
+ * <p>Description: 检索所有文档数据测试用例</p>
  * <p></p>
  * <p>Copyright (c) 2018</p>
  * @Date 2018/10/14 20:07
@@ -33,6 +33,19 @@ import java.util.Map;
  * @version 1.0
  */
 public class SearchAllTest {
+	/**
+	 * 统计索引中有多少文档
+	 */
+	@Test
+	public void testCountAll(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		long esDatas = clientInterface.countAll("demo");
+		System.out.println("TotalSize:"+esDatas);
+
+	}
+	/**
+	 * 简单的检索索引表所有文档数据，默认分5000条记录一批从es获取数据
+	 */
 	@Test
 	public void testSearchAll(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -47,7 +60,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 简单的检索索引表所有文档数据，按指定的10000条记录一批从es获取数据
+	 */
 	@Test
 	public void testSearchAllFethchSize(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -62,7 +77,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 检索索引表所有文档数据，默认分5000条记录一批从es获取数据，分批获取的数据交个一ScrollHandler来处理
+	 */
 	@Test
 	public void testSearchAllHandler(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -89,7 +106,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 检索索引表所有文档数据，按指定的10000条记录一批从es获取数据，分批获取的数据交个一ScrollHandler来处理
+	 */
 	@Test
 	public void testSearchAllFethchSizeHandler(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -116,7 +135,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 并行检索索引表所有文档数据，默认分5000条记录一批从es获取数据，指定了并行的线程数为6
+	 */
 	@Test
 	public void testSearchAllParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -131,7 +152,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 并行检索索引表所有文档数据，按指定的10000条记录一批从es获取数据，指定了并行的线程数为6
+	 */
 	@Test
 	public void testSearchAllFethchSizeParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -146,7 +169,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 并行检索索引表所有文档数据，默认分5000条记录一批从es获取数据，分批获取的数据交个一ScrollHandler来处理，指定了并行的线程数为6
+	 */
 	@Test
 	public void testSearchAllHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -173,7 +198,9 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
-
+	/**
+	 * 并行检索索引表所有文档数据，按指定的10000条记录一批从es获取数据，分批获取的数据交个一ScrollHandler来处理，指定了并行的线程数为6
+	 */
 	@Test
 	public void testSearchAllFethchSizeHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
