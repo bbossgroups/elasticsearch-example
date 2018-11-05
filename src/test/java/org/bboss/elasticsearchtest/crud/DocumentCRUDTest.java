@@ -42,8 +42,16 @@ public class DocumentCRUDTest {
 //		documentCRUD.testSearchSourceFilter();
 //
 //		documentCRUD.updateDemoIndice();
-		DocumentCRUDTest documentCRUDTest = new DocumentCRUDTest();
-		documentCRUDTest.testC();
+//		DocumentCRUDTest documentCRUDTest = new DocumentCRUDTest();
+//		documentCRUDTest.testC();
+
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+		//添加/修改单个文档
+		documentCRUD.testAddAndUpdateDocument();
+		//批量修改文档
+		documentCRUD.testBulkAddDocuments();
 	}
 
 	//先完整执行一边，ok
@@ -73,6 +81,50 @@ public class DocumentCRUDTest {
 
 		documentCRUD.updateDemoIndice();
 		documentCRUD.testTerm();
+
+
+
+	}
+
+	//先完整执行一边，ok
+	//现在单步debug功能，整个功能演示完毕
+	@Test
+	public void testThreadCRUD() {
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				DocumentCRUD documentCRUD = new DocumentCRUD();
+				//删除/创建文档索引表
+				documentCRUD.testCreateIndice();
+				//添加/修改单个文档
+				try {
+					documentCRUD.testAddAndUpdateDocument();
+
+					//批量添加文档
+					documentCRUD.testBulkAddDocument();
+					//检索文档
+					documentCRUD.testSearch();
+					//批量修改文档
+					documentCRUD.testBulkUpdateDocument();
+
+					//检索批量修改后的文档
+					documentCRUD.testSearch();
+					//带list复杂参数的文档检索操作
+					documentCRUD.testSearchArray();
+					//带from/size分页操作的文档检索操作
+					documentCRUD.testPagineSearch();
+					//带sourcefilter的文档检索操作
+					documentCRUD.testSearchSourceFilter();
+
+					documentCRUD.updateDemoIndice();
+					documentCRUD.testTerm();
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
+
+
 
 
 

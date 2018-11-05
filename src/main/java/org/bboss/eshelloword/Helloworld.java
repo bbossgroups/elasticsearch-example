@@ -16,8 +16,10 @@ package org.bboss.eshelloword;/*
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.entity.ESDatas;
 
 import java.util.Date;
+import java.util.Map;
 
 public class Helloworld {
 	public static void main(String[] args){
@@ -37,6 +39,9 @@ public class Helloworld {
 		exist = clientUtil.existIndice("twitter");
 
 		exist = clientUtil.existIndice("agentinfo");
+		long count = clientUtil.countAll("demo");
+
+		ESDatas<Map> esDatas = clientUtil.searchAll("demo",Map.class);
 //		long count = clientUtil.countAll("agentinfo");
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,

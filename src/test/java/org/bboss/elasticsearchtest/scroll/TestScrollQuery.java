@@ -37,7 +37,7 @@ public class TestScrollQuery {
 		Map params = new HashMap();
 
 		params.put("size", 100);//每页100条记录
-		ESDatas<Map> response = clientUtil.searchList("demo/_search?scroll=1m","scrollQuery",params,Map.class);
+		ESDatas<Map> response = clientUtil.searchList("demo/_search?scroll=10s","scrollQuery",params,Map.class);
 		List<Map> datas = response.getDatas();
 		long realTotalSize = datas.size();
 		long totalSize = response.getTotalSize();
@@ -49,12 +49,18 @@ public class TestScrollQuery {
 		if(datas != null && datas.size() > 0) {//每页1000条记录，迭代scrollid，遍历scroll分页结果
 			do {
 
-				response = clientUtil.searchScroll("1m",scrollId,Map.class);
+				response = clientUtil.searchScroll("10s",scrollId,Map.class);
+//				if(scrollIds != null && scrollIds.size() > 0) {
+//					clientUtil.deleteScrolls(scrollIds);
+//					scrollIds.clear();
+//				}
 				scrollId = response.getScrollId();
 				totalSize = response.getTotalSize();
 				System.out.println("scroll totalSize:"+totalSize);
-				if(scrollId != null)
+				if(scrollId != null) {
 					scrollIds.add(scrollId);
+
+				}
 				datas = response.getDatas();
 
 				if(datas == null || datas.size() == 0){
@@ -66,16 +72,21 @@ public class TestScrollQuery {
 		long endtime = System.currentTimeMillis();
 		System.out.println("耗时："+(endtime - starttime)+",realTotalSize："+realTotalSize+",totalSize:"+totalSize);
 		//查询存在es服务器上的scroll上下文信息
-		String scrolls = clientUtil.executeHttp("_nodes/stats/indices/search", ClientUtil.HTTP_GET);
+		String scrolls = clientUtil.executeHttp("_nodes/stats/indices/search?pretty", ClientUtil.HTTP_GET);
 //		System.out.println(scrolls);
 		//处理完毕后清除scroll上下文信息
 		if(scrollIds.size() > 0) {
-			scrolls = clientUtil.deleteScrolls(scrollIds);
-//			System.out.println(scrolls);
+			try {
+				scrolls = clientUtil.deleteScrolls(scrollIds);
+			}
+			catch (Exception e){
+
+			}
+			System.out.println(scrolls);
 		}
 		//清理完毕后查看scroll上下文信息
-		scrolls = clientUtil.executeHttp("_nodes/stats/indices/search", ClientUtil.HTTP_GET);
-//		System.out.println(scrolls);
+		scrolls = clientUtil.executeHttp("_nodes/stats/indices/search?pretty", ClientUtil.HTTP_GET);
+		System.out.println(scrolls);
 	}
 
 	/**

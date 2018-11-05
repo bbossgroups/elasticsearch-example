@@ -7,7 +7,7 @@ elasticPassword=changeme
 
 #elasticsearch.rest.hostNames=10.1.236.88:9200
 #elasticsearch.rest.hostNames=127.0.0.1:9200
-elasticsearch.rest.hostNames=10.21.20.168:9200
+elasticsearch.rest.hostNames=192.168.137.1:9200
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
 elasticsearch.dateFormat=yyyy.MM.dd
 elasticsearch.timeZone=Asia/Shanghai
@@ -36,7 +36,7 @@ logs.elasticUser=elastic
 logs.elasticPassword=changeme
 
 #elasticsearch.rest.hostNames=10.1.236.88:9200
-logs.elasticsearch.rest.hostNames=127.0.0.1:9200
+logs.elasticsearch.rest.hostNames=192.168.137.1:9200
 #elasticsearch.rest.hostNames=10.21.20.168:9200
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
 logs.elasticsearch.dateFormat=yyyy.MM.dd
@@ -50,7 +50,7 @@ logs.elasticsearch.discoverHost=false
 logs.http.timeoutConnection = 400000
 logs.http.timeoutSocket = 400000
 logs.http.connectionRequestTimeout=400000
-logs.http.retryTime = 1
+logs.http.retryTime = 3
 logs.http.maxLineLength = -1
 logs.http.maxHeaderCount = 200
 logs.http.maxTotal = 400

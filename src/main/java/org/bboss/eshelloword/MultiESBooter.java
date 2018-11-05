@@ -57,6 +57,8 @@ public class MultiESBooter {
 		System.out.println("twitter exist:"+exist);
 		exist = configClientUtil.existIndice("agentinfo");
 		System.out.println("agentinfo exist:"+exist);
+
+		defaultClientUtil.existIndice("sss");
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
 //				new ESMapResponseHandler());//返回map结构

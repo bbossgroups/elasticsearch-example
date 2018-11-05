@@ -1,0 +1,230 @@
+<properties>
+    <!--
+    本案例适用于es 2.x,5.x
+    创建包含员工类型和公司类型的公司索引表
+    -->
+    <property name="createCompanyEmployeeIndice">
+        <![CDATA[{
+            "settings": {
+                "number_of_shards": 6,
+                "index.refresh_interval": "5s"
+            },
+            "mappings": {
+                "company": { ##公司
+                    "properties": {
+                        "name": {
+                            "type": "text",
+                             "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
+                        },
+
+                        "city": {
+                            "type": "text",
+                            "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
+                        },
+                        "country": {
+                            "type": "text",
+                            "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
+                        },
+                        "companyId": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "employee":
+                 { ##雇员
+                     "_parent": {##定义雇员和公司父子关联关系
+                        "type": "company"
+                    },
+                    "_routing": {
+                        "required": false
+                    },
+                    "properties": {
+
+                        "name": {
+                            "type": "text",
+                             "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
+                        },
+                        "birthday": {
+                             "type": "date",
+                              "format":"yyyy-MM-dd||epoch_millis"
+                        },
+                        "hobby": {
+                            "type": "text",
+                            "fields": { ##dsl注释 定义精确查找的内部keyword字段
+                                "keyword": {
+                                    "type": "keyword"
+                                }
+                            }
+                        },
+                        "companyId": {
+                            "type": "keyword"
+                        },
+                        "employId": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+
+              }
+        }]]>
+    </property>
+    <!--
+    导入公司信息：
+    -->
+    <property name="bulkImportCompanyData">
+        <![CDATA[
+            { "index": { "_id": "london" }}
+            { "name": "London Westminster", "city": "London", "country": "UK" ,"companyId":"london"}
+            { "index": { "_id": "liverpool" }}
+            { "name": "Liverpool Central", "city": "Liverpool", "country": "UK" ,"companyId":"liverpool"}
+            { "index": { "_id": "paris" }}
+            { "name": "Champs Élysées", "city": "Paris", "country": "France","companyId":"paris" }
+        ]]>
+    </property>
+    <!--
+   导入雇员信息：
+   -->
+    <property name="bulkImportEmployeeData">
+        <![CDATA[
+            { "index": { "_id": 1, "parent": "london" }}
+            { "name": "Alice Smith", "birthday": "1970-10-24", "hobby": "hiking" ,"companyId":"london","employeeId":1 }
+            { "index": { "_id": 2, "parent": "london" }}
+            { "name": "Mark Thomas", "birthday": "1982-05-16", "hobby": "diving" ,"companyId":"london","employeeId":2}
+            { "index": { "_id": 3, "parent": "liverpool" }}
+            { "name": "Barry Smith", "birthday": "1979-04-01", "hobby": "hiking" ,"companyId":"liverpool","employeeId":3}
+            { "index": { "_id": 4, "parent": "paris" }}
+            { "name": "Adrien Grand", "birthday": "1987-05-11", "hobby": "horses" ,"companyId":"paris","employeeId":4}
+            { "index": { "_id": 5, "parent": "paris" }}
+            { "name": "Adrien Green", "birthday": "1977-05-12", "hobby": "dancing" ,"companyId":"paris","employeeId":5}
+        ]]>
+    </property>
+    <!--出生日期为条件检索公司信息-->
+    <property name="hasChildSearchByBirthday">
+        <![CDATA[
+            {
+              "query": {
+                "has_child": {
+                  "type": "employee",
+                  "query": {
+                    "range": {
+                      "birthday": {
+                        "gte": #[birthday]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        ]]>
+    </property>
+    <!--姓名为条件检索公司信息-->
+    <property name="hasChildSearchByName">
+        <![CDATA[
+            {
+              "query": {
+                "has_child": {
+                  "type":       "employee",
+                  "score_mode": "max",
+                  "query": {
+                    "match": {
+                      "name": #[name]
+                    }
+                  }
+                }
+              }
+            }
+        ]]>
+    </property>
+
+    <!--以雇员姓名为条件检索公司信息并返回公司雇员信息-->
+    <property name="hasChildSearchReturnParent2ndChildren">
+        <![CDATA[
+            {
+              "query": {
+                "has_child": {
+                  "type":       "employee",
+                  "score_mode": "max",
+                  "query": {
+                    "match": {
+                      "name": #[name]
+                    }
+                  },
+                  "inner_hits": {}
+                }
+              }
+            }
+        ]]>
+    </property>
+    <!--最小员工数为条件检索公司信息-->
+    <property name="hasChildSearchByMinChild">
+        <![CDATA[
+            {
+                "query": {
+                    "has_child": {
+                      "type":  "employee",
+                      "min_children": #[min_children],
+                      "query": {
+                        "match_all": {}
+                      }
+                    }
+                }
+            }
+        ]]>
+    </property>
+
+    <!--根据公司所在国家信息，检索员工信息-->
+    <property name="hasParentSearchByCountry">
+        <![CDATA[
+            {
+              "query": {
+                "has_parent": {
+                  "type": "company",
+                  "query": {
+                    "match": {
+                      "country": #[country]
+                    }
+                  }
+                }
+              }
+            }
+        ]]>
+    </property>
+
+    <!--检索员工信息，同时返回员工所属的公司信息-->
+    <property name="hasParentSearchByCountryReturnParent2ndChildren">
+        <![CDATA[
+            {
+              "query": {
+                "has_parent": {
+                  "type": "company",
+                  "query": {
+                    "match": {
+                      "country": #[country]
+                    }
+                  },
+                  "inner_hits": {}
+                }
+              }
+            }
+        ]]>
+    </property>
+
+
+
+</properties>

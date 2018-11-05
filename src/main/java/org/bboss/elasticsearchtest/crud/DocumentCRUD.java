@@ -159,6 +159,10 @@ public class DocumentCRUD {
 		response = clientUtil.addDocument("demo",//索引表
 				"demo",//索引类型
 				demo);
+
+		response = clientUtil.addDocument("demo",//索引表
+				"demo",//索引类型
+				demo);
 		//根据文档id获取修改后的文档对象，返回json报文字符串
 		response = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
@@ -328,12 +332,10 @@ public class DocumentCRUD {
 			demo.setContrastStatus(2);
 			demos.add(demo);//添加第一个对象到list中
 		}
-
-
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos,"refresh=true");//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+				demos);//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
@@ -413,6 +415,7 @@ public class DocumentCRUD {
 		System.out.println("addDateDocument-------------------------");
 		System.out.println(response);
 		demo.setContrastStatus(3);
+
 		response = clientUtil.updateDocuments("demo",//索引表
 				"demo",//索引类型
 				demos,"refresh=true");
@@ -501,6 +504,11 @@ public class DocumentCRUD {
 						"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
+
+		Demo single = clientUtil.searchObject("demo/_search",//demo为索引表，_search为检索操作action
+				"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
+				params,//变量参数
+				Demo.class );
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
 
