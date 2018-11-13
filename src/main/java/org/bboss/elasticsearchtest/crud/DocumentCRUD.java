@@ -40,7 +40,7 @@ public class DocumentCRUD {
 	}
 	public void testCreateIndice(){
 		//创建加载配置文件的客户端工具，单实例多线程安全
-		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo.xml");
 		try {
 			//判读索引表demo是否存在，存在返回true，不存在返回false
 			boolean exist = clientUtil.existIndice("demo");
@@ -504,7 +504,7 @@ public class DocumentCRUD {
 						"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
-
+		//检索单个文档
 		Demo single = clientUtil.searchObject("demo/_search",//demo为索引表，_search为检索操作action
 				"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
 				params,//变量参数

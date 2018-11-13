@@ -1,0 +1,319 @@
+<property name="hostAgentInfoIndice">
+        <![CDATA[{
+                "settings": {
+                    "number_of_shards": 6,
+                    "index.refresh_interval": "5s"
+                },
+                "mappings": {
+                    "hostagentinfo": {
+                        "properties": {
+                            "agentId": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "agentVersion": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "applicationName": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "endStatus": {
+                                "type": "long"
+                            },
+                            "endTimestamp": {
+                                "type": "long"
+                            },
+                            "endTimestampDate": {
+                                "type": "date"
+                            },
+                            "fileInfo": {
+                                "type" : "nested",
+                                "properties": {
+                                    "devName": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "dirName": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "diskType": {
+                                        "type": "long"
+                                    },
+                                    "flags": {
+                                        "type": "long"
+                                    },
+                                    "options": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "sysTypeName": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "total": {
+                                        "type": "long"
+                                    },
+                                    "typeName": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "hostCpuInfo": {
+                                "type" : "nested",
+                                "properties": {
+                                    "cacheSize": {
+                                        "type": "long"
+                                    },
+                                    "coresPerSocket": {
+                                        "type": "long"
+                                    },
+                                    "cpuCount": {
+                                        "type": "long"
+                                    },
+                                    "mhz": {
+                                        "type": "long"
+                                    },
+                                    "model": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "totalCores": {
+                                        "type": "long"
+                                    },
+                                    "totalSockets": {
+                                        "type": "long"
+                                    },
+                                    "vendor": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "hostname": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "ip": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "jvmInfo": {
+                                "properties": {
+                                    "gcType": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "version": {
+                                        "type": "long"
+                                    },
+                                    "vmVersion": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "netInterfaces": {
+                                "type" : "nested",
+                                "properties": {
+                                    "address": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "broadcast": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "description": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "destination": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "flags": {
+                                        "type": "long"
+                                    },
+                                    "hwaddr": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "metric": {
+                                        "type": "long"
+                                    },
+                                    "mtu": {
+                                        "type": "long"
+                                    },
+                                    "name": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "netmask": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    },
+                                    "type": {
+                                        "type": "text",
+                                        "fields": {
+                                            "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "pid": {
+                                "type": "long"
+                            },
+                            "ports": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "serviceType": {
+                                "type": "long"
+                            },
+                            "startTimestamp": {
+                                "type": "long"
+                            },
+                            "startTimestampDate": {
+                                "type": "date"
+                            },
+                            "swapTotalMem": {
+                                "type": "long"
+                            },
+                            "totalMem": {
+                                "type": "long"
+                            },
+                            "uptime": {
+                                "type": "float"
+                            },
+                            "vmVersion": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+        }]]>
+    </property>

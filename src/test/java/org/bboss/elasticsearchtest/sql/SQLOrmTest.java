@@ -48,8 +48,6 @@ public class SQLOrmTest {
 	public void testMapQuery(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		List<Map> json = clientUtil.sql(Map.class,"{\"query\": \"SELECT * FROM dbclobdemo\"}");
-
-
 		System.out.println(json);
 	}
 	/**
