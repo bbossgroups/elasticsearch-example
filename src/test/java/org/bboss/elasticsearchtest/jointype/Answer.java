@@ -19,34 +19,9 @@ package org.bboss.elasticsearchtest.jointype;
  * <p>Description: </p>
  * <p></p>
  * <p>Copyright (c) 2018</p>
- * @Date 2018/9/11 11:48
+ * @Date 2018/11/22 16:15
  * @author biaoping.yin
  * @version 1.0
  */
-public class JoinSon {
-	private String name;
-	private String parent;
-	/**
-	 * 如果属性名称不一样，就通过这种指定别名
-	@JsonProperty("name")
-	private String namexxxx;
-	@JsonProperty("parent")
-	private String parentxxxxx;
-	*/
-
-	public String getParent() {
-		return parent;
-	}
-
-	public void setParent(String parent) {
-		this.parent = parent;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+public class Answer extends Question {
 }
