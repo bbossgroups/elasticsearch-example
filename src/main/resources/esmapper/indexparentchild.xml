@@ -87,7 +87,7 @@
     <!--
     导入公司信息：
     -->
-    <property name="bulkImportCompanyData">
+    <property name="bulkImportCompanyData"  trim="false">
         <![CDATA[
             { "index": { "_id": "london" }}
             { "name": "London Westminster", "city": "London", "country": "UK" ,"companyId":"london"}
@@ -100,7 +100,7 @@
     <!--
    导入雇员信息：
    -->
-    <property name="bulkImportEmployeeData">
+    <property name="bulkImportEmployeeData"  trim="false">
         <![CDATA[
             { "index": { "_id": 1, "parent": "london" }}
             { "name": "Alice Smith", "birthday": "1970-10-24", "hobby": "hiking" ,"companyId":"london","employeeId":1 }

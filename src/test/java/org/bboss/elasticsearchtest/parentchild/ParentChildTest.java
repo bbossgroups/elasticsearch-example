@@ -281,6 +281,7 @@ public class ParentChildTest {
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences("medical",Medical.class);//指定inner查询结果对于medical类型和对应的对象类型Medical
 			ESDatas<Basic> escompanys = clientUtil.searchList("client_info/basic/_search",
 					"hasParentSearchByCountryReturnParent2ndMultiChildren",params,Basic.class);
+			String response = clientUtil.executeRequest("client_info/basic/_search","hasParentSearchByCountryReturnParent2ndMultiChildren",params);
 //			escompanys = clientUtil.searchAll("client_info",Basic.class);
 			long totalSize = escompanys.getTotalSize();
 			List<Basic> clientInfos = escompanys.getDatas();//获取符合条件的数据

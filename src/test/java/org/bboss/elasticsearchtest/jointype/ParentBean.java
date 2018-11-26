@@ -16,6 +16,7 @@ package org.bboss.elasticsearchtest.jointype;
  */
 
 import com.frameworkset.orm.annotation.ESId;
+import org.frameworkset.elasticsearch.entity.JoinSon;
 
 /**
  * <p>Description: </p>
