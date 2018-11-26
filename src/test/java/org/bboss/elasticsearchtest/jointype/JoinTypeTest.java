@@ -40,6 +40,9 @@ import java.util.Map;
 public class JoinTypeTest {
 	private ClientInterface clientInterface = ElasticSearchHelper.getConfigRestClientUtil("esmapper/joinparentchild.xml");
 
+	/**
+	 * 创建join父子关系indice ：pager
+	 */
 	private void createPagerIndice() {
 		try {
 			clientInterface.dropIndice("pager");
@@ -53,6 +56,10 @@ public class JoinTypeTest {
 
 	}
 
+	/**
+	 * 导入测试数据
+	 * 6.x对bulk的处理更加严格，所以从配置文件中获取到要导入的数据，trim掉空格，补上换行符
+	 */
 	private void importDatas() {
 
 
@@ -93,7 +100,7 @@ public class JoinTypeTest {
 			//设置子文档的类型和对象映射关系
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences("answer", Answer.class);//指定inner查询结果对于answer类型和对应的对象类型Answer
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences("comment", Comment.class);//指定inner查询结果对于comment类型和对应的对象类型Comment
-			String response = clientInterface.executeRequest("pager/pagertype/_search", "hasParentSearchByNameReturnAnswerAndComment", params);
+//			String response = clientInterface.executeRequest("pager/pagertype/_search", "hasParentSearchByNameReturnAnswerAndComment", params);
 			ESDatas<Question> escompanys = clientInterface.searchList("pager/pagertype/_search",
 					"hasParentSearchByNameReturnAnswerAndComment", params, Question.class);
 //			escompanys = clientUtil.searchAll("client_info",Basic.class);
@@ -185,6 +192,9 @@ public class JoinTypeTest {
 
 	}
 
+	/**
+	 * 运行demo的junit测试方法
+	 */
 	@Test
 	public void testJoin() {
 		createPagerIndice();
