@@ -106,7 +106,7 @@ public class JoinTypeTest {
 //			escompanys = clientUtil.searchAll("client_info",Basic.class);
 			long totalSize = escompanys.getTotalSize();
 			List<Question> clientInfos = escompanys.getDatas();//获取符合条件的数据
-			//查看公司下面的雇员信息（符合检索条件的雇员信息）
+			//查看问题信息以及对应的答案和评论信息
 			for (int i = 0; clientInfos != null && i < clientInfos.size(); i++) {
 				Question question = clientInfos.get(i);
 				List<Answer> answers = ResultUtil.getInnerHits(question.getInnerHits(), "answer");
@@ -135,9 +135,9 @@ public class JoinTypeTest {
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences(Question.class);//指定inner查询结果对于问题类型,问题只有一个文档类型，索引不需要显示指定Question类型信息
 			ESDatas<Answer> escompanys = clientInterface.searchList("pager/pagertype/_search",
 					"hasParentSearchByQuestionNameReturnParent2ndChildren", params, Answer.class);
-			List<Answer> employeeList = escompanys.getDatas();//获取符合条件的雇员数据
+			List<Answer> employeeList = escompanys.getDatas();
 			long totalSize = escompanys.getTotalSize();
-			//查看每个雇员对应的公司信息
+			//查看答案和评论信息以及对应的问题信息
 			for (int i = 0; i < employeeList.size(); i++) {
 				Answer employee = employeeList.get(i);
 				List<Question> companies = ResultUtil.getInnerHits(employee.getInnerHits(), "question");
@@ -160,9 +160,9 @@ public class JoinTypeTest {
 
 		ESDatas<Answer> escompanys = clientInterface.searchList("pager/pagertype/_search",
 				"hasParentSearchByName", params, Answer.class);
-		List<Answer> employeeList = escompanys.getDatas();//获取符合条件的雇员数据
+		List<Answer> employeeList = escompanys.getDatas();
 		long totalSize = escompanys.getTotalSize();
-		//查看每个雇员对应的公司信息
+		//查看符合条件的问题对应的答案信息
 		for (int i = 0; i < employeeList.size(); i++) {
 			Answer employee = employeeList.get(i);
 			System.out.println(employee.getDatatype());
@@ -181,9 +181,9 @@ public class JoinTypeTest {
 
 		ESDatas<Answer> escompanys = clientInterface.searchList("pager/pagertype/_search",
 				"hasParentIdSearch", params, Answer.class);
-		List<Answer> employeeList = escompanys.getDatas();//获取符合条件的雇员数据
+		List<Answer> employeeList = escompanys.getDatas();//根据问题id，检索答案信息
 		long totalSize = escompanys.getTotalSize();
-		//查看每个雇员对应的公司信息
+		//查看答案信息
 		for (int i = 0; i < employeeList.size(); i++) {
 			Answer employee = employeeList.get(i);
 			System.out.println(employee.getDatatype());
