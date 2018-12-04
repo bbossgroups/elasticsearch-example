@@ -63,7 +63,7 @@ public class DocumentSearchAfter {
 			if(demos != null)
 				System.out.println("返回当前页记录数:"+demos.size());
 			if(demos != null && demos.size() == 100) { //还有数据，则通过searchAfter继续获取下一页数据
-				String searchAfterId = (String) demos.get(99).getId();//获取最后一条记录的_id值
+				String searchAfterId =   demos.get(99).getDemoId()+"";//获取最后一条记录的_id值
 				params.put("searchAfterId", searchAfterId);//设置searchAfterId为分页起点_id值
 				long demoId =  demos.get(99).getDemoId();//获取最后一条记录的demoId值
 				params.put("demoId", demoId);//设置searchAfterId为分页起点demoId值

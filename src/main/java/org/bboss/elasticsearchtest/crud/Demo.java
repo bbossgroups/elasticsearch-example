@@ -26,7 +26,7 @@ import java.util.Date;
 public class Demo extends ESBaseData {
 	private Object dynamicPriceTemplate;
 	//设定文档标识字段
-	@ESId
+	@ESId(readSet = true,persistent = false)
 	private Long demoId;
 	private String contentbody;
 	/**  当在mapping定义中指定了日期格式时，则需要指定以下两个注解,例如
