@@ -47,7 +47,10 @@ public class DocumentSearchAfter {
 		params.put("endTime",new Date().getTime());
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
-				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+				clientUtil.searchList("demo_*/_search",//demo为索引表，_search为检索操作action:
+						// demo/_search
+						// demo_*/search
+						// demo_1,demo_2/search
 						"searchAfterDSL",//esmapper/demo.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型

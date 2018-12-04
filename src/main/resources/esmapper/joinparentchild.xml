@@ -149,7 +149,7 @@
                 "has_parent": {
                   "parent_type": "question",
                   "query": {
-                    "match": {
+                    "match": {## 这是注释
                       "name": #[name]
                     }
                   }
@@ -165,14 +165,14 @@
     -->
     <property name="hasParentIdSearch">
         <![CDATA[
-            {
-              "query": {
-                "parent_id": {
-                  "type": "answer",
-                  "id": #[id]
-                }
-              }
-            }
+            {##这是注释
+              "query": {##这是注释
+                "parent_id": {##这是注释
+                  "type": "answer",##这是注释
+                  "id": #[id]##这是注释
+                }##这是注释
+              }##这是注释
+            }##这是注释
         ]]>
     </property>
 
