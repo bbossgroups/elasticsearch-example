@@ -741,4 +741,21 @@ public class DocumentCRUD {
 		long totalSize = esDatas.getTotalSize();
 		System.out.println(totalSize);
 	}
+
+	/**
+	 * Elasticsearch-SQL插件功能测试方法
+	 */
+	public void testESSQL(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
+				clientUtil.searchList("/_sql",//sql请求
+						"select * from vem_order_index_2018 limit 0,10", //elasticsearch-sql支持的sql语句
+						Map.class);//返回的文档封装对象类型
+		//获取结果对象列表
+		List<Map> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
 }
