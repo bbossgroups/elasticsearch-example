@@ -14,6 +14,7 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
+import org.frameworkset.spi.BaseApplicationContext;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -52,6 +53,8 @@ public class DocumentCRUDTest {
 		documentCRUD.testAddAndUpdateDocument();
 		//批量修改文档
 		documentCRUD.testBulkAddDocuments();
+		BaseApplicationContext.shutdown();
+
 	}
 
 	//先完整执行一边，ok

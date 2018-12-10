@@ -36,6 +36,8 @@ public class Helloworld {
 		//判断索引类型是否存在，false表示不存在，正常返回true表示存在
 		boolean exist = clientUtil.existIndiceType("twitter","tweet");
 
+		exist = clientUtil.existIndiceType("demo","demo");
+
 		//判读索引是否存在，false表示不存在，正常返回true表示存在
 		exist = clientUtil.existIndice("twitter");
 
