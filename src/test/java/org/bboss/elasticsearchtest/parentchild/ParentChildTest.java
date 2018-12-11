@@ -31,8 +31,14 @@ public class ParentChildTest {
 	public void createIndice(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/indexparentchild.xml");
 		try {
-			//删除mapping
-			clientUtil.dropIndice("company");
+			//company，存在返回true，不存在返回false
+			boolean exist = clientUtil.existIndice("company");
+
+			//如果索引表company已经存在先删除mapping
+			if(exist) {
+				//删除mapping
+				clientUtil.dropIndice("company");
+			}
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -233,14 +239,21 @@ public class ParentChildTest {
 		//定义客户端实例，加载上面建立的dsl配置文件
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_Info.xml");
 		try {
-			//先删除mapping client_info
-			clientUtil.dropIndice("client_info");
+			//client_info存在返回true，不存在返回false
+			boolean exist = clientUtil.existIndice("client_info");
+
+			//如果索引表client_info已经存在先删除mapping
+			if(exist) {//先删除mapping client_info
+				clientUtil.dropIndice("client_info");
+			}
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//创建mapping client_info
 		clientUtil.createIndiceMapping("client_info","createClientIndice");
+		String client_info = clientUtil.getIndice("client_info");//获取最新建立的索引表结构client_info
+		System.out.println("after createClientIndice clientUtil.getIndice(\"client_info\") response:"+client_info);
 	}
 
 	/**
@@ -447,12 +460,13 @@ public class ParentChildTest {
 	}
 	@Test
 	public void testMutil(){
-		this.createClientIndice();
-//		this.importClientInfoDataFromBeans();
-		this.importClientInfoFromJsonData();
-		this.queryExamSearchByClientName();
-		this.queryDiagnosisByClientName();
-		this.queryClientAndAllSons();
+		this.createClientIndice();//创建indice client_info
+//		this.importClientInfoDataFromBeans(); //通过api添加测试数据
+		this.importClientInfoFromJsonData();//导入测试数据
+		this.queryExamSearchByClientName(); //根据客户端名称查询提交报告
+		this.queryClientInfoByMedicalName();//通过医疗信息编码查找客户基本数据
+		this.queryDiagnosisByClientName();//根据客户名称获取客户体检诊断数据，并返回客户数据
+		this.queryClientAndAllSons();//查询客户信息，同时返回客户对应的所有体检报告、医疗记录、诊断记录
 	}
 
 
