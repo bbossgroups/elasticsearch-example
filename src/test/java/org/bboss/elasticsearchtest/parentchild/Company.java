@@ -22,7 +22,7 @@ public class Company extends ESBaseData {
 	/**
 	 * 将companyId作为索引_id的值
 	 */
-	@ESId
+	@ESId(readSet = true)
 	private String companyId;
 	private String city;
 	private String country;

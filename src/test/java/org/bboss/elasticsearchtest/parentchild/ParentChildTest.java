@@ -24,10 +24,7 @@ import org.frameworkset.elasticsearch.serial.ESInnerHitSerialThreadLocal;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ParentChildTest {
 
@@ -151,6 +148,7 @@ public class ParentChildTest {
 
 	}
 
+
 	/**
 	 * 通过雇员生日检索公司信息
 	 */
@@ -232,24 +230,87 @@ public class ParentChildTest {
 		}
 	}
 	public void createClientIndice(){
+		//定义客户端实例，加载上面建立的dsl配置文件
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_Info.xml");
 		try {
-			//删除mapping
+			//先删除mapping client_info
 			clientUtil.dropIndice("client_info");
 		} catch (ElasticSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//创建mapping
+		//创建mapping client_info
 		clientUtil.createIndiceMapping("client_info","createClientIndice");
 	}
 
 	/**
-	 * 通过读取配置文件中的dsl json数据导入雇员和公司数据
+	 * 录入体检医疗信息
+	 */
+	public void importClientInfoDataFromBeans()  {
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+
+		//导入基本信息,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Basic> basics = buildBasics();
+		clientUtil.addDocuments("client_info","basic",basics,"refresh");
+
+		//导入医疗信息,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Medical> medicals = buildMedicals();
+		clientUtil.addDocuments("client_info","medical",medicals,"refresh");
+
+		//导入体检结果数据,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Exam> exams = buildExams();
+		clientUtil.addDocuments("client_info","exam",exams,"refresh");
+
+		//导入结果诊断数据,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Diagnosis> diagnosiss = buildDiagnosiss();
+		clientUtil.addDocuments("client_info","diagnosis",diagnosiss,"refresh");
+	}
+	//导入基本信息
+	private List<Basic> buildBasics() {
+		List<Basic> basics = new ArrayList<Basic>();
+		Basic basic = new Basic();
+		basic.setParty_id("1");
+		basic.setAge(60);
+		basics.add(basic);
+		//继续添加其他数据
+		return basics;
+
+	}
+	//导入医疗信息
+	private List<Medical> buildMedicals() {
+		List<Medical> medicals = new ArrayList<Medical>();
+		Medical medical = new Medical();
+		medical.setParty_id("1");//设置父文档id-基本信息文档_id
+		medical.setCreated_date(new Date());
+		medicals.add(medical);
+		//继续添加其他数据
+		return medicals;
+
+	}
+	//导入体检结果数据
+	private List<Exam> buildExams() {
+		List<Exam> exams = new ArrayList<Exam>();
+		Exam exam = new Exam();
+		exam.setParty_id("1");//设置父文档id-基本信息文档_id
+		exams.add(exam);
+		//继续添加其他数据
+		return exams;
+	}
+	//导入结果诊断数据
+	private List<Diagnosis> buildDiagnosiss() {
+		List<Diagnosis> diagnosiss = new ArrayList<Diagnosis>();
+		Diagnosis diagnosis = new Diagnosis();
+		diagnosis.setParty_id("1");//设置父文档id-基本信息文档_id
+		diagnosiss.add(diagnosis);
+		//继续添加其他数据
+		return diagnosiss;
+	}
+
+	/**
+	 * 通过读取配置文件中的dsl json数据导入医疗数据
 	 */
 	public void importClientInfoFromJsonData(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_Info.xml");
-
 
 		clientUtil.executeHttp("client_info/basic/_bulk?refresh","bulkImportBasicData",ClientUtil.HTTP_POST);
 		clientUtil.executeHttp("client_info/diagnosis/_bulk?refresh","bulkImportDiagnosisData",ClientUtil.HTTP_POST);
@@ -267,12 +328,11 @@ public class ParentChildTest {
 		System.out.println(diagnosiscount);
 	}
 	/**
-	 * 查找顾客信息，演示多子文档父子数据查询功能
+	 * 查询客户信息，同时返回客户对应的所有体检报告、医疗记录、诊断记录
 	 */
-	public void hasParentSearchByCountryReturnParent2ndMultiChildren(){
+	public void queryClientAndAllSons(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_Info.xml");
-		Map<String,Object> params = new HashMap<String,Object>();//没有检索条件，构造一个空的参数对象
-//		params.put("name","Alice Smith");
+		Map<String,Object> params = null;//没有检索条件，构造一个空的参数对象
 
 		try {
 			//设置子文档的类型和对象映射关系
@@ -280,8 +340,8 @@ public class ParentChildTest {
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences("diagnosis",Diagnosis.class);//指定inner查询结果对于diagnosis类型和对应的对象类型Diagnosis
 			ESInnerHitSerialThreadLocal.setESInnerTypeReferences("medical",Medical.class);//指定inner查询结果对于medical类型和对应的对象类型Medical
 			ESDatas<Basic> escompanys = clientUtil.searchList("client_info/basic/_search",
-					"hasParentSearchByCountryReturnParent2ndMultiChildren",params,Basic.class);
-			String response = clientUtil.executeRequest("client_info/basic/_search","hasParentSearchByCountryReturnParent2ndMultiChildren",params);
+					"queryClientAndAllSons",params,Basic.class);
+			//String response = clientUtil.executeRequest("client_info/basic/_search","queryClientAndAllSons",params);直接获取原始的json报文
 //			escompanys = clientUtil.searchAll("client_info",Basic.class);
 			long totalSize = escompanys.getTotalSize();
 			List<Basic> clientInfos = escompanys.getDatas();//获取符合条件的数据
@@ -301,7 +361,7 @@ public class ParentChildTest {
 			}
 		}
 		finally{
-			ESInnerHitSerialThreadLocal.clean();//清空inner查询结果对于雇员类型
+			ESInnerHitSerialThreadLocal.clean();//清空inner查询结果对于各种类型信息
 		}
 	}
 	/**
@@ -320,7 +380,7 @@ public class ParentChildTest {
 			List<Employee> employeeList = escompanys.getDatas();//获取符合条件的雇员数据
 			long totalSize = escompanys.getTotalSize();
 			//查看每个雇员对应的公司信息
-			for(int i = 0;  i < employeeList.size(); i ++) {
+			for(int i = 0; employeeList !=null && i < employeeList.size(); i ++) {
 				Employee employee = employeeList.get(i);
 				List<Company> companies = ResultUtil.getInnerHits(employee.getInnerHits(), "company");
 				System.out.println(companies.size());
@@ -331,12 +391,71 @@ public class ParentChildTest {
 		}
 	}
 
+	/**
+	 * 根据客户名称查询客户体检报告
+	 */
+	public void queryExamSearchByClientName(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_info.xml");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("clientName","张三");
+		params.put("size",1000);
+		ESDatas<Exam> exams = clientUtil.searchList("client_info/exam/_search","queryExamSearchByClientName",params,Exam.class);
+		List<Exam> examList = exams.getDatas();//获取符合条件的体检数据
+		long totalSize = exams.getTotalSize();//符合条件的总记录数据
+	}
+	/**
+	 * 通过医疗信息编码查找客户基本数据
+	 */
+	public void queryClientInfoByMedicalName(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_info.xml");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("medicalCode","A01AA01"); //通过变量medicalCode设置医疗编码
+		params.put("size",1000); //最多返回size变量对应的记录条数
+		ESDatas<Basic> bascis = clientUtil.searchList("client_info/basic/_search","queryClientInfoByMedicalName",params,Basic.class);
+		List<Basic> bascisList = bascis.getDatas();//获取符合条件的客户信息
+		long totalSize = bascis.getTotalSize();
+	}
+
+	/**
+	 * 根据客户名称获取客户体检诊断数据，并返回客户数据
+	 */
+	public void queryDiagnosisByClientName(){
+
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/Client_info.xml");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("clientName","张三");
+		params.put("size",1000);
+
+		try {
+			ESInnerHitSerialThreadLocal.setESInnerTypeReferences(Basic.class);//指定inner查询结果对应的客户基本信息类型,Basic只有一个文档类型，索引不需要显示指定basic对应的mapping type名称
+			ESDatas<Diagnosis> diagnosiss = clientUtil.searchList("client_info/diagnosis/_search",
+					"queryDiagnosisByClientName",params,Diagnosis.class);
+			List<Diagnosis> diagnosisList = diagnosiss.getDatas();//获取符合条件的雇员数据
+			long totalSize = diagnosiss.getTotalSize();
+			//遍历诊断报告信息，并查看报告对应的客户基本信息
+			for(int i = 0;  diagnosisList != null && i < diagnosisList.size(); i ++) {
+				Diagnosis diagnosis = diagnosisList.get(i);
+				List<Basic> basics = ResultUtil.getInnerHits(diagnosis.getInnerHits(), "basic");
+				if(basics != null) {
+					System.out.println(basics.size());
+				}
+			}
+		}
+		finally{
+			ESInnerHitSerialThreadLocal.clean();//清空inner查询结果对应的客户基本信息类型
+		}
+	}
 	@Test
 	public void testMutil(){
 		this.createClientIndice();
+//		this.importClientInfoDataFromBeans();
 		this.importClientInfoFromJsonData();
-		this.hasParentSearchByCountryReturnParent2ndMultiChildren();
+		this.queryExamSearchByClientName();
+		this.queryDiagnosisByClientName();
+		this.queryClientAndAllSons();
 	}
+
+
 	@Test
 	public void testFromBeans(){
 		createIndice();

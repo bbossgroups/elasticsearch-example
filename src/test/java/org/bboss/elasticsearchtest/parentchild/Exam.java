@@ -13,11 +13,11 @@ import java.util.Date;
 public class Exam extends ESBaseData {
     @ESParentId
     private String party_id;          //父id
-
+    private String  hospital;           // 就诊医院
     public Exam() {
     }
 
-    private String  hospital;           // 就诊医院
+
     private String dept;                //就诊科室
     private String is_ok;               // 体检正常
     private String exam_result;         // 体检结果说明

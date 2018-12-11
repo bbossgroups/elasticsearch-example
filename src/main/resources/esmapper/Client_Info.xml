@@ -5,7 +5,7 @@
     <property name="bulkImportBasicData" trim="false">
         <![CDATA[
             { "index": { "_id": "1" }}
-            {  "party_id":"1", "sex":"男", "mari_sts":"不详", "ethnic":"蒙古族", "prof":"放牧","birth_date":"1966-2-14 00:00:00", "province":"内蒙古", "city":"赤峰市","client_type":"1", "client_name":"安", "age":52,"id_type":"1", "idno":"1", "education":"初中","created_date":"2013-04-24 00:00:00","last_modified_date":"2013-04-24 00:00:00", "etl_date":"2013-04-24 00:00:00"}
+            {  "party_id":"1", "sex":"男", "mari_sts":"不详", "ethnic":"蒙古族", "prof":"放牧","birth_date":"1966-2-14 00:00:00", "province":"内蒙古", "city":"赤峰市","client_type":"1", "client_name":"张三", "age":52,"id_type":"1", "idno":"1", "education":"初中","created_date":"2013-04-24 00:00:00","last_modified_date":"2013-04-24 00:00:00", "etl_date":"2013-04-24 00:00:00"}
             { "index": { "_id": "2" }}
             { "party_id":"2", "sex":"女", "mari_sts":"已婚", "ethnic":"汉族", "prof":"公务员","birth_date":"1986-07-06 00:00:00", "province":"广东", "city":"深圳","client_type":"1", "client_name":"彭", "age":32,"id_type":"1", "idno":"2", "education":"本科", "created_date":"2013-05-09 15:49:47","last_modified_date":"2013-05-09 15:49:47", "etl_date":"2013-05-09 15:49:47"}
             { "index": { "_id": "3" }}
@@ -27,7 +27,7 @@
         ]]>
     </property>
     <!--
-  导入診斷信息
+  导入诊断信息
   -->
     <property name="bulkImportDiagnosisData" trim="false">
         <![CDATA[
@@ -61,7 +61,7 @@
     </property>
 
     <!--
- 导入診斷信息
+ 导入医疗信息
  -->
     <property name="bulkImportMedicalData" trim="false">
         <![CDATA[
@@ -104,7 +104,7 @@
     </property>
 
     <!--
-     导入體檢信息
+     导入体检信息
 -->
     <property name="bulkImportExamData" trim="false">
         <![CDATA[
@@ -150,7 +150,7 @@
                 "index.refresh_interval": "5s"
             },
             "mappings": {
-                "basic": {
+                "basic": {  ##基本信息
                     "properties": {
                         "party_id": {
                             "type": "keyword"
@@ -209,7 +209,7 @@
                         }
                     }
                 },
-                "diagnosis": {
+                "diagnosis": { ##结果分析
                     "_parent": {
                         "type": "basic"
                     },
@@ -248,7 +248,7 @@
                         }
                     }
                 },
-                "medical": {
+                "medical": { ##医疗情况
                     "_parent": {
                         "type": "basic"
                     },
@@ -300,7 +300,7 @@
                         }
                     }
                 },
-                "exam": {
+                "exam": { ##检查结果
                     "_parent": {
                         "type": "basic"
                     },
@@ -389,8 +389,8 @@
         }]]>
     </property>
 
-    <!--根据公司所在的国家信息检索员工信息和子文档信息，同时返回员工所属的公司信息-->
-    <property name="hasParentSearchByCountryReturnParent2ndMultiChildren">
+    <!--查询客户信息，同时返回客户对应的所有体检报告、医疗记录、诊断记录-->
+    <property name="queryClientAndAllSons">
         <![CDATA[
         {
           "query": {
@@ -446,6 +446,67 @@
             }
           }
         }
+        ]]>
+    </property>
+
+    <!--根据客户名称查询客户体检报告-->
+    <property name="queryExamSearchByClientName">
+        <![CDATA[
+            {
+              "query": {
+                ## 最多返回size变量对应的记录条数
+                "size":#[size],
+                "has_parent": {
+                  "type": "basic",
+                  "query": {
+                    "match": {
+                      "client_name": #[clientName] ## 通过变量clientName设置客户名称
+                    }
+                  }
+                }
+              }
+            }
+        ]]>
+    </property>
+
+    <!--通过医疗信息编码查找客户基本数据-->
+    <property name="queryClientInfoByMedicalName">
+        <![CDATA[
+            {
+              "query": {
+                ## 最多返回size变量对应的记录条数
+                "size":#[size],
+                "has_child": {
+                  "type":       "medical",
+                  "score_mode": "max",
+                  "query": {
+                    "match": {
+                      "medical_code": #[medicalCode] ## 通过变量medicalCode设置医疗编码
+                    }
+                  }
+                }
+              }
+            }
+        ]]>
+    </property>
+    <!--根据客户名称获取客户体检诊断数据，并返回客户信息-->
+    <property name="queryDiagnosisByClientName">
+        <![CDATA[
+            {
+              "query": {
+                ## 最多返回size变量对应的记录条数
+                "size":#[size],
+                "has_parent": {
+                  "type": "basic",
+                  "query": {
+                    "match": {
+                      "client_name": #[clientName] ## 通过变量clientName设置客户名称
+                    }
+                  },
+                  "inner_hits": {}  ## 通过变量inner_hits表示要返回对应的客户信息
+                }
+              }
+            }
         ]]>
     </property>
 </properties>
