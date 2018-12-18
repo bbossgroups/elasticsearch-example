@@ -43,7 +43,7 @@ public class Helloworld {
 
 		exist = clientUtil.existIndice("agentinfo");
 
-		exist = clientUtil.existIndice("demo");
+		exist = clientUtil.existIndice("demo1");
 		if(exist) {
 			long count = clientUtil.countAll("demo");
 			System.out.println("count:"+count);

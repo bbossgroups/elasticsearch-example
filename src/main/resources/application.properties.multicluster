@@ -30,6 +30,19 @@ http.keyPassword =
 # ssl 主机名称校验，是否采用default配置，
 # 如果指定为default，就采用DefaultHostnameVerifier,否则采用 SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 http.hostnameVerifier =
+#每隔多少毫秒校验空闲connection，自动释放无效链接
+# -1 或者0不检查
+http.validateAfterInactivity=3000
+# 每次获取connection时校验连接，true，校验，false不校验，有性能开销，推荐采用
+# validateAfterInactivity来控制连接是否有效
+# 默认值false
+http.staleConnectionCheckEnabled=true
+#* 自定义重试控制接口，必须实现接口方法
+#* public interface CustomHttpRequestRetryHandler  {
+#* 	public boolean retryRequest(IOException exception, int executionCount, HttpContext context,ClientConfiguration configuration);
+#* }
+#* 方法返回true，进行重试，false不重试
+http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.ConnectionResetHttpRequestRetryHandler
 
 ##logs集群配置
 logs.elasticUser=elastic
@@ -61,3 +74,17 @@ logs.http.keyPassword =
 # ssl 主机名称校验，是否采用default配置，
 # 如果指定为default，就采用DefaultHostnameVerifier,否则采用 SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 logs.http.hostnameVerifier =
+
+#每隔多少毫秒校验空闲connection，自动释放无效链接
+# -1 或者0不检查
+logs.http.validateAfterInactivity=2000
+# 每次获取connection时校验连接，true，校验，false不校验，有性能开销，推荐采用
+# validateAfterInactivity来控制连接是否有效
+# 默认值false
+logs.http.staleConnectionCheckEnabled=false
+#* 自定义重试控制接口，必须实现接口方法
+#* public interface CustomHttpRequestRetryHandler  {
+#* 	public boolean retryRequest(IOException exception, int executionCount, HttpContext context,ClientConfiguration configuration);
+#* }
+#* 方法返回true，进行重试，false不重试
+logs.http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.ConnectionResetHttpRequestRetryHandler

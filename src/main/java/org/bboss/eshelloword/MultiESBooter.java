@@ -17,6 +17,7 @@ package org.bboss.eshelloword;/*
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.boot.ElasticSearchBoot;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.spi.BaseApplicationContext;
 
 public class MultiESBooter {
 	public static void main(String[] args){
@@ -59,6 +60,7 @@ public class MultiESBooter {
 		System.out.println("agentinfo exist:"+exist);
 
 		defaultClientUtil.existIndice("sss");
+		BaseApplicationContext.shutdown();
 //		System.out.println(response);
 //		Map<String,Object> state = clientUtil.executeHttp("_cluster/state",ClientInterface.HTTP_GET,
 //				new ESMapResponseHandler());//返回map结构

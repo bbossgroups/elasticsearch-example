@@ -49,10 +49,10 @@ public class DocumentCRUDTest {
 		DocumentCRUD documentCRUD = new DocumentCRUD();
 		//删除/创建文档索引表
 		documentCRUD.testCreateIndice();
-		//添加/修改单个文档
-		documentCRUD.testAddAndUpdateDocument();
-		//批量修改文档
-		documentCRUD.testBulkAddDocuments();
+//		//添加/修改单个文档
+//		documentCRUD.testAddAndUpdateDocument();
+//		//批量修改文档
+//		documentCRUD.testBulkAddDocuments();
 		BaseApplicationContext.shutdown();
 
 	}

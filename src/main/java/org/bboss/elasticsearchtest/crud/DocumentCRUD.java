@@ -340,7 +340,7 @@ public class DocumentCRUD {
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
 		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
-		ESDatas<Map> datas = clientUtil.scroll("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}","1m",Map.class);
+		ESDatas<Demo> datas = clientUtil.scroll("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}","1m",Demo.class);
 		end = System.currentTimeMillis();
 		System.out.println("scroll SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
 		int max = 6;
@@ -348,11 +348,11 @@ public class DocumentCRUD {
 		params.put("sliceMax", max);//最多6个slice，不能大于share数
 		params.put("size", 1000);//每页1000条记录
 
-		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,false);
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Demo.class,false);
 		//scroll上下文有效期1分钟
 		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
 		start = System.currentTimeMillis();
-		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Map.class,true);
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Demo.class,true);
 		end = System.currentTimeMillis();
 		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
 		if(datas != null){
