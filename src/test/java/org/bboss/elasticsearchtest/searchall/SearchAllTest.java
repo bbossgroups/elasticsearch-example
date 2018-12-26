@@ -141,7 +141,7 @@ public class SearchAllTest {
 	@Test
 	public void testSearchAllParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Map> esDatas = clientInterface.searchAll("demo",Map.class,6);
+		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",Map.class,6);
 		List<Map> dataList = esDatas.getDatas();
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
@@ -158,7 +158,7 @@ public class SearchAllTest {
 	@Test
 	public void testSearchAllFethchSizeParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Map> esDatas = clientInterface.searchAll("demo",10000,Map.class,6);
+		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",10000,Map.class,6);
 		List<Map> dataList = esDatas.getDatas();
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
@@ -175,7 +175,7 @@ public class SearchAllTest {
 	@Test
 	public void testSearchAllHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Map> esDatas = clientInterface.searchAll("demo", new ScrollHandler<Map>() {
+		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo", new ScrollHandler<Map>() {
 			public void handle(ESDatas<Map> esDatas) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());
@@ -204,7 +204,7 @@ public class SearchAllTest {
 	@Test
 	public void testSearchAllFethchSizeHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Map> esDatas = clientInterface.searchAll("demo",10000,new ScrollHandler<Map>() {
+		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",10000,new ScrollHandler<Map>() {
 			public void handle(ESDatas<Map> esDatas) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());

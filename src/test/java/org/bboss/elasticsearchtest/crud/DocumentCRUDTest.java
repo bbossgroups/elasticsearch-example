@@ -52,7 +52,7 @@ public class DocumentCRUDTest {
 //		//添加/修改单个文档
 //		documentCRUD.testAddAndUpdateDocument();
 //		//批量修改文档
-//		documentCRUD.testBulkAddDocuments();
+		documentCRUD.testBulkAddDocuments();
 		BaseApplicationContext.shutdown();
 
 	}

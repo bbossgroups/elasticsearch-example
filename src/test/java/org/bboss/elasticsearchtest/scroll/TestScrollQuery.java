@@ -169,13 +169,14 @@ public class TestScrollQuery {
 
 				public void run() {
 					Map params = new HashMap();
-					params.put("id", i);
-					params.put("max", max);//最多6个slice，不能大于share数
+					params.put("sliceId", i);
+					params.put("sliceMax", max);//最多6个slice，不能大于share数
 					params.put("size", 100);//每页100条记录
 					ESDatas<Map> sliceResponse = clientUtil.searchList("demo/_search?scroll=1m",
 							"scrollSliceQuery", params,Map.class);
 					List<Map> sliceDatas = sliceResponse.getDatas();
-					incrementSize( sliceDatas.size());//统计实际处理的文档数量
+					if(sliceDatas != null)
+						incrementSize( sliceDatas.size());//统计实际处理的文档数量
 					long totalSize = sliceResponse.getTotalSize();
 					String scrollId = sliceResponse.getScrollId();
 					if (scrollId != null)

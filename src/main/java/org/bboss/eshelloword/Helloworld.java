@@ -16,17 +16,13 @@ package org.bboss.eshelloword;/*
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
-import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.spi.BaseApplicationContext;
 
-import java.util.Date;
 import java.util.Map;
 
 public class Helloworld {
 	public static void main(String[] args){
-		Date date = new Date(1521788460387L);//1520584740000 1520845980000
-
-		date = new Date(1520930340000L);
+	 
 		//创建es客户端工具，验证环境
 //		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("logs");
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
@@ -34,21 +30,22 @@ public class Helloworld {
 //		String response = clientUtil.executeHttp("_cluster/state?pretty",ClientInterface.HTTP_GET);
 
 		//判断索引类型是否存在，false表示不存在，正常返回true表示存在
-		boolean exist = clientUtil.existIndiceType("twitter","tweet");
-
-		exist = clientUtil.existIndiceType("demo","demo");
-
-		//判读索引是否存在，false表示不存在，正常返回true表示存在
-		exist = clientUtil.existIndice("twitter");
-
-		exist = clientUtil.existIndice("agentinfo");
-
-		exist = clientUtil.existIndice("demo1");
-		if(exist) {
-			long count = clientUtil.countAll("demo");
-			System.out.println("count:"+count);
-			ESDatas<Map> esDatas = clientUtil.searchAll("demo", Map.class);
-		}
+//		boolean exist = clientUtil.existIndiceType("twitter","tweet");
+//
+//		exist = clientUtil.existIndiceType("demo","demo");
+//
+//		//判读索引是否存在，false表示不存在，正常返回true表示存在
+//		exist = clientUtil.existIndice("twitter");
+//
+//		exist = clientUtil.existIndice("agentinfo");
+//
+//		exist = clientUtil.existIndice("demo1");
+//		if(exist) {
+//			long count = clientUtil.countAll("demo");
+//			System.out.println("count:"+count);
+//			ESDatas<Map> esDatas = clientUtil.searchAll("demo", Map.class);
+//		}
+		clientUtil.searchAllParallel("demo", Map.class,2);
 		BaseApplicationContext.shutdown();
 //		long count = clientUtil.countAll("agentinfo");
 //		System.out.println(response);

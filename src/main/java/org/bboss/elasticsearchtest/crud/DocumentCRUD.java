@@ -348,11 +348,11 @@ public class DocumentCRUD {
 		params.put("sliceMax", max);//最多6个slice，不能大于share数
 		params.put("size", 1000);//每页1000条记录
 
-		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Demo.class,false);
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Demo.class);
 		//scroll上下文有效期1分钟
 		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
 		start = System.currentTimeMillis();
-		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",Demo.class,true);
+		datas = clientUtil.scrollSliceParallel("demo/_search","scrollSliceQuery", params,"1m",Demo.class);
 		end = System.currentTimeMillis();
 		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
 		if(datas != null){
