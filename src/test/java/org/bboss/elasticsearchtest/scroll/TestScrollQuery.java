@@ -102,8 +102,8 @@ public class TestScrollQuery {
 		long realTotalSize = 0;
 		for (int i = 0; i < max; i++) {
 			Map params = new HashMap();
-			params.put("id", i);
-			params.put("max", max);//最多6个slice，不能大于share数
+			params.put("sliceId", i);
+			params.put("sliceMax", max);//最多6个slice，不能大于share数
 			params.put("size", 100);//每页100条记录
 			ESDatas<Map> sliceResponse = clientUtil.searchList("demo/_search?scroll=1m",
 					"scrollSliceQuery", params,Map.class);

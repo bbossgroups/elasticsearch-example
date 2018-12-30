@@ -1,0 +1,74 @@
+<properties>
+    <property name="perKeyDSLStructionCacheSize" value="2000"/>
+    <property name="alwaysCacheDslStruction" value="true"/>
+    <!--
+    dsl配置之文件
+        testBadQuery
+        对于坏口味的$变量使用模式，系统会给出告警信息，建议进行相关优化操作：
+        **********************************************************************
+        *********************************警告:dsl testBadQuery@file[esmapper/badquery.xml]*********************************
+        **********************************************************************
+        调用方法_getVTPLTemplateStruction从dsl struction cache获取[{
+                    "query": {
+                        "bool": {
+                            "filter": [
+                                {                              "terms": {
+                                        "applicationName.keyword": ["blackcatdemo120000","blackcatdemo120000"]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }]dsl struction 信息时,检测到缓冲区信息记录数超出DSLStructionCache允许的最大cache size:20000,
+        导致告警原因分析:
+        本条dsl可能存在不断变化的值参数;
+        本条dsl可能存在的$var模式的变量并且$var的值不断变化;
+        优化建议：
+        将本条dsl中可能存在不断变化的值参数转化#[variable]变量，或将dsl中可能存在的$var模式的变量转换为#[varibale]模式的变量，以提升系统性能!
+        如果需要做数组或者list的转换处理，优先使用变量#[variable]并设置serialJson属性：#[variable,serialJson=true]，以提升系统性能!
+        foreach循环中使用#[varibale]模式变量可以参考文档中的章节[5.3.3 逻辑判断和foreach循环示例]：https://my.oschina.net/bboss/blog/1556866
+        **********************************************************************
+        **********************************************************************
+    -->
+    <property name="testBadQuery">
+        <![CDATA[
+         {
+            "query": {
+                "bool": {
+                    "filter": [
+                        {  ## 多值检索，查找多个应用名称对应的文档记录
+                            "terms": {
+                                "applicationName.keyword": ["$applicationName1","$applicationName2"]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        ]]>
+    </property>
+
+    <!--
+        testGoodDsl
+
+    -->
+    <property name="testGoodDsl">
+        <![CDATA[
+         {
+            "query": {
+                "bool": {
+                    "filter": [
+                        {  ## 多值检索，查找多个应用名称对应的文档记录
+                            "terms": {
+                                "applicationName.keyword": [#[applicationName1],#[applicationName2]]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        ]]>
+    </property>
+
+
+</properties>
