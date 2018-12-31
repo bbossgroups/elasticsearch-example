@@ -1,6 +1,6 @@
 <properties>
     <property name="perKeyDSLStructionCacheSize" value="2000"/>
-    <property name="alwaysCacheDslStruction" value="true"/>
+    <property name="alwaysCacheDslStruction" value="false"/>
     <!--
     dsl配置之文件
         testBadQuery
