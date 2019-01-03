@@ -41,8 +41,8 @@ public class MatchPhrasePrefixQueryTest {
 		params.put("queryCondition","bl");
 		params.put("maxExpansions",10);
 		params.put("from",10);
-		params.put("to",20);
-		ESDatas<Map> searchResult = clientInterface.searchList("megacorp/_search",//检索的请求地址
+		params.put("size",20);
+		ESDatas<Map> searchResult = clientInterface.searchList("demo/_search",//检索的请求地址
 														"testMatchPhrasePrefixQueryTest",//对应的dsl配置语句
 														 params, //dsl中需要的参数
 														 Map.class);//返回结果封装的对象类型，可以为自定义的实体Bean对象类型

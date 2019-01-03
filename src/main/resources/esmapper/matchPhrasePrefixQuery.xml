@@ -7,7 +7,7 @@
         <![CDATA[
          {
             "from":#[from],
-            "to":#[to],
+            "size":#[size],
             "query": {
               "match_phrase_prefix": {
                 "about": {

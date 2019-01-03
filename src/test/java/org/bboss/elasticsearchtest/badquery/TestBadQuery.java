@@ -46,7 +46,7 @@ public class TestBadQuery {
 
 		String result = null;
 
-		for(int i = 0;  i < 1000000; i ++){
+		for(int i = 0;  i < 6001; i ++){
 			//设置applicationName1和applicationName2两个变量的值
 			params.put("applicationName1","blackcatdemo"+i);
 			params.put("applicationName2","blackcatdemo"+i);
@@ -67,7 +67,7 @@ public class TestBadQuery {
 
 		String result = null;
 
-		for(int i = 0;  i < 1000000; i ++){
+		for(int i = 0;  i < 6001; i ++){
 			//设置applicationName1和applicationName2两个变量的值
 			params.put("applicationName1","blackcatdemo"+i);
 			params.put("applicationName2","blackcatdemo"+i);

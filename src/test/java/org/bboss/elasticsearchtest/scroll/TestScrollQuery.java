@@ -109,6 +109,8 @@ public class TestScrollQuery {
 					"scrollSliceQuery", params,Map.class);
 			List<Map> sliceDatas = sliceResponse.getDatas();
 			realTotalSize = realTotalSize + sliceDatas.size();
+			if(sliceDatas == null)
+				return;
 			long totalSize = sliceResponse.getTotalSize();
 			String scrollId = sliceResponse.getScrollId();
 			if (scrollId != null)
