@@ -1,0 +1,40 @@
+<properties>
+    <property name="testGoodDsl">
+        <![CDATA[{ ## 最多返回1000条记录
+            size: #[size],
+            "query": {
+                "bool": {
+                    "must": [{
+                        "term": {
+                            "cityId": #[cityId]
+                        }
+                    },
+                    {
+                        "terms": {
+                            "titleId": #[titleId,serialJson=true]
+                        }
+                    },
+                    {
+                        "bool": {
+                            "should": [{
+                                "term": {
+                                    "deptId1": #[deptId1]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId2": #[deptId2]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId3": #[deptId3]
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }
+        }]]>
+    </property>
+</properties>
