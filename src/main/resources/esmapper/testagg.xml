@@ -1,0 +1,39 @@
+<properties>
+    <property name="termAgg">
+        <![CDATA[
+        {
+            ## 设置查询条件
+            #* 注释掉统计条件
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "term": {
+                                "applicationName.keyword": #[application]
+                            }
+                        },
+                        {"range": {
+                                "startTime": {
+                                    "gte": #[startTime],
+                                    "lt": #[endTime]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            *#
+            "size":0,
+            ## 聚合查询
+            "aggs": {
+                "traces": {
+                      "terms": {
+                        "field": "rpc.keyword",
+                        "size":10000
+                      }
+                }
+            }
+        }
+        ]]>
+    </property>
+</properties>
