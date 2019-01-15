@@ -20,6 +20,7 @@ import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESAggDatas;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.entity.LongAggHit;
+import org.frameworkset.elasticsearch.entity.SingleLongAggHit;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -66,8 +67,8 @@ public class TestTermAgg {
 
 		Map params = null;//聚合统计条件参数
 		//一行代码，执行每个服务的访问量总数统计
-		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search","candicateAgg",params,LongAggHit.class,"traces");
-		List<LongAggHit> aggHitList = response.getAggDatas();//每个服务的访问量
+		ESAggDatas<SingleLongAggHit> response = clientInterface.searchAgg("trace-*/_search","candicateAgg",params,SingleLongAggHit.class,"traces");
+		SingleLongAggHit aggHitList = response.getSingleAggData();//服务的访问量
 		long totalSize = response.getTotalSize();//总访问量
 
 	}

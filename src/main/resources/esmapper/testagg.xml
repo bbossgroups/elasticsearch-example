@@ -41,4 +41,47 @@
         }
         ]]>
     </property>
+
+    <property name="candicateAgg">
+        <![CDATA[
+        {
+            ## 设置查询条件
+            #* 注释掉统计条件
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "term": {
+                                "applicationName.keyword": #[application]
+                            }
+                        },
+                         {
+                            "term": {
+                                "rpc.keyword": #[rpc]
+                            }
+                        },
+                        {"range": {
+                                "startTime": {
+                                    "gte": #[startTime],
+                                    "lt": #[endTime]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            *#
+            "size":0,
+            ## 聚合查询
+            "aggs": {
+                "traces": {
+                      "cardinality" : {
+                            "field" : "rpc.keyword",
+                            "precision_threshold": 100
+                        }
+                }
+            }
+        }
+        ]]>
+    </property>
 </properties>
