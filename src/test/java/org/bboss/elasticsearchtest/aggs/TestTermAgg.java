@@ -18,9 +18,14 @@ package org.bboss.elasticsearchtest.aggs;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESAggDatas;
+import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.entity.LongAggHit;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +42,31 @@ public class TestTermAgg {
 	@Test
 	public void termAgg(){
 
+
+		//一行代码，执行每个服务的访问量总数统计
+		ESDatas<Map> traces = clientInterface.searchAll("trace-*",1000,Map.class);
+		Map params = new HashMap();//聚合统计条件参数
+		params.put("application","testweb");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
+		try {
+			params.put("startTime",format.parse("1999-01-01 00:00:00").getTime());
+			params.put("endTime",new Date().getTime());
+			params.put("rpc","/testweb/jsp/logoutredirect.jsp");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search","termAgg",params,LongAggHit.class,"traces");
+		List<LongAggHit> aggHitList = response.getAggDatas();//每个服务的访问量
+		long totalSize = response.getTotalSize();//总访问量
+
+	}
+
+	@Test
+	public void candicateAgg(){
+
 		Map params = null;//聚合统计条件参数
 		//一行代码，执行每个服务的访问量总数统计
-		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search","termAgg",params,LongAggHit.class,"traces");
+		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search","candicateAgg",params,LongAggHit.class,"traces");
 		List<LongAggHit> aggHitList = response.getAggDatas();//每个服务的访问量
 		long totalSize = response.getTotalSize();//总访问量
 

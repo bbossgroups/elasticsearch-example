@@ -3,13 +3,18 @@
         <![CDATA[
         {
             ## 设置查询条件
-            #* 注释掉统计条件
+            #* 注释掉统计条件  *#
             "query": {
                 "bool": {
                     "filter": [
                         {
                             "term": {
                                 "applicationName.keyword": #[application]
+                            }
+                        },
+                         {
+                            "term": {
+                                "rpc.keyword": #[rpc]
                             }
                         },
                         {"range": {
@@ -22,7 +27,7 @@
                     ]
                 }
             },
-            *#
+
             "size":0,
             ## 聚合查询
             "aggs": {
