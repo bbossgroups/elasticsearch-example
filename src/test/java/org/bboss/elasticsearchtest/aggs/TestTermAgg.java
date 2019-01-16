@@ -18,7 +18,6 @@ package org.bboss.elasticsearchtest.aggs;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESAggDatas;
-import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.entity.LongAggHit;
 import org.frameworkset.elasticsearch.entity.SingleLongAggHit;
 import org.junit.Test;
@@ -39,13 +38,11 @@ import java.util.Map;
  * @version 1.0
  */
 public class TestTermAgg {
-	ClientInterface clientInterface = ElasticSearchHelper.getConfigRestClientUtil("esmapper/testagg.xml");
+
 	@Test
 	public void termAgg(){
-
-
-		//一行代码，执行每个服务的访问量总数统计
-		ESDatas<Map> traces = clientInterface.searchAll("trace-*",1000,Map.class);
+		ClientInterface clientInterface = ElasticSearchHelper.getConfigRestClientUtil("esmapper/testagg.xml");
+		//ESDatas<Map> traces = clientInterface.searchAll("trace-*",1000,Map.class);//获取总记录集合
 		Map params = new HashMap();//聚合统计条件参数
 		params.put("application","testweb");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
@@ -56,7 +53,12 @@ public class TestTermAgg {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search","termAgg",params,LongAggHit.class,"traces");
+		//一行代码，执行每个服务的访问量总数统计
+		ESAggDatas<LongAggHit> response = clientInterface.searchAgg("trace-*/_search",//从trace-开头的索引表中检索数据
+																	"termAgg", //配置在esmapper/testagg.xml中的dsl语句
+																	params,    //dsl语句termAgg中需要的查询参数
+																	LongAggHit.class,  //封装聚合统计中每个服务地址及服务访问量的地址
+																	"traces");  //term统计桶的名称，参见dsl语句
 		List<LongAggHit> aggHitList = response.getAggDatas();//每个服务的访问量
 		long totalSize = response.getTotalSize();//总访问量
 
@@ -64,11 +66,13 @@ public class TestTermAgg {
 
 	@Test
 	public void candicateAgg(){
-
-		Map params = null;//聚合统计条件参数
-		//一行代码，执行每个服务的访问量总数统计
+		ClientInterface clientInterface = ElasticSearchHelper.getConfigRestClientUtil("esmapper/testagg.xml");
+		Map params = null;//单值聚合统计条件参数
+		//一行代码，执行服务基数统计
+		//支持的数据封装类有：SingleIntegergAggHit，SingleLongAggHit，SingleDoubleAggHit，SingleFloatAggHit，SingleObjectAggHit
 		ESAggDatas<SingleLongAggHit> response = clientInterface.searchAgg("trace-*/_search","candicateAgg",params,SingleLongAggHit.class,"traces");
-		SingleLongAggHit aggHitList = response.getSingleAggData();//服务的访问量
+		SingleLongAggHit aggHitList = response.getSingleAggData();
+		long value = aggHitList.getValue();
 		long totalSize = response.getTotalSize();//总访问量
 
 	}
