@@ -46,9 +46,8 @@
                     "must": [
                     #set($needComma = false)
                     #foreach($condition in $conditions.entrySet())
-
                         #foreach($item in $condition.value.entrySet())
-                         #if($needComma), #else #set($needComma = true) #end
+                        #if($needComma), #else #set($needComma = true) #end
                         {
                             "$condition.key": {
                                 "$item.key": #[conditions[$condition.key][$item.key],serialJson=true]

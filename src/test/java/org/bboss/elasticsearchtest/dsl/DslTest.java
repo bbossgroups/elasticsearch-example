@@ -24,7 +24,6 @@ import org.frameworkset.elasticsearch.template.ESUtil;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +93,7 @@ public class DslTest {
 		Map params = new HashMap();
 		params.put("conditions",conditions);
 		params.put("size",1000);
-		Iterator<Map.Entry<String,Map<String,Object>>> iterable = conditions.entrySet().iterator();
+//		Iterator<Map.Entry<String,Map<String,Object>>> iterable = conditions.entrySet().iterator();
 //		Map.Entry<String,Map<String,Object>> entry = iterable.next();
 //		entry.getKey()
 		System.out.println(ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params));
