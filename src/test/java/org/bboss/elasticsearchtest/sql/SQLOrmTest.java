@@ -16,6 +16,9 @@ package org.bboss.elasticsearchtest.sql;/*
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.entity.ESAggDatas;
+import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.entity.LongAggHit;
 import org.frameworkset.elasticsearch.entity.sql.SQLRestResponse;
 import org.frameworkset.elasticsearch.entity.sql.SQLRestResponseHandler;
 import org.junit.Test;
@@ -157,12 +160,50 @@ public class SQLOrmTest {
 	@Test
 	public void testSQLRestResponse(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+
 		SQLRestResponse sqlRestResponse = clientUtil.executeHttp("/_xpack/sql",
 																	"{\"query\": \"SELECT * FROM dbclobdemo where documentId = 1\"}",
 																	ClientInterface.HTTP_POST,
 																		new SQLRestResponseHandler());
 		System.out.println(sqlRestResponse);
 	}
+
+	/**
+	 * Elasticsearch-SQL插件功能测试方法
+	 */
+	@Test
+	public void testESSQL(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
+				clientUtil.searchList("/_sql",//sql请求
+						"select operModule.keyword from dbdemo group by operModule.keyword", //elasticsearch-sql支持的sql语句
+						Map.class);//返回的文档封装对象类型
+		//获取结果对象列表
+		List<Map> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+
+	/**
+	 * Elasticsearch-SQL插件功能测试方法
+	 */
+	@Test
+	public void testESSQLSearchagg(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ESAggDatas<LongAggHit> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
+				clientUtil.searchAgg("/_sql",//sql请求
+						"select operModule.keyword from dbdemo group by operModule.keyword ", //elasticsearch-sql支持的sql语句
+						LongAggHit.class,"operModule.keyword");//返回的文档封装对象类型
+		//获取结果对象列表
+		List<LongAggHit> demos = esDatas.getAggDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+
 
 
 }

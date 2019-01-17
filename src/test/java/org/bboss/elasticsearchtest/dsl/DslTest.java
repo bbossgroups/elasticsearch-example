@@ -19,9 +19,12 @@ import org.bboss.elasticsearchtest.crud.Demo;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.template.ESTemplateHelper;
+import org.frameworkset.elasticsearch.template.ESUtil;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,5 +72,32 @@ public class DslTest {
 		long totalSize = esDatas.getTotalSize();
 		System.out.println(totalSize);
 		
+	}
+
+	@Test
+	public void dynamicInnerDsl(){
+		Map conditions = new HashMap<String,Map<String,Object>>();
+
+		Map<String,Object> term = new HashMap<String, Object>();
+		term.put("terma","tavalue");
+		term.put("termb","tbvalue");
+		term.put("termc","tcvalue");
+		conditions.put("term",term);
+
+		Map<String,Object> terms = new HashMap<String, Object>();
+		terms.put("termsa",new String[]{"tavalue","tavalue1"});
+		terms.put("termsb",new String[]{"tbvalue","tbvalue1"});
+		terms.put("termsc",new String[]{"tcvalue","tcvalue1"});
+		conditions.put("terms",terms);
+		ESUtil esUtil = ESUtil.getInstance("esmapper/dsl.xml");
+
+		Map params = new HashMap();
+		params.put("conditions",conditions);
+		params.put("size",1000);
+		Iterator<Map.Entry<String,Map<String,Object>>> iterable = conditions.entrySet().iterator();
+//		Map.Entry<String,Map<String,Object>> entry = iterable.next();
+//		entry.getKey()
+		System.out.println(ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params));
+
 	}
 }
