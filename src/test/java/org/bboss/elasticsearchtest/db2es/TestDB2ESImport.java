@@ -45,6 +45,7 @@ public class TestDB2ESImport {
 				ESJDBC esjdbcResultSet = new ESJDBC();
 				esjdbcResultSet.setResultSet(resultSet);
 				esjdbcResultSet.setMetaData(statementInfo.getMeta());
+				//esjdbcResultSet.setEsIdField("id");
 				JDBCRestClientUtil jdbcRestClientUtil = new JDBCRestClientUtil();
 				jdbcRestClientUtil.addDocuments("dbdemo","dbdemo",esjdbcResultSet,"refresh",98);
 			}

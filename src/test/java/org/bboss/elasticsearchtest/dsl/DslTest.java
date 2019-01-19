@@ -76,7 +76,6 @@ public class DslTest {
 	@Test
 	public void dynamicInnerDsl(){
 		Map conditions = new HashMap<String,Map<String,Object>>();
-
 		Map<String,Object> term = new HashMap<String, Object>();
 		term.put("terma","tavalue");
 		term.put("termb","tbvalue");
@@ -88,15 +87,15 @@ public class DslTest {
 		terms.put("termsb",new String[]{"tbvalue","tbvalue1"});
 		terms.put("termsc",new String[]{"tcvalue","tcvalue1"});
 		conditions.put("terms",terms);
-		ESUtil esUtil = ESUtil.getInstance("esmapper/dsl.xml");
 
 		Map params = new HashMap();
 		params.put("conditions",conditions);
 		params.put("size",1000);
-//		Iterator<Map.Entry<String,Map<String,Object>>> iterable = conditions.entrySet().iterator();
-//		Map.Entry<String,Map<String,Object>> entry = iterable.next();
-//		entry.getKey()
-		System.out.println(ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params));
+		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
+		ESUtil esUtil = ESUtil.getInstance("esmapper/dsl.xml");
+		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
+		//打印解析结果
+		System.out.println(parseResult);
 
 	}
 }
