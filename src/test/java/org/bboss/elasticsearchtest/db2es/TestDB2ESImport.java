@@ -136,6 +136,29 @@ public class TestDB2ESImport {
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
 				ESJDBC esjdbcResultSet = new ESJDBC();
 				esjdbcResultSet.setResultSet(resultSet);
+				esjdbcResultSet.setEsIdField("document_id");
+				/**
+				 * 重新设置es数据结构
+				 */
+				esjdbcResultSet.setDataRefactor(new DataRefactor() {
+					public void refactor(Context context) throws Exception  {
+						CustomObject customObject = new CustomObject();
+						customObject.setAuthor((String)context.getValue("author"));
+						customObject.setTitle((String)context.getValue("title"));
+						customObject.setSubtitle((String)context.getValue("subtitle"));
+
+						customObject.setIds(new int[]{1,2,3});
+						context.addFieldValue("author",customObject);
+						long testtimestamp = context.getLongValue("testtimestamp");//将long类型的时间戳转换为Date类型
+						context.addFieldValue("testtimestamp",new Date(testtimestamp));//将long类型的时间戳转换为Date类型
+
+//				context.addIgnoreFieldMapping("title");
+						//上述三个属性已经放置到docInfo中，如果无需再放置到索引文档中，可以忽略掉这些属性
+//				context.addIgnoreFieldMapping("author");
+						context.addIgnoreFieldMapping("title");
+						context.addIgnoreFieldMapping("subtitle");
+					}
+				});
 				esjdbcResultSet.setMetaData(statementInfo.getMeta());
 				JDBCRestClientUtil jdbcRestClientUtil = new JDBCRestClientUtil();
 				jdbcRestClientUtil.addDocuments("dbclobdemo","dbclobdemo",esjdbcResultSet,"refresh",1000);

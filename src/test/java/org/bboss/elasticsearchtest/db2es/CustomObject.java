@@ -27,6 +27,7 @@ public class CustomObject {
 	private String title;
 	private String subtitle;
 	private String author;
+	private int[] ids;
 
 	public String getTitle() {
 		return title;
@@ -50,5 +51,13 @@ public class CustomObject {
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public int[] getIds() {
+		return ids;
+	}
+
+	public void setIds(int[] ids) {
+		this.ids = ids;
 	}
 }
