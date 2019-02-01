@@ -420,12 +420,12 @@ public class DocumentCRUD {
 		// * 	private String rountField;
 		// * 	private String refreshOption;
 		ClientOptions clientOption = new ClientOptions();
-		clientOption.setRefreshOption("refresh=true");//设置强制刷新控制参数
+		clientOption.setRefreshOption("refresh=true");//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"，线上环境谨慎设置这个参数
 		clientOption.setIdField("demoId");//设置文档id对应的字段
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
 		String response = clientUtil.addDocuments("demo",//索引表
 				"demo",//索引类型
-				demos,clientOption);//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+				demos,clientOption);
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
