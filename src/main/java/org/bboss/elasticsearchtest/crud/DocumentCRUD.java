@@ -19,6 +19,7 @@ import org.bboss.elasticsearchtest.script.Rule;
 import org.frameworkset.elasticsearch.ElasticSearchException;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.client.ClientOptions;
 import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 
@@ -112,9 +113,16 @@ public class DocumentCRUD {
 		demo.setContrastStatus(2);
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
+		/**
+		//通过@ESId注解的字段值设置文档id
 		String response = clientUtil.addDocument("demo",//索引表
 				"demo",//索引类型
 				demo);
+		 */
+		//直接指定文档id
+		String response = clientUtil.addDocumentWithId("demo",//索引表
+				"demo",//索引类型
+				demo,2l);
 //		//强制刷新
 //		String response = clientUtil.addDocument("demo",//索引表
 //				"demo",//索引类型
@@ -311,7 +319,6 @@ public class DocumentCRUD {
 	public void testBulkAddDocuments() {
 		//创建批量创建文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
 		long start = System.currentTimeMillis();
@@ -375,6 +382,90 @@ public class DocumentCRUD {
 				"demo",//索引类型
 				"3",//文档id
 				Demo.class);
+	}
+
+	/**
+	 * 批量导入20002条数据
+	 */
+	public void testBulkAddDocumentsSetIdField() {
+		//创建批量创建文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		List<FieldDemo> demos = new ArrayList<FieldDemo>();
+		FieldDemo demo = null;
+		long start = System.currentTimeMillis();
+		for(int i = 0 ; i < 100; i ++) {
+			demo = new FieldDemo();//定义第一个对象
+			demo.setDemoId((long)i);
+			demo.setAgentStarttime(new Date());
+			demo.setApplicationName("blackcatdemo"+i);
+			demo.setContentbody("this is content body"+i);
+			if(i % 2 == 0) {
+				demo.setName("刘德华喜欢唱歌" + i);
+			}
+			else{
+				demo.setName("张学友不喜欢唱歌" + i);
+			}
+
+			demo.setOrderId("NFZF15045871807281445364228");
+			demo.setContrastStatus(2);
+			demos.add(demo);//添加第一个对象到list中
+		}
+		//通过clientOptions设置相关的控制参数，
+		// * 可以在ClientOption中指定以下参数：
+		// * 	private String parentIdField;
+		// * 	private String idField;
+		// * 	private String esRetryOnConflictField;
+		// * 	private String versionField;
+		// * 	private String versionTypeField;
+		// * 	private String rountField;
+		// * 	private String refreshOption;
+		ClientOptions clientOption = new ClientOptions();
+		clientOption.setRefreshOption("refresh=true");//设置强制刷新控制参数
+		clientOption.setIdField("demoId");//设置文档id对应的字段
+		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
+		String response = clientUtil.addDocuments("demo",//索引表
+				"demo",//索引类型
+				demos,clientOption);//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+		long end = System.currentTimeMillis();
+		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
+		start = System.currentTimeMillis();
+		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		ESDatas<FieldDemo> datas = clientUtil.scroll("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}",
+				"1m",FieldDemo.class);
+		end = System.currentTimeMillis();
+		System.out.println("scroll SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		int max = 6;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("size", 1000);//每页1000条记录
+
+		datas = clientUtil.scrollSlice("demo/_search","scrollSliceQuery", params,"1m",FieldDemo.class);
+		//scroll上下文有效期1分钟
+		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		start = System.currentTimeMillis();
+		datas = clientUtil.scrollSliceParallel("demo/_search","scrollSliceQuery", params,"1m",FieldDemo.class);
+		end = System.currentTimeMillis();
+		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		if(datas != null){
+			System.out.println("scrollSlice SearchAll datas.getTotalSize():"+datas.getTotalSize());
+			if(datas.getDatas() != null)
+				System.out.println("scrollSlice SearchAll datas.getDatas().size():"+datas.getDatas().size());
+		}
+		long count = clientUtil.countAll("demo");
+
+		System.out.println("addDocuments-------------------------" +count);
+		//System.out.println(response);
+		//获取第一个文档
+		response = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"2");//w
+//		System.out.println("getDocument-------------------------");
+//		System.out.println(response);
+		//获取第二个文档
+		demo = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"3",//文档id
+				FieldDemo.class);
 	}
 
 	/**
