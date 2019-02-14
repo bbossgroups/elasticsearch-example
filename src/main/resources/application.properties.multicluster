@@ -6,10 +6,10 @@ elasticsearch.serverNames = default,logs
 elasticUser=elastic
 elasticPassword=changeme
 
-#elasticsearch.rest.hostNames=10.1.236.88:9200
-#elasticsearch.rest.hostNames=127.0.0.1:9200
 elasticsearch.rest.hostNames=192.168.137.1:9200
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
+#如果开启了https协议，则需要在elasticsearch地址中添加https://协议头
+#elasticsearch.rest.hostNames=https://10.180.211.27:9280,https://10.180.211.27:9281,https://10.180.211.27:9282
 elasticsearch.dateFormat=yyyy.MM.dd
 elasticsearch.timeZone=Asia/Shanghai
 elasticsearch.ttl=2d
@@ -50,10 +50,12 @@ http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.ConnectionRe
 logs.elasticUser=elastic
 logs.elasticPassword=changeme
 
-#elasticsearch.rest.hostNames=10.1.236.88:9200
+
 logs.elasticsearch.rest.hostNames=192.168.137.1:9200
-#elasticsearch.rest.hostNames=10.21.20.168:9200
+#配置多个集群地址
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
+#如果开启了https协议，则需要在elasticsearch地址中添加https://协议头
+#elasticsearch.rest.hostNames=https://10.180.211.27:9280,https://10.180.211.27:9281,https://10.180.211.27:9282
 logs.elasticsearch.dateFormat=yyyy.MM.dd
 logs.elasticsearch.timeZone=Asia/Shanghai
 logs.elasticsearch.ttl=2d
