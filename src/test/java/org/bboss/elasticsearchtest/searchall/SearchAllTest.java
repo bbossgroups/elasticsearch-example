@@ -18,6 +18,7 @@ package org.bboss.elasticsearchtest.searchall;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.scroll.HandlerInfo;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
 import org.junit.Test;
 
@@ -84,7 +85,7 @@ public class SearchAllTest {
 	public void testSearchAllHandler(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		ESDatas<Map> esDatas = clientInterface.searchAll("demo", new ScrollHandler<Map>() {
-			public void handle(ESDatas<Map> esDatas) throws Exception {
+			public void handle(ESDatas<Map> esDatas, HandlerInfo handlerInfo) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());
 				if(dataList != null) {
@@ -113,7 +114,7 @@ public class SearchAllTest {
 	public void testSearchAllFethchSizeHandler(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		ESDatas<Map> esDatas = clientInterface.searchAll("demo",10000,new ScrollHandler<Map>() {
-			public void handle(ESDatas<Map> esDatas) throws Exception {
+			public void handle(ESDatas<Map> esDatas, HandlerInfo handlerInfo) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());
 				if(dataList != null) {
@@ -176,7 +177,7 @@ public class SearchAllTest {
 	public void testSearchAllHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo", new ScrollHandler<Map>() {
-			public void handle(ESDatas<Map> esDatas) throws Exception {
+			public void handle(ESDatas<Map> esDatas, HandlerInfo handlerInfo) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());
 				if(dataList != null) {
@@ -205,7 +206,7 @@ public class SearchAllTest {
 	public void testSearchAllFethchSizeHandlerParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",10000,new ScrollHandler<Map>() {
-			public void handle(ESDatas<Map> esDatas) throws Exception {
+			public void handle(ESDatas<Map> esDatas, HandlerInfo handlerInfo) throws Exception {
 				List<Map> dataList = esDatas.getDatas();
 				System.out.println("TotalSize:"+esDatas.getTotalSize());
 				if(dataList != null) {
