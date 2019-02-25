@@ -17,6 +17,7 @@ package org.bboss.elasticsearchtest.scroll;/*
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.scroll.HandlerInfo;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
 import org.junit.Test;
 
@@ -88,7 +89,27 @@ public class TestScrollAPIQuery {
 		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
 		//scroll上下文有效期1分钟
 		ESDatas<Map> response = clientUtil.scroll("demo/_search", "scrollQuery", "1m", params, Map.class, new ScrollHandler<Map>() {
-			public void handle(ESDatas<Map> response) throws Exception {//自己处理每次scroll的结果
+			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
+				List<Map> datas = response.getDatas();
+				long totalSize = response.getTotalSize();
+				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+			}
+		});
+
+		System.out.println("response realzie:"+response.getTotalSize());
+
+	}
+
+	@Test
+	public void testSimleScrollParallelAPIHandler(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll分页检索
+		Map params = new HashMap();
+		params.put("size", 10);//每页5000条记录
+		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		ESDatas<Map> response = clientUtil.scrollParallel("demo/_search", "scrollQuery", "1m", params, Map.class, new ScrollHandler<Map>() {
+			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
 				List<Map> datas = response.getDatas();
 				long totalSize = response.getTotalSize();
 				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
@@ -114,7 +135,7 @@ public class TestScrollAPIQuery {
 		//scroll上下文有效期1分钟
 		ESDatas<Map> sliceResponse = clientUtil.scrollSlice("demo/_search",
 				"scrollSliceQuery", params,"1m",Map.class, new ScrollHandler<Map>() {
-					public void handle(ESDatas<Map> response) throws Exception {//自己处理每次scroll的结果
+					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
 						List<Map> datas = response.getDatas();
 						long totalSize = response.getTotalSize();
 						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
@@ -140,7 +161,7 @@ public class TestScrollAPIQuery {
 		//scroll上下文有效期1分钟
 		ESDatas<Map> sliceResponse = clientUtil.scrollSliceParallel("demo/_search",
 				"scrollSliceQuery", params,"1m",Map.class, new ScrollHandler<Map>() {
-					public void handle(ESDatas<Map> response) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
 						List<Map> datas = response.getDatas();
 						long totalSize = response.getTotalSize();
 						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());

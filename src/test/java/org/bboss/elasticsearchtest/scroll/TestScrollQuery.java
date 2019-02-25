@@ -20,10 +20,7 @@ import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 public class TestScrollQuery {
@@ -32,7 +29,7 @@ public class TestScrollQuery {
 	public void testScroll(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
-		List<String > scrollIds = new ArrayList<String>();
+		Set<String > scrollIds = new TreeSet<String>();
 		long starttime = System.currentTimeMillis();
 		Map params = new HashMap();
 
@@ -80,7 +77,7 @@ public class TestScrollQuery {
 				scrolls = clientUtil.deleteScrolls(scrollIds);
 			}
 			catch (Exception e){
-
+					e.printStackTrace();
 			}
 			System.out.println(scrolls);
 		}
@@ -95,7 +92,7 @@ public class TestScrollQuery {
 	@Test
 	public void testSliceScroll() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		List<String> scrollIds = new ArrayList<String>();
+		Set<String> scrollIds = new TreeSet<String>();
 		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索
 		int max = 6;
@@ -159,7 +156,7 @@ public class TestScrollQuery {
 	@Test
 	public void testParralSliceScroll() {
 		final ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		final List<String> scrollIds = new ArrayList<String>();
+		final Set<String> scrollIds = new TreeSet<String>();
 		long starttime = System.currentTimeMillis();
 		//scroll slice分页检索
 		final int max = 6;
@@ -191,6 +188,7 @@ public class TestScrollQuery {
 							String sliceScrollId = sliceResponse.getScrollId();
 							if (sliceScrollId != null)
 								scrollIds.add(sliceScrollId);
+							scrollId = sliceScrollId ;
 							sliceDatas = sliceResponse.getDatas();
 							if (sliceDatas == null || sliceDatas.size() < 100) {
 								break;

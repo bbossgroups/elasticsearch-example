@@ -17,6 +17,16 @@ elasticsearch.ttl=2d
 elasticsearch.showTemplate=true
 elasticsearch.discoverHost=false
 
+#设置slice scroll查询对应的线程数和等待队列数
+elasticsearch.sliceScrollThreadCount=100
+elasticsearch.sliceScrollThreadQueue=100
+elasticsearch.sliceScrollBlockedWaitTimeout=0
+
+#设置scroll查询对应的线程数和等待队列数
+elasticsearch.scrollThreadCount=200
+elasticsearch.scrollThreadQueue=200
+elasticsearch.scrollBlockedWaitTimeout=0
+
 ##default连接池配置
 http.timeoutConnection = 5000
 http.timeoutSocket = 5000
@@ -62,6 +72,16 @@ logs.elasticsearch.ttl=2d
 #在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
 logs.elasticsearch.showTemplate=true
 logs.elasticsearch.discoverHost=false
+
+#设置slice scroll查询对应的线程数和等待队列数
+logs.elasticsearch.sliceScrollThreadCount=100
+logs.elasticsearch.sliceScrollThreadQueue=100
+logs.elasticsearch.sliceScrollBlockedWaitTimeout=0
+
+#设置scroll查询对应的线程数和等待队列数
+logs.elasticsearch.scrollThreadCount=200
+logs.elasticsearch.scrollThreadQueue=200
+logs.elasticsearch.scrollBlockedWaitTimeout=0
 
 ##logs集群对应的连接池配置
 logs.http.timeoutConnection = 5000

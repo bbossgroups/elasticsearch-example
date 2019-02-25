@@ -6,7 +6,10 @@
         <![CDATA[
          {
             "size":#[size],
-            "query": {"match_all": {}}
+            "query": {"match_all": {}},
+            "sort": [
+                "_doc"
+            ]
         }
         ]]>
     </property>
@@ -21,7 +24,10 @@
                 "max": #[sliceMax] ## 必须使用sliceMax作为变量名称
             },
             "size":#[size],
-            "query": {"match_all": {}}
+            "query": {"match_all": {}},
+            "sort": [
+                "_doc"
+            ]
         }
         ]]>
     </property>
