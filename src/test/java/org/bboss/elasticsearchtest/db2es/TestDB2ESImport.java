@@ -62,7 +62,7 @@ public class TestDB2ESImport {
 	 */
 	@Test
 	public void testSimpleLogImportBuilderFromExternalDBConfig(){
-		ImportBuilder importBuilder = ImportBuilder.newInstance();
+		DB2ESImportBuilder importBuilder = DB2ESImportBuilder.newInstance();
 		try {
 			//清除测试表,导入的时候回重建表，测试的时候加上为了看测试效果，实际线上环境不要删表
 			ElasticSearchHelper.getRestClientUtil().dropIndice("dbdemo");
@@ -104,7 +104,7 @@ public class TestDB2ESImport {
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
-		dataStream.db2es();
+		dataStream.execute();
 
 		try {
 			//查询文档表中文档数量，与数据库中的记录数进行比较
@@ -172,7 +172,7 @@ public class TestDB2ESImport {
 	}
 	@Test
 	public void testImportBuilder() throws SQLException {
-		ImportBuilder importBuilder = ImportBuilder.newInstance();
+		DB2ESImportBuilder importBuilder = DB2ESImportBuilder.newInstance();
 		try {
 			//清除测试表
 			ElasticSearchHelper.getRestClientUtil().dropIndice("dbclobdemo");
@@ -259,7 +259,7 @@ public class TestDB2ESImport {
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
-		dataStream.db2es();
+		dataStream.execute();
 		long dbcount = SQLExecutor.queryObject(long.class,"select count(*) from td_cms_document");
 		ESDatas<Map> datas = ElasticSearchHelper.getRestClientUtil().searchAll("dbclobdemo",Map.class);
 
@@ -269,7 +269,7 @@ public class TestDB2ESImport {
 
 	@Test
 	public void testSimpleImportBuilder(){
-		ImportBuilder importBuilder = ImportBuilder.newInstance();
+		DB2ESImportBuilder importBuilder = DB2ESImportBuilder.newInstance();
 		try {
 			//清除测试表
 			ElasticSearchHelper.getRestClientUtil().dropIndice("dbclobdemo");
@@ -304,7 +304,7 @@ public class TestDB2ESImport {
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
-		dataStream.db2es();
+		dataStream.execute();
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class TestDB2ESImport {
 	 */
 	@Test
 	public void testSimpleImportBuilderFromExternalDBConfig(){
-		ImportBuilder importBuilder = ImportBuilder.newInstance();
+		DB2ESImportBuilder importBuilder = DB2ESImportBuilder.newInstance();
 		try {
 			//清除测试表
 			ElasticSearchHelper.getRestClientUtil().dropIndice("dbclobdemo");
@@ -340,6 +340,6 @@ public class TestDB2ESImport {
 		 * 执行数据库表数据导入es操作
 		 */
 		DataStream dataStream = importBuilder.builder();
-		dataStream.db2es();
+		dataStream.execute();
 	}
 }

@@ -105,7 +105,7 @@ public class TestScrollAPIQuery {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
 		Map params = new HashMap();
-		params.put("size", 10);//每页5000条记录
+		params.put("size", 5000);//每页5000条记录
 		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
 		//scroll上下文有效期1分钟
 		ESDatas<Map> response = clientUtil.scrollParallel("demo/_search", "scrollQuery", "1m", params, Map.class, new ScrollHandler<Map>() {
