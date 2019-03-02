@@ -16,7 +16,7 @@ package org.bboss.elasticsearchtest.db2es;
  */
 
 import org.frameworkset.elasticsearch.client.DataStream;
-import org.frameworkset.elasticsearch.client.ImportBuilder;
+import org.frameworkset.elasticsearch.client.DB2ESImportBuilder;
 import org.frameworkset.elasticsearch.client.schedule.ImportIncreamentConfig;
 import org.junit.Test;
 
@@ -30,14 +30,14 @@ import org.junit.Test;
  */
 public class ScheduleImportTaskTest {
 //	public static void main(String[] args){
-//		testSimpleLogImportBuilderFromExternalDBConfig();
+//		testSimpleLogDB2ESImportBuilderFromExternalDBConfig();
 //	}
 	/**
 	 * 从外部application.properties文件中加载数据源配置和es配置
 	 */
 	@Test
-	public void testSimpleLogImportBuilderFromExternalDBConfig(){
-		ImportBuilder importBuilder = ImportBuilder.newInstance();
+	public void testSimpleLogDB2ESImportBuilderFromExternalDBConfig(){
+		DB2ESImportBuilder importBuilder = DB2ESImportBuilder.newInstance();
 		//增量定时任务不要删表，但是可以通过删表来做初始化操作
 //		try {
 //			//清除测试表,导入的时候回重建表，测试的时候加上为了看测试效果，实际线上环境不要删表
