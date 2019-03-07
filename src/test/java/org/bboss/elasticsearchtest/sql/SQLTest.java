@@ -52,7 +52,7 @@ public class SQLTest {
 	public void testTranslate(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 		String json = clientUtil.executeHttp("/_xpack/sql/translate",
-				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
+				"{\"query\": \"SELECT * FROM agentinfo\"}",
 				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
