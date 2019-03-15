@@ -1,0 +1,35 @@
+<property name="pianduan">
+    <![CDATA["query": {
+                "bool": {
+                    "must": [{
+                        "term": {
+                            "cityId": #[cityId]
+                        }
+                    },
+                    {
+                        "terms": {
+                            "titleId": #[titleId,serialJson=true]
+                        }
+                    },
+                    {
+                        "bool": {
+                            "should": [{
+                                "term": {
+                                    "deptId1": #[deptId1]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId2": #[deptId2]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId3": #[deptId3]
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]]>
+</property>

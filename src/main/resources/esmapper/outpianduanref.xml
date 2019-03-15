@@ -1,0 +1,56 @@
+<properties>
+
+    <property name="outPianduanRef"
+              templateFile="esmapper/pianduan.xml"
+              templateName="pianduan"/>
+
+    <property name="pianduan">
+        <![CDATA["query": {
+                "bool": {
+                    "must": [{
+                        "term": {
+                            "cityId": #[cityId]
+                        }
+                    },
+                    {
+                        "terms": {
+                            "titleId": #[titleId,serialJson=true]
+                        }
+                    },
+                    {
+                        "bool": {
+                            "should": [{
+                                "term": {
+                                    "deptId1": #[deptId1]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId2": #[deptId2]
+                                }
+                            },
+                            {
+                                "term": {
+                                    "deptId3": #[deptId3]
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]]>
+    </property>
+    <property name="testoutPianduan">
+        <![CDATA[{ ## 最多返回1000条记录
+            size: #[size],
+            @{outPianduanRef}
+        }]]>
+    </property>
+
+    <property name="testinnerPianduan">
+        <![CDATA[{ ## 最多返回1000条记录
+            size: #[size],
+            @{pianduan}
+        }]]>
+    </property>
+
+</properties>
