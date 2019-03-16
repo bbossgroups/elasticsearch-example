@@ -115,9 +115,9 @@ public class FunctionScriptScoreTest {
 	}
 	@Test
 	public void testFunctionScriptScore(){
-		this.createUserInfoIndice();
-		this.createUserInfoScoreScript();
-		this.importUserInfoData();
-		this.queryUserInfo();
+		this.createUserInfoIndice();//创建通讯录索引
+		this.createUserInfoScoreScript();//创建自定义评分脚本
+		this.importUserInfoData();//导入测试数据
+		this.queryUserInfo(); //执行普票查询和自定义评分查询，并打印查询结果
 	}
 }

@@ -16,7 +16,7 @@ package org.bboss.elasticsearchtest.score;
  */
 
 import com.frameworkset.orm.annotation.ESId;
-import com.frameworkset.util.SimpleStringUtil;
+import org.frameworkset.elasticsearch.entity.ESBaseData;
 
 /**
  * <p>Description: </p>
@@ -26,7 +26,7 @@ import com.frameworkset.util.SimpleStringUtil;
  * @author biaoping.yin
  * @version 1.0
  */
-public class UserInfo {
+public class UserInfo extends ESBaseData {
 	@ESId(readSet = true)
 	private String userId;
 	private String name;
@@ -48,7 +48,10 @@ public class UserInfo {
 	}
 	public String toString(){
 		StringBuilder ret = new StringBuilder();
-		ret.append(SimpleStringUtil.object2json(this)).append("\n");
+		ret.append("{\"name\":").append("\"").append(this.getName()).append("\",");
+		ret.append("\"userId\":").append("\"").append(this.getUserId()).append("\",");
+		ret.append("\"score\":").append(this.getScore()).append("}");
+		ret.append("\n");
 		return ret.toString();
 	}
 }

@@ -1,7 +1,7 @@
 <properties>
     <!--
     通过score函数计算相关度打分案例
-
+	创建通讯录索引user-info mapping dsl
     -->
     <property name="createUserInfoIndice">
         <![CDATA[{
@@ -23,14 +23,15 @@
     </property>
     <!--
         简单的query案例，默认评分规则
-
+		普通检索dsl，查询条件通过name变量传入
     -->
     <property name="nameQuery">
         <![CDATA[
          {
+           "size": 20,
            "query": {
                 "query_string":{
-                    "query":"(name:(*#[name,quoted=false]*))"
+                    "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入
                 }
             }
         }
@@ -74,6 +75,7 @@
    -->
     <property name="nameScriptScoreQuery">
         <![CDATA[{
+          "size": 20,
           "query": {
             "function_score": {
                 "query": {
