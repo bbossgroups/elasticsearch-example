@@ -50,6 +50,7 @@
               "source": @"""
                     double position_score = 0;
                     double similarity_score = 0;
+                    //params.keyword对应查询dsl中传入的名称为keyword的参数
                     int pos = doc['name'].value.indexOf(params.keyword);
                     if(pos != -1)
                     {
@@ -75,25 +76,41 @@
    -->
     <property name="nameScriptScoreQuery">
         <![CDATA[{
-          "size": 20,
-          "query": {
-            "function_score": {
-                "query": {
-                    "query_string":{
-                        "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入,字符串变量会自动添加双引号，这里不需自动添加，所以设置quoted=false
-                    }
-                },
-                "script_score": {
-                    "script": {
-                        "id": "user_info_score",
-                        "params": {
-                            "keyword":#[name]
-                        }
-                    }
-                },
-                "boost_mode": "sum"
-            }
-          }
-        }]]>
+           "size": 20,
+           "query": {
+             #*
+               function_score查询是用来控制评分的终极武器，
+               它允许每个与主查询匹配的文档应用一个内置或自定义函数，已达到改变原始查询评分_score的目的。
+             *#
+             "function_score": {
+                 "query": {
+                     "query_string":{
+                         "query":"(name:(*#[name,quoted=false]*))" ## 根据传入的关键字条件进行检索
+                     }
+                 },
+                 #*
+                   script_score用于指定自定义脚本。params指定作为变量传递到脚本中的参数
+                 *#
+                 "script_score": {
+                     "script": {
+                         "id": "user_info_score", ## 通过user_info_score引用上面定义的评分painless脚本
+                         "params": {
+                             "keyword":#[name]  ## 传入评分脚本的关键字条件
+                         }
+                     }
+                 },
+                 #*
+                    boost_mode字段用来指定新计算的分数与_score的结合方式，取值可以是：
+                        multiply 相乘
+                        replace 替换
+                        sum 相加
+                        avg 取平均值
+                        max 取最大值
+                        min 取最小值
+                 *#
+                 "boost_mode": "sum"  ## 将计算得出的评分值与原始评分值相加
+             }
+           }
+         }]]>
     </property>
 </properties>
