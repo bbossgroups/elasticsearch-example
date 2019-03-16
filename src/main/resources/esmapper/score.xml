@@ -1,0 +1,97 @@
+<properties>
+    <!--
+    通过score函数计算相关度打分案例
+
+    -->
+    <property name="createUserInfoIndice">
+        <![CDATA[{
+            "settings": {
+                "number_of_shards": 1,
+                "number_of_replicas": 0,
+                "index.refresh_interval": "5s"
+            },
+            "mappings": {
+                "user": {
+                    "properties": {
+                        "name":{
+                            "type":"keyword"
+                        }
+                    }
+                }
+            }
+        }]]>
+    </property>
+    <!--
+        简单的query案例，默认评分规则
+
+    -->
+    <property name="nameQuery">
+        <![CDATA[
+         {
+           "query": {
+                "query_string":{
+                    "query":"(name:(*#[name,quoted=false]*))"
+                }
+            }
+        }
+        ]]>
+    </property>
+
+    <!--
+        简单的query案例：评分函数定义
+        https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting-using.html
+    -->
+    <property name="userInfoScore">
+        <![CDATA[
+         {
+           "script": {
+              "lang": "painless",
+              "source": @"""
+                    double position_score = 0;
+                    double similarity_score = 0;
+                    int pos = doc['name'].value.indexOf(params.keyword);
+                    if(pos != -1)
+                    {
+                        position_score = 10 - pos;
+                        if(position_score < 0) position_score = 0; // 出现位置大于10的忽略其重要性
+                    }
+                    double similarity = Math.abs(1.0*doc['name'].value.length() - params.keyword.length());
+                    similarity_score = 10 - similarity;
+                    if(similarity_score < 0) similarity_score = 0; // 相似度差10个字符的忽略其重要性
+                    // 在下面调节各分值的权重
+                    return position_score*0.6 + similarity_score * 0.4;
+              """
+            }
+        }
+        ]]>
+    </property>
+
+    <!--
+       简单的query案例，默认评分规则
+       https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
+       https://elasticsearch.cn/question/1890
+       评分相似度文档：https://blog.csdn.net/qq_19598855/article/details/50581945
+   -->
+    <property name="nameScriptScoreQuery">
+        <![CDATA[{
+          "query": {
+            "function_score": {
+                "query": {
+                    "query_string":{
+                        "query":"(name:(*#[name,quoted=false]*))"
+                    }
+                },
+                "script_score": {
+                    "script": {
+                        "id": "user_info_score",
+                        "params": {
+                            "keyword":#[name]
+                        }
+                    }
+                },
+                "boost_mode": "sum"
+            }
+          }
+        }]]>
+    </property>
+</properties>
