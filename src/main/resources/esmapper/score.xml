@@ -31,7 +31,7 @@
            "size": 20,
            "query": {
                 "query_string":{
-                    "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入
+                    "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入,字符串变量会自动添加双引号，这里不需自动添加，所以设置quoted=false
                 }
             }
         }
@@ -80,7 +80,7 @@
             "function_score": {
                 "query": {
                     "query_string":{
-                        "query":"(name:(*#[name,quoted=false]*))"
+                        "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入,字符串变量会自动添加双引号，这里不需自动添加，所以设置quoted=false
                     }
                 },
                 "script_score": {
