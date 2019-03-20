@@ -174,7 +174,7 @@ public class TestScrollAPIQuery {
 	}
 
 	/**
-	 * 并行方式执行slice scroll操作
+	 * 并行方式执行slice scroll操作：将一个es的数据导入另外一个es数据，需要在application.properties文件中定义一个es233的集群
 	 */
 	@Test
 	public void testSimpleSliceScrollApiParralHandlerExport() {
