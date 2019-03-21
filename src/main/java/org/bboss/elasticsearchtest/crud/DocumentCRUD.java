@@ -555,6 +555,9 @@ public class DocumentCRUD {
 				"searchDatas",//esmapper/demo.xml中定义的dsl语句
 				params,//变量参数
 				Demo.class);//返回的文档封装对象类型
+
+		long count = clientUtil.count("demo/_search","searchDatas",//esmapper/demo.xml中定义的dsl语句
+				params);//变量参数
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
 
