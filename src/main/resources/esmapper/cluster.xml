@@ -1,0 +1,113 @@
+<properties>
+    <!--
+    设置集群延迟分配分片
+    The allocation of replica shards which become unassigned because a node has left can be delayed with the
+    index.unassigned.node_left.delayed_timeout dynamic setting, which defaults to 1m.
+    https://www.elastic.co/guide/en/elasticsearch/reference/6.2/delayed-allocation.html
+    PUT _all/_settings
+    {
+      "settings": {
+        "index.unassigned.node_left.delayed_timeout": "5m"
+      }
+    }
+    -->
+    <property name="updateUnassigned">
+        <![CDATA[{
+            "settings":{
+                "index.unassigned.node_left.delayed_timeout":"1d"
+            }
+        }]]>
+    </property>
+    <!--
+        简单的query案例，默认评分规则
+		普通检索dsl，查询条件通过name变量传入
+    -->
+    <property name="nameQuery">
+        <![CDATA[
+         {
+           "size": 20,
+           "query": {
+                "query_string":{
+                    "query":"(name:(*#[name,quoted=false]*))" ## 查询条件通过name变量传入,字符串变量会自动添加双引号，这里不需自动添加，所以设置quoted=false
+                }
+            }
+        }
+        ]]>
+    </property>
+
+    <!--
+        简单的query案例：评分函数定义
+        https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting-using.html
+    -->
+    <property name="userInfoScore">
+        <![CDATA[
+         {
+           "script": {
+              "lang": "painless",
+              "source": @"""
+                    double position_score = 0;
+                    double similarity_score = 0;
+                    //params.keyword对应查询dsl中传入的名称为keyword的参数
+                    int pos = doc['name'].value.indexOf(params.keyword);
+                    if(pos != -1)
+                    {
+                        position_score = 10 - pos;
+                        if(position_score < 0) position_score = 0; // 出现位置大于10的忽略其重要性
+                    }
+                    double similarity = Math.abs(1.0*doc['name'].value.length() - params.keyword.length());
+                    similarity_score = 10 - similarity;
+                    if(similarity_score < 0) similarity_score = 0; // 相似度差10个字符的忽略其重要性
+                    // 在下面调节各分值的权重
+                    return position_score*0.6 + similarity_score * 0.4;
+              """
+            }
+        }
+        ]]>
+    </property>
+
+    <!--
+       简单的query案例，默认评分规则
+       https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
+       https://elasticsearch.cn/question/1890
+       评分相似度文档：https://blog.csdn.net/qq_19598855/article/details/50581945
+   -->
+    <property name="nameScriptScoreQuery">
+        <![CDATA[{
+           "size": 20,
+           "query": {
+             #*
+               function_score查询是用来控制评分的终极武器，
+               它允许每个与主查询匹配的文档应用一个内置或自定义函数，已达到改变原始查询评分_score的目的。
+             *#
+             "function_score": {
+                 "query": {
+                     "query_string":{
+                         "query":"(name:(*#[name,quoted=false]*))" ## 根据传入的关键字条件进行检索
+                     }
+                 },
+                 #*
+                   script_score用于指定自定义脚本。params指定作为变量传递到脚本中的参数
+                 *#
+                 "script_score": {
+                     "script": {
+                         "id": "user_info_score", ## 通过user_info_score引用上面定义的评分painless脚本
+                         "params": {
+                             "keyword":#[name]  ## 传入评分脚本的关键字条件
+                         }
+                     }
+                 },
+                 #*
+                    boost_mode字段用来指定新计算的分数与_score的结合方式，取值可以是：
+                        multiply 相乘
+                        replace 替换
+                        sum 相加
+                        avg 取平均值
+                        max 取最大值
+                        min 取最小值
+                 *#
+                 "boost_mode": "sum"  ## 将计算得出的评分值与原始评分值相加
+             }
+           }
+         }]]>
+    </property>
+</properties>

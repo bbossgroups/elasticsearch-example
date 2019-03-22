@@ -35,14 +35,23 @@ public class TestClusterSetting {
 	}
 	@Test
 	public void updateUnassigned(){
-		ClientInterface clientInterface = ElasticSearchHelper.getConfigRestClientUtil("esmapper/cluster.xml");
+		ClientInterface clientInterface =  ElasticSearchHelper.getRestClientUtil();
+		clientInterface.unassignedNodeLeftDelayedTimeout("2d"); //全局设置
+		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");//直接设置cms_document索引
+		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));//获取索引cms_document配置
+		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");//直接设置
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+	}
 
-		System.out.println(clientInterface.executeHttp("_all/_settings","updateUnassigned",ClientInterface.HTTP_PUT));
-		clientInterface.unassignedNodeLeftDelayedTimeout("2d");
-		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");
-		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));
-		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));
+	@Test
+	public void updateNumberOfReplicas(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+
+		clientInterface.updateNumberOfReplicas(1);//全局设置
+		clientInterface.updateNumberOfReplicas("cms_document",2);//直接设置cms_document索引
+		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));//获取索引cms_document配置
+		clientInterface.updateNumberOfReplicas("cms_document",0);//直接设置cms_document索引
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
 
 	}
 }
