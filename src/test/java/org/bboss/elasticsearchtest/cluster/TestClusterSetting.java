@@ -19,6 +19,9 @@ import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>Description: </p>
  * <p></p>
@@ -50,7 +53,26 @@ public class TestClusterSetting {
 		clientInterface.updateNumberOfReplicas(1);//全局设置
 		clientInterface.updateNumberOfReplicas("cms_document",2);//直接设置cms_document索引
 		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));//获取索引cms_document配置
-		clientInterface.updateNumberOfReplicas("cms_document",0);//直接设置cms_document索引
+		clientInterface.updateNumberOfReplicas("cms_document",3);//直接设置cms_document索引
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+
+	}
+
+	@Test
+	public void testSetting(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		clientInterface.updateIndiceSetting("cms_document","index.unassigned.node_left.delayed_timeout","1d");
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		clientInterface.updateAllIndicesSetting("index.unassigned.node_left.delayed_timeout","2d");
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		Map<String,Object> settings = new HashMap<String,Object>();
+		settings.put("index.unassigned.node_left.delayed_timeout","5d");
+		settings.put("index.number_of_replicas",5);
+		clientInterface.updateAllIndicesSettings(settings);
+		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		settings.put("index.unassigned.node_left.delayed_timeout","3d");
+		settings.put("index.number_of_replicas",6);
+		clientInterface.updateIndiceSettings("cms_document",settings);
 		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
 
 	}
