@@ -17,9 +17,12 @@ package org.bboss.elasticsearchtest.cluster;
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.entity.ClusterSetting;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +37,72 @@ public class TestClusterSetting {
 	@Test
 	public void testGetClusterSetting(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		System.out.println(clientInterface.getClusterSetting());
+		System.out.println(clientInterface.getClusterSettings());
+	}
+	@Test
+	public void updateClusterSetting(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		ClusterSetting clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("indices.recovery.max_bytes_per_sec");
+		clusterSetting.setValue("50mb");
+		clusterSetting.setPersistent(true);
+		clientInterface.updateClusterSetting(clusterSetting);
+		System.out.println(clientInterface.getClusterSettings());
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("indices.recovery.max_bytes_per_sec");
+		clusterSetting.setValue(null);
+		clusterSetting.setPersistent(true);
+		clientInterface.updateClusterSetting(clusterSetting);
+		System.out.println(clientInterface.getClusterSettings());
+	}
+
+	@Test
+	public void updateClusterSettings(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		List<ClusterSetting> clusterSettingList = new ArrayList<ClusterSetting>();
+
+		ClusterSetting clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("indices.recovery.max_bytes_per_sec");
+		clusterSetting.setValue("50mb");
+		clusterSetting.setPersistent(true);
+		clusterSettingList.add(clusterSetting);
+
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("xpack.monitoring.collection.enabled");
+		clusterSetting.setValue("true");
+		clusterSetting.setPersistent(true);
+		clusterSettingList.add(clusterSetting);
+
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("xpack.monitoring.collection.enabled");
+		clusterSetting.setValue("true");
+		clusterSetting.setPersistent(false);
+		clusterSettingList.add(clusterSetting);
+
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("indices.recovery.max_bytes_per_sec");
+		clusterSetting.setValue("50mb");
+		clusterSetting.setPersistent(false);
+		clusterSettingList.add(clusterSetting);
+
+		clientInterface.updateClusterSettings(clusterSettingList);
+		System.out.println(clientInterface.getClusterSettings(false));
+		clusterSettingList = new ArrayList<ClusterSetting>();
+
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("xpack.monitoring.collection.enabled");
+		clusterSetting.setValue(null);
+		clusterSetting.setPersistent(true);
+		clusterSettingList.add(clusterSetting);
+
+		clusterSetting = new ClusterSetting();
+		clusterSetting.setKey("indices.recovery.max_bytes_per_sec");
+		clusterSetting.setValue(null);
+		clusterSetting.setPersistent(false);
+		clusterSettingList.add(clusterSetting);
+
+		clientInterface.updateClusterSettings(clusterSettingList);
+		System.out.println(clientInterface.getClusterSettings(false));
 	}
 	@Test
 	public void updateUnassigned(){
