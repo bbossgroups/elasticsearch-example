@@ -144,4 +144,15 @@ public class TestClusterSetting {
 		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
 
 	}
+
+	@Test
+	public void enableShared(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		System.out.println(clientInterface.flushSynced());
+		System.out.println(clientInterface.disableClusterRoutingAllocation());//全局设置
+		System.out.println(clientInterface.getClusterSettings(false));
+		System.out.println(clientInterface.enableClusterRoutingAllocation());//直接设置cms_document索引
+		System.out.println(clientInterface.getClusterSettings(false));
+
+	}
 }
