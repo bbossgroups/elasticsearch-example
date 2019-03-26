@@ -852,4 +852,14 @@ public class DocumentCRUD {
 		long totalSize = esDatas.getTotalSize();
 		System.out.println(totalSize);
 	}
+
+	public void test(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		String dsl = "{\"size\":1000,\"query\": {\"match_all\": {}},\"sort\": [\"_doc\"]}";
+		//执行查询，demo为索引表，_search为检索操作action
+		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+						dsl,//dsl语句
+						Demo.class);//返回的文档封装对象类型
+	}
 }
