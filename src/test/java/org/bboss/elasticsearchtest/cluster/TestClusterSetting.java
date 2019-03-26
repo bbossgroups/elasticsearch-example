@@ -145,14 +145,18 @@ public class TestClusterSetting {
 
 	}
 
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/6.3/rolling-upgrades.html
+	 */
 	@Test
 	public void enableShared(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		System.out.println(clientInterface.flushSynced());
-		System.out.println(clientInterface.disableClusterRoutingAllocation());//全局设置
-		System.out.println(clientInterface.getClusterSettings(false));
-		System.out.println(clientInterface.enableClusterRoutingAllocation());//直接设置cms_document索引
-		System.out.println(clientInterface.getClusterSettings(false));
+//		System.out.println(clientInterface.flushSynced("cms_document"));//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
+		System.out.println(clientInterface.flushSynced());//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
+		System.out.println(clientInterface.disableClusterRoutingAllocation());//禁用share allocation
+		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
+		System.out.println(clientInterface.enableClusterRoutingAllocation());//启用share allocation
+		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
 
 	}
 }
