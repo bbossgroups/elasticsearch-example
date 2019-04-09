@@ -13,14 +13,18 @@ Spring booter 1.x,2.x,+
 
 # 工程集成说明
 ## 快速集成和应用 
+
 非spring boot项目：
-https://my.oschina.net/bboss/blog/1801273 
+
+https://esdoc.bbossgroups.com/#/common-project-with-bboss
 
 spring boot项目：
-https://my.oschina.net/bboss/blog/1835601
 
-详细配置说明，参考文档：
-https://my.oschina.net/bboss/blog/1556866
+https://esdoc.bbossgroups.com/#/spring-booter-with-bboss
+
+详细配置说明参考文档：
+
+https://esdoc.bbossgroups.com/#/development
 
 ## demo功能说明：
 

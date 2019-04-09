@@ -30,5 +30,6 @@ public class CleanMonitor {
 	@Test
 	public void cleanXPaxkMonitor(){
 		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
+//		ElasticSearchHelper.getRestClientUtil().deleteTempate("demotemplate_1");
 	}
 }
