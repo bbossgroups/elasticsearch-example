@@ -346,6 +346,8 @@ public class DocumentCRUD {
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
+		String datasr = ElasticSearchHelper.getRestClientUtil().executeHttp("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}",ClientInterface.HTTP_POST);
+		System.out.println(datasr);
 		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
 		ESDatas<Demo> datas = clientUtil.scroll("demo/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}","1m",Demo.class);
 		end = System.currentTimeMillis();
