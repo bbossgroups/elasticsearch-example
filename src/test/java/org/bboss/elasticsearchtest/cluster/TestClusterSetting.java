@@ -108,10 +108,10 @@ public class TestClusterSetting {
 	public void updateUnassigned(){
 		ClientInterface clientInterface =  ElasticSearchHelper.getRestClientUtil();
 		clientInterface.unassignedNodeLeftDelayedTimeout("2d"); //全局设置
-		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");//直接设置cms_document索引
-		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));//获取索引cms_document配置
-		clientInterface.unassignedNodeLeftDelayedTimeout("cms_document","3d");//直接设置
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		clientInterface.unassignedNodeLeftDelayedTimeout("demo","3d");//直接设置demo索引
+		System.out.println(clientInterface.executeHttp("demo/_settings?pretty",ClientInterface.HTTP_GET));//获取索引demo配置
+		clientInterface.unassignedNodeLeftDelayedTimeout("demo","3d");//直接设置
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 	}
 
 	@Test
@@ -119,29 +119,29 @@ public class TestClusterSetting {
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 
 		clientInterface.updateNumberOfReplicas(1);//全局设置
-		clientInterface.updateNumberOfReplicas("cms_document",2);//直接设置cms_document索引
-		System.out.println(clientInterface.executeHttp("cms_document/_settings?pretty",ClientInterface.HTTP_GET));//获取索引cms_document配置
-		clientInterface.updateNumberOfReplicas("cms_document",3);//直接设置cms_document索引
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		clientInterface.updateNumberOfReplicas("demo",2);//直接设置demo索引
+		System.out.println(clientInterface.executeHttp("demo/_settings?pretty",ClientInterface.HTTP_GET));//获取索引demo配置
+		clientInterface.updateNumberOfReplicas("demo",3);//直接设置demo索引
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 
 	}
 
 	@Test
 	public void testSetting(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		clientInterface.updateIndiceSetting("cms_document","index.unassigned.node_left.delayed_timeout","1d");
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		clientInterface.updateIndiceSetting("demo","index.unassigned.node_left.delayed_timeout","1d");
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 		clientInterface.updateAllIndicesSetting("index.unassigned.node_left.delayed_timeout","2d");
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 		Map<String,Object> settings = new HashMap<String,Object>();
 		settings.put("index.unassigned.node_left.delayed_timeout","5d");
 		settings.put("index.number_of_replicas",5);
 		clientInterface.updateAllIndicesSettings(settings);
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 		settings.put("index.unassigned.node_left.delayed_timeout","3d");
 		settings.put("index.number_of_replicas",6);
-		clientInterface.updateIndiceSettings("cms_document",settings);
-		System.out.println(clientInterface.getIndiceSetting("cms_document","pretty"));//获取索引cms_document配置
+		clientInterface.updateIndiceSettings("demo",settings);
+		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
 
 	}
 
@@ -151,7 +151,7 @@ public class TestClusterSetting {
 	@Test
 	public void enableShared(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-//		System.out.println(clientInterface.flushSynced("cms_document"));//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
+//		System.out.println(clientInterface.flushSynced("demo"));//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
 		System.out.println(clientInterface.flushSynced());//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
 		System.out.println(clientInterface.disableClusterRoutingAllocation());//禁用share allocation
 		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
