@@ -201,7 +201,7 @@ public class DocumentCRUD7 {
 		//批量删除文档
 		clientUtil.deleteDocuments("demo",//索引表
 
-				"2","3");//批量删除文档ids
+				new String[]{"2","3"});//批量删除文档ids
 
 	}
 
