@@ -149,6 +149,32 @@
         }]]>
     </property>
 
+    <property name="countDatas">
+        <![CDATA[{
+            "query": {
+                "bool": {
+                    "filter": [
+                        {  ## 多值检索，查找多个应用名称对应的文档记录
+                            "terms": {
+                                "applicationName.keyword": [#[applicationName1],#[applicationName2]]
+                            }
+                        },
+                        {   ## 时间范围检索，返回对应时间范围内的记录，接受long型的值
+                            "range": {
+                                "agentStarttime": {
+                                    "gte": #[startTime],##统计开始时间
+                                    "lt": #[endTime]  ##统计截止时间
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+            ## 最多返回1000条记录
+            ## "size":1000 es 7.0 count不支持size
+        }]]>
+    </property>
+
 
     <property name="searchWithCustomEscapeWithError">
         <![CDATA[{## 这是一个错误的案例，本条dsl会运行失败，变量中的特殊字符，日期类型都没有得到正确处理
