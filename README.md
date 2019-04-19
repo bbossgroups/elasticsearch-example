@@ -44,8 +44,18 @@ https://esdoc.bbossgroups.com/#/development
    文档检索
    
    关键词高亮检索
+# 运行demo
+src/test/java目录下面提供提供很多可以直接运行的的junit测试用例 
 
+比如运行增删改查：
 
+elasticsearch 5.x,6.x
+
+org.bboss.elasticsearchtest.crud.DocumentCRUDTest
+
+elasticsearch 7.x
+
+org.bboss.elasticsearchtest.crud.DocumentCRUD7Test
 ## 开发交流群
 166471282
   
