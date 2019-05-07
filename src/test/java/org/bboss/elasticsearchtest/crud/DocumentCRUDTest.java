@@ -56,6 +56,11 @@ public class DocumentCRUDTest {
 		BaseApplicationContext.shutdown();
 
 	}
+	@Test
+	public void testBulkAddDocumentsWithESIndex(){
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		documentCRUD.testBulkAddDocumentsWithESIndex();
+	}
 
 	//先完整执行一边，ok
 	//现在单步debug功能，整个功能演示完毕

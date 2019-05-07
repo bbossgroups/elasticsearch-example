@@ -386,6 +386,72 @@ public class DocumentCRUD {
 				Demo.class);
 	}
 
+
+	/**
+	 * 批量导入20002条数据
+	 */
+	public void testBulkAddDocumentsWithESIndex() {
+		//创建批量创建文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		clientUtil.dropIndice("demowithesindex-*");
+		List<DemoWithESIndex> demos = new ArrayList<DemoWithESIndex>();
+		DemoWithESIndex demo = null;
+		long start = System.currentTimeMillis();
+		for(int i = 0 ; i < 20002; i ++) {
+			demo = new DemoWithESIndex();//定义第一个对象
+			demo.setDemoId((long)i);
+			demo.setAgentStarttime(new Date());
+			demo.setApplicationName("blackcatdemo"+i);
+			demo.setContentbody("this is content body"+i);
+			if(i % 2 == 0) {
+				demo.setName("刘德华喜欢唱歌" + i);
+			}
+			else{
+				demo.setName("张学友不喜欢唱歌" + i);
+			}
+
+			demo.setOrderId("NFZF15045871807281445364228");
+			demo.setContrastStatus(2);
+			demos.add(demo);//添加第一个对象到list中
+		}
+		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
+		ClientOptions clientOptions = new ClientOptions();
+		clientOptions.setRefreshOption("refresh=true");
+		clientOptions.setIdField("demoId");
+		String response = clientUtil.addDocuments(
+				demos,clientOptions);//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+		long end = System.currentTimeMillis();
+		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
+		start = System.currentTimeMillis();
+		String datasr = ElasticSearchHelper.getRestClientUtil().executeHttp("demowithesindex-*/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}",ClientInterface.HTTP_POST);
+		System.out.println(datasr);
+		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		ESDatas<Demo> datas = clientUtil.scroll("demowithesindex-*/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}","1m",Demo.class);
+		end = System.currentTimeMillis();
+		System.out.println("scroll SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		int max = 6;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多6个slice，不能大于share数
+		params.put("size", 1000);//每页1000条记录
+
+		datas = clientUtil.scrollSlice("demowithesindex-*/_search","scrollSliceQuery", params,"1m",Demo.class);
+		//scroll上下文有效期1分钟
+		//scrollSlice 并行查询2万条记录：0.1s，参考文档：https://my.oschina.net/bboss/blog/1942562
+		start = System.currentTimeMillis();
+		datas = clientUtil.scrollSliceParallel("demowithesindex-*/_search","scrollSliceQuery", params,"1m",Demo.class);
+		end = System.currentTimeMillis();
+		System.out.println("scrollSlice SearchAll 20002 Documents elapsed:"+(end - start)+"毫秒");
+		if(datas != null){
+			System.out.println("scrollSlice SearchAll datas.getTotalSize():"+datas.getTotalSize());
+			if(datas.getDatas() != null)
+				System.out.println("scrollSlice SearchAll datas.getDatas().size():"+datas.getDatas().size());
+		}
+		long count = clientUtil.countAll("demowithesindex-*");
+
+		System.out.println("addDocuments-------------------------" +count);
+
+	}
+
 	/**
 	 * 批量导入20002条数据
 	 */
