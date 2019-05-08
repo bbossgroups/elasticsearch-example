@@ -24,7 +24,8 @@ import java.util.Date;
 /**
  * 测试实体，可以从ESBaseData对象继承meta属性，检索时会将文档的一下meta属性设置到对象实例中
  */
-@ESIndex(name="demowithesindex-{agentStarttime,yyyy.MM.dd}",type="demowithesindex")
+//@ESIndex(name="demowithesindex-{agentStarttime,yyyy.MM.dd}",type="demowithesindex")
+@ESIndex(name="demowithesindex-{dateformat=yyyy.MM.dd}",type="demowithesindex")
 public class DemoWithESIndex extends ESBaseData {
 	private Object dynamicPriceTemplate;
 	//设定文档标识字段

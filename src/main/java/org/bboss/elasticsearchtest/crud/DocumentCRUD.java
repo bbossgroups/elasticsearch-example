@@ -393,7 +393,7 @@ public class DocumentCRUD {
 	public void testBulkAddDocumentsWithESIndex() {
 		//创建批量创建文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
-		clientUtil.dropIndice("demowithesindex-*");
+		String d = clientUtil.dropIndice("demowithesindex-*");
 		List<DemoWithESIndex> demos = new ArrayList<DemoWithESIndex>();
 		DemoWithESIndex demo = null;
 		long start = System.currentTimeMillis();
@@ -447,6 +447,10 @@ public class DocumentCRUD {
 				System.out.println("scrollSlice SearchAll datas.getDatas().size():"+datas.getDatas().size());
 		}
 		long count = clientUtil.countAll("demowithesindex-*");
+
+		for(int i = 0; i < 10; i ++){
+			count = clientUtil.countAll("demowithesindex-*");
+		}
 
 		System.out.println("addDocuments-------------------------" +count);
 
