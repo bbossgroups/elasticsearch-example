@@ -40,13 +40,14 @@ public class Helloworld {
 
 		exist = clientUtil.existIndice("agentinfo");
 
-		exist = clientUtil.existIndice("demo1");
+		exist = clientUtil.existIndice("demo");
 		if(exist) {
 			long count = clientUtil.countAll("demo");
 			System.out.println("count:"+count);
 			ESDatas<Map> esDatas = clientUtil.searchAll("demo", Map.class);
+			clientUtil.searchAllParallel("demo", Map.class,2);
 		}
-		clientUtil.searchAllParallel("demo", Map.class,2);
+
 		BaseApplicationContext.shutdown();
 //		long count = clientUtil.countAll("agentinfo");
 //		System.out.println(response);
