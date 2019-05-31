@@ -153,6 +153,22 @@ public class SQLOrmTest {
 		System.out.println(json);
 
 	}
+	/**
+	 * sql转换为dsl
+	 */
+	@Test
+	public void testAggTranslate(){
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		String dsljson = clientUtil.executeHttp("/_xpack/sql/translate",
+				"{\"query\": \"select appId.keyword,count(1) number,sum(batchSize) tally " +
+						"from \\\"comparedmetric*\\\" group by appId.keyword having number >= 2\"}",
+				ClientInterface.HTTP_POST
+		);
+		System.out.println(dsljson);
+
+	}
+
+
 
 	/**
 	 * 低阶的检索方法
