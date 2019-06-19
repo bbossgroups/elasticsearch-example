@@ -38,4 +38,18 @@
         ]]>
     </property>
 
+    <!--for elasticsearch sqlplugin -->
+    <property name="testESSQL">
+        <![CDATA[
+         select operModule.keyword from dbdemo group by operModule.keyword
+        ]]>
+    </property>
+
+    <!--for elasticsearch sqlplugin -->
+    <property name="testESSQLWithParams">
+        <![CDATA[
+         select operModule.keyword from dbdemo group by operModule.keyword where operModule.keyword=#[operModule]
+        ]]>
+    </property>
+
 </properties>

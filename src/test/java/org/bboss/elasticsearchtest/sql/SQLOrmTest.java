@@ -73,7 +73,7 @@ public class SQLOrmTest {
 	@Test
 	public void testMapObjectQuery(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
-		Map json = clientUtil.sqlObject(Map.class,"{\"query\": \"SELECT * FROM dbclobdemo\"}");
+		Map json = clientUtil.sqlObject(Map.class,"{\"query\": \"SELECT * FROM dbdemo where logId = 143\"}");
 
 
 		System.out.println(json);
@@ -178,7 +178,7 @@ public class SQLOrmTest {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
 
 		SQLRestResponse sqlRestResponse = clientUtil.executeHttp("/_xpack/sql",
-																	"{\"query\": \"SELECT * FROM dbclobdemo where documentId = 1\"}",
+																	"{\"query\": \"SELECT * FROM dbdemo where logId = 143\"}",
 																	ClientInterface.HTTP_POST,
 																		new SQLRestResponseHandler());
 		System.out.println(sqlRestResponse);
@@ -193,6 +193,44 @@ public class SQLOrmTest {
 		ESDatas<Map> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
 				clientUtil.searchList("/_sql",//sql请求
 						"select operModule.keyword from dbdemo group by operModule.keyword", //elasticsearch-sql支持的sql语句
+						Map.class);//返回的文档封装对象类型
+		//获取结果对象列表
+		List<Map> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+	/**
+	 * Elasticsearch-SQL插件功能测试方法
+	 */
+	@Test
+	public void testESSQLFromConf(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/sql.xml");
+		ESDatas<Map> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
+				clientUtil.searchList("/_sql",//sql请求
+						"testESSQL", //elasticsearch-sql支持的sql语句
+						Map.class);//返回的文档封装对象类型
+		//获取结果对象列表
+		List<Map> demos = esDatas.getDatas();
+
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+
+	/**
+	 * Elasticsearch-SQL插件功能测试方法，带参数sql
+	 */
+	@Test
+	public void testESSQLFromConfParams(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/sql.xml");
+		Map params = new HashMap();
+		params.put("operModule","xxxx");
+		ESDatas<Map> esDatas =  //ESDatas包含当前检索的记录集合，最多10条记录，由sql中的limit属性指定
+				clientUtil.searchList("/_sql",//sql请求
+						"testESSQL", //elasticsearch-sql支持的sql语句
+						params, //检索参数
 						Map.class);//返回的文档封装对象类型
 		//获取结果对象列表
 		List<Map> demos = esDatas.getDatas();
