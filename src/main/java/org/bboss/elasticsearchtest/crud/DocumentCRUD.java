@@ -22,6 +22,7 @@ import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.client.ClientOptions;
 import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.entity.InnerSearchHits;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -632,6 +633,23 @@ public class DocumentCRUD {
 				params);//变量参数
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
+
+		for(int i = 0; demos != null && i < demos.size(); i ++){
+			Demo demo = demos.get(i);
+			//获取索引元数据
+			Double score = demo.getScore();//文档评分
+			String indexName = demo.getIndex();//索引名称
+			String indexType = demo.getType();//索引type
+			Map<String,Object> nested = demo.getNested();//文档neste信息
+			Map<String,Map<String, InnerSearchHits>> innerHits = demo.getInnerHits();//文档父子查询数据
+			Map<String,List<Object>> highlight = demo.getHighlight();//高亮检索数据
+			Map<String,List<Object>> fields = demo.getFields();//检索字段信息
+			long version = demo.getVersion();//文档版本号
+			Object parent = demo.getParent();//文档父docId
+			Object routing = demo.getRouting();//文档路由信息
+			String id = demo.getId();//文档docId
+			Object[] sort = demo.getSort();//排序信息
+		}
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
 //				"searchDatas",//esmapper/demo.xml中定义的dsl语句
