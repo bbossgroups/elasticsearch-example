@@ -18,6 +18,7 @@ package org.bboss.elasticsearchtest.jointype;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.frameworkset.orm.annotation.Column;
+import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESRouting;
 import org.frameworkset.elasticsearch.entity.ESBaseData;
 import org.frameworkset.elasticsearch.entity.JoinSon;
@@ -33,6 +34,8 @@ import java.util.Date;
  * @version 1.0
  */
 public class Question extends ESBaseData {
+	@ESId(persistent = true)
+	private String qid;
 	private String name;
 	private String content;
 	private String person;
@@ -93,5 +96,13 @@ public class Question extends ESBaseData {
 
 	public void setQuestionJoin(JoinSon questionJoin) {
 		this.questionJoin = questionJoin;
+	}
+
+	public String getQid() {
+		return qid;
+	}
+
+	public void setQid(String qid) {
+		this.qid = qid;
 	}
 }

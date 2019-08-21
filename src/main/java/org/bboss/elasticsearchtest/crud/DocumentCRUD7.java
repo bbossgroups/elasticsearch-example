@@ -116,26 +116,28 @@ public class DocumentCRUD7 {
 		demo.setDemoId(2l);//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
 		demo.setAgentStarttime(new Date());
 		demo.setApplicationName("blackcatdemo2");
-		demo.setContentbody("this is content body2");
-		demo.setName("刘德华");
+		demo.setContentbody("this-is content body2");
+		demo.setName("|刘德华");
 		demo.setOrderId("NFZF15045871807281445364228");
 		demo.setContrastStatus(2);
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
 		/**
 		//通过@ESId注解的字段值设置文档id
-		String response = clientUtil.addDocument("demo",//索引表
-				"demo",//索引类型
+		String response = clientUtil.addDocument("demo"//索引表
+
 				demo);
 		 */
+		/**
 		//直接指定文档id
 		String response = clientUtil.addDocumentWithId("demo",//索引表
 
 				demo,2l);
-//		//强制刷新
-//		String response = clientUtil.addDocument("demo",//索引表
-//				"demo",//索引类型
-//				demo,"refresh=true");
+		 */
+		//强制刷新
+		String response = clientUtil.addDocument("demo",//索引表
+
+				demo,"refresh=true");
 
 
 		//向动态index demo-yyyy.MM.dd这种添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -144,8 +146,7 @@ public class DocumentCRUD7 {
 		// 到天 elasticsearch.dateFormat=yyyy.MM.dd demo-2018.03.14
 		// 到小时 elasticsearch.dateFormat=yyyy.MM.dd.HH demo-2018.03.14.11
 		// 到分钟 elasticsearch.dateFormat=yyyy.MM.dd.HH.mm demo-2018.03.14.11.18
-//		String response = clientUtil.addDateDocument("demo",//索引表
-//				"demo",//索引类型
+//		String response = clientUtil.addDateDocument("demo"//索引表
 //				demo);
 
 		System.out.println("打印结果：addDocument-------------------------");

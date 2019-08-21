@@ -20,13 +20,13 @@ import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.client.ResultUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.entity.JoinSon;
 import org.frameworkset.elasticsearch.serial.ESInnerHitSerialThreadLocal;
 import org.frameworkset.elasticsearch.template.ESInfo;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>Description: </p>
@@ -56,6 +56,446 @@ public class JoinTypeTest {
 
 	}
 
+
+	private List<Question> buildQuestions(){
+		List<Question> questions = new ArrayList<Question>();
+		Question question = new Question();
+		question.setQid("1");
+		question.setName("q1");
+		question.setContent("This is a question 1");
+		question.setPerson("john");
+		question.setDatatype(0);//数据类型为：0 问题类型
+		question.setCreatedDate(new Date());
+		JoinSon joinSon = new JoinSon();
+		joinSon.setName("question");
+		question.setQuestionJoin(joinSon);
+		questions.add(question);
+
+		question = new Question();
+		question.setQid("2");
+		question.setName("q2");
+		question.setContent("This is a question 2");
+		question.setPerson("john");
+		question.setDatatype(0);//数据类型为：0 问题类型
+		question.setCreatedDate(new Date());
+		joinSon = new JoinSon();
+		joinSon.setName("question");
+		question.setQuestionJoin(joinSon);
+		questions.add(question);
+
+		question = new Question();
+		question.setQid("3");
+		question.setName("q3");
+		question.setContent("This is a question 3");
+		question.setPerson("john");
+		question.setDatatype(0);//数据类型为：0 问题类型
+		question.setCreatedDate(new Date());
+		joinSon = new JoinSon();
+		joinSon.setName("question");
+		question.setQuestionJoin(joinSon);
+		questions.add(question);
+
+		question = new Question();
+		question.setQid("4");
+		question.setName("q4");
+		question.setContent("This is a question 4");
+		question.setPerson("john");
+		question.setDatatype(0);//数据类型为：0 问题类型
+		question.setCreatedDate(new Date());
+		joinSon = new JoinSon();
+		joinSon.setName("question");
+		question.setQuestionJoin(joinSon);
+		questions.add(question);
+
+		question = new Question();
+		question.setQid("5");
+		question.setName("q5");
+		question.setContent("This is a question 5");
+		question.setPerson("john");
+		question.setDatatype(0);//数据类型为：0 问题类型
+		question.setCreatedDate(new Date());
+		joinSon = new JoinSon();
+		joinSon.setName("question");
+		question.setQuestionJoin(joinSon);
+		questions.add(question);
+		return questions;
+	}
+
+	private List<Comment> buildComments()  {
+		try {
+			List<Comment> comments = new ArrayList<Comment>();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Comment comment = new Comment();
+			comment.setCid("18");
+			comment.setRoutingId("1");
+			comment.setName("c1");
+			comment.setContent("This is a comment 1");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			JoinSon joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("1");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("19");
+			comment.setRoutingId("1");
+			comment.setName("c2");
+			comment.setContent("This is a comment 2");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("1");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("20");
+			comment.setRoutingId("2");
+			comment.setName("c3");
+			comment.setContent("This is a comment 3");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("2");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("21");
+			comment.setRoutingId("2");
+			comment.setName("c4");
+			comment.setContent("This is a comment 4");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("2");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("22");
+			comment.setRoutingId("3");
+			comment.setName("c5");
+			comment.setContent("This is a comment 5");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("3");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("23");
+			comment.setRoutingId("3");
+			comment.setName("c6");
+			comment.setContent("This is a comment 6");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("3");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("24");
+			comment.setRoutingId("4");
+			comment.setName("c7");
+			comment.setContent("This is a comment 7");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("4");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("25");
+			comment.setRoutingId("4");
+			comment.setName("c8");
+			comment.setContent("This is a comment 8");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("4");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("26");
+			comment.setRoutingId("5");
+			comment.setName("c9");
+			comment.setContent("This is a comment 9");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("5");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("27");
+			comment.setRoutingId("5");
+			comment.setName("c10");
+			comment.setContent("This is a comment 10");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("5");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("28");
+			comment.setRoutingId("5");
+			comment.setName("c11");
+			comment.setContent("This is a comment 11");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("5");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			comment = new Comment();
+			comment.setCid("29");
+			comment.setRoutingId("5");
+			comment.setName("c12");
+			comment.setContent("This is a comment 12");
+			comment.setPerson("john");
+			comment.setDatatype(2);//数据类型为：2 评论类型
+			comment.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("comment");
+			joinSon.setParent("5");
+			comment.setQuestionJoin(joinSon);
+			comments.add(comment);
+
+			return comments;
+		}
+		catch (Exception e){
+			return null;
+		}
+	}
+
+	private List<Answer> buildAnswers()  {
+		try {
+			List<Answer> answers = new ArrayList<Answer>();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Answer answer = new Answer();
+			answer.setAid("6");
+			answer.setRoutingId("1");
+			answer.setName("c1");
+			answer.setContent("This is a answer 1");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			JoinSon joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("1");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("7");
+			answer.setRoutingId("1");
+			answer.setName("c2");
+			answer.setContent("This is a answer 2");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("1");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("8");
+			answer.setRoutingId("2");
+			answer.setName("c3");
+			answer.setContent("This is a answer 3");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("2");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("9");
+			answer.setRoutingId("2");
+			answer.setName("c4");
+			answer.setContent("This is a answer 4");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("2");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("10");
+			answer.setRoutingId("3");
+			answer.setName("c5");
+			answer.setContent("This is a answer 5");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("3");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("11");
+			answer.setRoutingId("3");
+			answer.setName("c6");
+			answer.setContent("This is a answer 6");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("3");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("12");
+			answer.setRoutingId("4");
+			answer.setName("c7");
+			answer.setContent("This is a answer 7");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("4");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("13");
+			answer.setRoutingId("4");
+			answer.setName("c8");
+			answer.setContent("This is a answer 8");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("4");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("14");
+			answer.setRoutingId("5");
+			answer.setName("c9");
+			answer.setContent("This is a answer 9");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("5");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("15");
+			answer.setRoutingId("5");
+			answer.setName("c10");
+			answer.setContent("This is a answer 10");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("5");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("16");
+			answer.setRoutingId("5");
+			answer.setName("c11");
+			answer.setContent("This is a answer 11");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("5");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			answer = new Answer();
+			answer.setAid("17");
+			answer.setRoutingId("5");
+			answer.setName("c12");
+			answer.setContent("This is a answer 12");
+			answer.setPerson("john");
+			answer.setDatatype(1);//数据类型为：1 答案类型
+			answer.setCreatedDate(new Date());
+			joinSon = new JoinSon();
+			joinSon.setName("answer");
+			joinSon.setParent("5");
+			answer.setQuestionJoin(joinSon);
+			answers.add(answer);
+
+			return answers;
+		}
+		catch (Exception e){
+			return null;
+		}
+	}
+
+	/**
+	 * 通过List集合导入雇员和公司数据
+	 */
+	public void importDataFromBeans()  {
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+
+		//导入公司数据,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Question> questions = buildQuestions();
+		clientUtil.addDocuments("pager","pagertype",questions,"refresh");
+
+		//导入雇员数据,并且实时刷新，测试需要，实际环境不要带refresh
+		List<Comment> comments = buildComments();
+		clientUtil.addDocuments("pager","pagertype",comments,"refresh");
+		List<Answer> answers = buildAnswers();
+		clientUtil.addDocuments("pager","pagertype",answers,"refresh");
+
+	}
 	/**
 	 * 导入测试数据
 	 * 6.x对bulk的处理更加严格，所以从配置文件中获取到要导入的数据，trim掉空格，补上换行符
@@ -138,7 +578,7 @@ public class JoinTypeTest {
 			List<Answer> employeeList = escompanys.getDatas();
 			long totalSize = escompanys.getTotalSize();
 			//查看答案和评论信息以及对应的问题信息
-			for (int i = 0; i < employeeList.size(); i++) {
+			for (int i = 0; employeeList != null && i < employeeList.size(); i++) {
 				Answer employee = employeeList.get(i);
 				List<Question> companies = ResultUtil.getInnerHits(employee.getInnerHits(), "question");
 				System.out.println(companies.size());
@@ -206,4 +646,20 @@ public class JoinTypeTest {
 
 
 	}
+
+	/**
+	 * 运行demo的junit测试方法
+	 */
+	@Test
+	public void testJoinBean() {
+		createPagerIndice();
+		importDataFromBeans();
+		hasParentIdSearch();
+		hasParentSearchByName();
+		hasParentSearchByCountryReturnParent2ndChildren();
+		hasParentSearchByCountryReturnParent2ndMultiChildren();
+
+
+	}
+
 }

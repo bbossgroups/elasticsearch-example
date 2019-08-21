@@ -51,9 +51,9 @@ public class DocumentCRUD7Test {
 		documentCRUD.testCreateIndice();
 		documentCRUD.getIndiceMapping();
 //		//添加/修改单个文档
-//		documentCRUD.testAddAndUpdateDocument();
+		documentCRUD.testAddAndUpdateDocument();
 //		//批量修改文档
-		documentCRUD.testBulkAddDocuments();
+//		documentCRUD.testBulkAddDocuments();
 		BaseApplicationContext.shutdown();
 
 	}
