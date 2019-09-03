@@ -146,7 +146,31 @@
                 }
             },
             ## 最多返回1000条记录
-            "size":1000
+            "size":1000,
+            "explain":true
+        }]]>
+    </property>
+    <property name="countDatas">
+        <![CDATA[{
+            "query": {
+                "bool": {
+                    "filter": [
+                        {  ## 多值检索，查找多个应用名称对应的文档记录
+                            "terms": {
+                                "applicationName.keyword": [#[applicationName1],#[applicationName2]]
+                            }
+                        },
+                        {   ## 时间范围检索，返回对应时间范围内的记录，接受long型的值
+                            "range": {
+                                "agentStarttime": {
+                                    "gte": #[startTime],##统计开始时间
+                                    "lt": #[endTime]  ##统计截止时间
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         }]]>
     </property>
 

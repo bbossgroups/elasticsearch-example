@@ -581,6 +581,12 @@ public class DocumentCRUD7 {
 		//获取总记录数
 		long totalSize = esDatas.getTotalSize();
 		System.out.println(totalSize);
+
+		esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+				clientUtil.searchAll("demo",Demo.class);
+		totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+
 	}
 
 	/**

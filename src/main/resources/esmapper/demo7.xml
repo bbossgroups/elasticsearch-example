@@ -145,7 +145,8 @@
                 }
             },
             ## 最多返回1000条记录
-            "size":1000
+            "size":1000,
+            "explain":true
         }]]>
     </property>
 

@@ -190,6 +190,11 @@ public class DocumentCRUD {
 				"2");//文档id
 		System.out.println("打印修改后的结果：getDocument-------------------------");
 		System.out.println(response);
+
+		MetaDemo metaDemo = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"2",//文档id
+				MetaDemo.class);
 		//批量删除文档
 		clientUtil.deleteDocuments("demo",//索引表
 				"demo",//索引类型
@@ -623,19 +628,19 @@ public class DocumentCRUD {
 		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
 		params.put("endTime",new Date());
 		//执行查询，demo为索引表，_search为检索操作action
-		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+		ESDatas<MetaDemo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
 				"searchDatas",//esmapper/demo.xml中定义的dsl语句
 				params,//变量参数
-				Demo.class);//返回的文档封装对象类型
+						MetaDemo.class);//返回的文档封装对象类型
 
-		long count = clientUtil.count("demo","searchDatas",//esmapper/demo.xml中定义的dsl语句
+		long count = clientUtil.count("demo","countDatas",//esmapper/demo.xml中定义的dsl语句
 				params);//变量参数
 		//获取结果对象列表，最多返回1000条记录
-		List<Demo> demos = esDatas.getDatas();
+		List<MetaDemo> demos = esDatas.getDatas();
 
 		for(int i = 0; demos != null && i < demos.size(); i ++){
-			Demo demo = demos.get(i);
+			MetaDemo demo = demos.get(i);
 			//获取索引元数据
 			Double score = demo.getScore();//文档评分
 			String indexName = demo.getIndex();//索引名称
@@ -647,7 +652,7 @@ public class DocumentCRUD {
 			long version = demo.getVersion();//文档版本号
 			Object parent = demo.getParent();//文档父docId
 			Object routing = demo.getRouting();//文档路由信息
-			String id = demo.getId();//文档docId
+			Long id = demo.getDemoId();//文档docId
 			Object[] sort = demo.getSort();//排序信息
 		}
 
