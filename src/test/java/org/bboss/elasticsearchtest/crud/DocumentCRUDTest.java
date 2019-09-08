@@ -51,6 +51,8 @@ public class DocumentCRUDTest {
 		documentCRUD.testCreateIndice();
 //		//添加/修改单个文档
 		documentCRUD.testAddAndUpdateDocument();
+
+		documentCRUD.testBulkAddDocument();
 //		//批量修改文档
 		documentCRUD.testBulkAddDocuments();
 		BaseApplicationContext.shutdown();

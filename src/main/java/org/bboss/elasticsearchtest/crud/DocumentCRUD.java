@@ -193,7 +193,7 @@ public class DocumentCRUD {
 
 		MetaDemo metaDemo = clientUtil.getDocument("demo",//索引表
 				"demo",//索引类型
-				"2",//文档id
+				"3",//文档id
 				MetaDemo.class);
 		//批量删除文档
 		clientUtil.deleteDocuments("demo",//索引表
@@ -279,6 +279,12 @@ public class DocumentCRUD {
 				"demo",//索引类型
 				"3",//文档id
 				NewDemo.class
+		);
+
+		MetaDemo metaDemo = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"2",//文档id
+				MetaDemo.class
 		);
 		//获取不存在的文档
 		response = clientUtil.getDocument("demo",//索引表
