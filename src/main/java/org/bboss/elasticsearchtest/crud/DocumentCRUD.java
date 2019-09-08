@@ -120,14 +120,14 @@ public class DocumentCRUD {
 				"demo",//索引类型
 				demo);
 		 */
-		//直接指定文档id
-		String response = clientUtil.addDocumentWithId("demo",//索引表
-				"demo",//索引类型
-				demo,2l);
-//		//强制刷新
-//		String response = clientUtil.addDocument("demo",//索引表
+//		//直接指定文档id
+//		String response = clientUtil.addDocumentWithId("demo",//索引表
 //				"demo",//索引类型
-//				demo,"refresh=true");
+//				demo,2l);
+		//强制刷新
+		String response = clientUtil.addDocument("demo",//索引表
+				"demo",//索引类型
+				demo,"refresh=true");
 
 
 		//向动态index demo-yyyy.MM.dd这种添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -622,7 +622,8 @@ public class DocumentCRUD {
 		Map<String,Object> params = new HashMap<String,Object>();
 		//设置applicationName1和applicationName2两个变量的值
 		params.put("applicationName1","blackcatdemo2");
-		params.put("applicationName2","blackcatdemo3");
+//		params.put("applicationName2","blackcatdemo3");
+		params.put("applicationName2","\"CHECK_MODE\":\"0\"");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
 		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
