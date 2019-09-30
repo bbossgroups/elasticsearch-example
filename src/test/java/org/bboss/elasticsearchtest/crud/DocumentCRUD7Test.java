@@ -52,9 +52,11 @@ public class DocumentCRUD7Test {
 		documentCRUD.getIndiceMapping();
 //		//添加/修改单个文档
 		documentCRUD.testAddAndUpdateDocument();
+		documentCRUD.testBulkAddDocumentWithESIndex();
 
 //		//批量修改文档
 		documentCRUD.testBulkAddDocuments();
+		documentCRUD.testBulkAddDocumentsWithESIndex();
 		//检索文档
 		documentCRUD.testSearch();
 		BaseApplicationContext.shutdown();
