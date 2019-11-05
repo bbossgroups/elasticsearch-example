@@ -927,11 +927,11 @@ public class DocumentCRUD {
 	public void testDirectDslQuery(){
 		String queryAll = "{\"query\": {\"match_all\": {}}}";
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Demo> esDatas =clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
+		ESDatas<Map> esDatas =clientUtil.searchList("dbdemo/_search",//demo为索引表，_search为检索操作action
 				queryAll,//queryAll变量对应的dsl语句
-				Demo.class);
+				Map.class);
 		//获取结果对象列表，最多返回1000条记录
-		List<Demo> demos = esDatas.getDatas();
+		List<Map> demos = esDatas.getDatas();
 
 		//获取总记录数
 		long totalSize = esDatas.getTotalSize();

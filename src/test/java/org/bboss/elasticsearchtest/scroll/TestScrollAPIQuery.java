@@ -18,12 +18,15 @@ import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.scroll.HandlerInfo;
+import org.frameworkset.elasticsearch.scroll.ParralBreakableScrollHandler;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
+import org.frameworkset.elasticsearch.scroll.SerialBreakableScrollHandler;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestScrollAPIQuery {
 	@Test
@@ -101,6 +104,55 @@ public class TestScrollAPIQuery {
 	}
 
 	@Test
+	public void testSimleBreakableScrollAPIHandler(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll分页检索
+		Map params = new HashMap();
+		params.put("size", 10);//每页5000条记录
+		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final AtomicInteger count = new AtomicInteger();
+		ESDatas<Map> response = clientUtil.scroll("demo/_search", "scrollQuery", "1m", params, Map.class, new SerialBreakableScrollHandler<Map>() {
+			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
+				List<Map> datas = response.getDatas();
+				long totalSize = response.getTotalSize();
+				int test = count.incrementAndGet();
+//				final AtomicInteger count = new AtomicInteger();
+				if(test % 2 == 1) //到第三条数据时，中断scroll执行
+				 	this.setBreaked(true);
+				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+			}
+		});
+
+		System.out.println("response realzie:"+response.getTotalSize());
+
+	}
+
+	@Test
+	public void testSimleBreakableScrollParallelAPIHandler(){
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll分页检索
+		Map params = new HashMap();
+		params.put("size", 10);//每页5000条记录
+		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
+		final AtomicInteger count = new AtomicInteger();
+		//scroll上下文有效期1分钟
+		ESDatas<Map> response = clientUtil.scrollParallel("demo/_search", "scrollQuery", "1m", params, Map.class, new ParralBreakableScrollHandler<Map>() {
+			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
+				List<Map> datas = response.getDatas();
+				long totalSize = response.getTotalSize();
+				int test = count.incrementAndGet();
+				if(test % 2 == 1) //到第三条数据时，中断scroll执行
+					this.setBreaked(true);
+				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+			}
+		});
+
+		System.out.println("response realzie:"+response.getTotalSize());
+
+	}
+
+	@Test
 	public void testSimleScrollParallelAPIHandler(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
@@ -112,6 +164,7 @@ public class TestScrollAPIQuery {
 			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
 				List<Map> datas = response.getDatas();
 				long totalSize = response.getTotalSize();
+
 				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
 			}
 		});
@@ -147,6 +200,37 @@ public class TestScrollAPIQuery {
 	}
 
 	/**
+	 * 串行方式执行slice scroll操作
+	 */
+	@Test
+	public void testSimpleBreakableSliceScrollApiHandler() {
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll slice分页检索,max对应并行度
+		int max = 6;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
+		params.put("size", 10);//每页1000条记录
+		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final AtomicInteger count = new AtomicInteger();
+		ESDatas<Map> sliceResponse = clientUtil.scrollSlice("demo/_search",
+				"scrollSliceQuery", params,"1m",Map.class, new SerialBreakableScrollHandler<Map>() {
+					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
+						List<Map> datas = response.getDatas();
+						long totalSize = response.getTotalSize();
+						int test = count.incrementAndGet();
+						int r = test % 7;
+						if(r == 6) //到第6条数据时，中断scroll执行
+							this.setBreaked(true);
+						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+					}
+				});//串行
+		long totalSize = sliceResponse.getTotalSize();
+
+		System.out.println("totalSize:"+totalSize);
+	}
+
+	/**
 	 * 并行方式执行slice scroll操作
 	 */
 	@Test
@@ -164,6 +248,38 @@ public class TestScrollAPIQuery {
 					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
 						List<Map> datas = response.getDatas();
 						long totalSize = response.getTotalSize();
+						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+					}
+				});//并行
+
+		long totalSize = sliceResponse.getTotalSize();
+		System.out.println("totalSize:"+totalSize);
+
+	}
+
+	/**
+	 * 并行方式执行slice scroll操作
+	 */
+	@Test
+	public void testSimpleBreakableSliceScrollApiParralHandler() {
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll slice分页检索,max对应并行度
+		int max = 6;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
+		params.put("size", 1000);//每页1000条记录
+		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final AtomicInteger count = new AtomicInteger();
+		ESDatas<Map> sliceResponse = clientUtil.scrollSliceParallel("demo/_search",
+				"scrollSliceQuery", params,"1m",Map.class, new ParralBreakableScrollHandler<Map>() {
+					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<Map> datas = response.getDatas();
+						long totalSize = response.getTotalSize();
+						int test = count.incrementAndGet();
+						int r = test % 7;
+						if(r == 6) //到第6条数据时，中断scroll执行
+							this.setBreaked(true);
 						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
 					}
 				});//并行

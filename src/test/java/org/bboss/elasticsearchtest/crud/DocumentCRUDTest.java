@@ -14,10 +14,15 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
+import org.frameworkset.elasticsearch.ElasticSearchHelper;
+import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.junit.Test;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 public class DocumentCRUDTest {
 	public static void main(String[] args) throws ParseException {
@@ -63,6 +68,21 @@ public class DocumentCRUDTest {
 		DocumentCRUD documentCRUD = new DocumentCRUD();
 		documentCRUD.testBulkAddDocumentsWithESIndex();
 	}
+	@Test
+	public void testDirectDslQuery(){
+		String queryAll = "{\"query\": {\"match_all\": {}}}";
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ESDatas<Map> esDatas =clientUtil.searchList("dbdemo/_search",//demo为索引表，_search为检索操作action
+				queryAll,//queryAll变量对应的dsl语句
+				Map.class);
+		//获取结果对象列表，最多返回1000条记录
+		List<Map> demos = esDatas.getDatas();
+		System.out.println(demos);
+		//获取总记录数
+		long totalSize = esDatas.getTotalSize();
+		System.out.println(totalSize);
+	}
+
 
 	//先完整执行一边，ok
 	//现在单步debug功能，整个功能演示完毕

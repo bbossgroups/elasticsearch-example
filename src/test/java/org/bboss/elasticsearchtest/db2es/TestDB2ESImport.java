@@ -5,7 +5,13 @@ import com.frameworkset.common.poolman.StatementInfo;
 import com.frameworkset.common.poolman.handle.ResultSetHandler;
 import com.frameworkset.common.poolman.util.SQLUtil;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
-import org.frameworkset.elasticsearch.client.*;
+import org.frameworkset.elasticsearch.client.DataRefactor;
+import org.frameworkset.elasticsearch.client.DataStream;
+import org.frameworkset.elasticsearch.client.context.Context;
+import org.frameworkset.elasticsearch.client.db2es.DB2ESDataTran;
+import org.frameworkset.elasticsearch.client.db2es.DB2ESImportBuilder;
+import org.frameworkset.elasticsearch.client.db2es.DB2ESImportContext;
+import org.frameworkset.elasticsearch.client.db2es.JDBCResultSet;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.junit.Test;
 
@@ -39,15 +45,20 @@ public class TestDB2ESImport {
 		catch (Exception e){
 
 		}
+		final DB2ESImportContext importContext = new DB2ESImportContext();
+		importContext.setBatchSize(98);
+		importContext.setRefreshOption("refresh=true");
 		SQLExecutor.queryByNullRowHandler(new ResultSetHandler() {
 			@Override
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
-				ESJDBC esjdbcResultSet = new ESJDBC();
-				esjdbcResultSet.setResultSet(resultSet);
-				esjdbcResultSet.setMetaData(statementInfo.getMeta());
+				JDBCResultSet jdbcResultSet = new JDBCResultSet();
+
+				jdbcResultSet.setResultSet(resultSet);
+				jdbcResultSet.setMetaData(statementInfo.getMeta());
+				jdbcResultSet.setDbadapter(statementInfo.getDbadapter());
 				//esjdbcResultSet.setEsIdField("id");
-				JDBCRestClientUtil jdbcRestClientUtil = new JDBCRestClientUtil();
-				jdbcRestClientUtil.addDocuments("dbdemo","dbdemo",esjdbcResultSet,"refresh",98);
+				DB2ESDataTran db2ESDataTran = new DB2ESDataTran(jdbcResultSet,importContext);
+				db2ESDataTran.tran("dbdemo","dbdemo");
 			}
 		},"select * from td_sm_log");
 
@@ -130,17 +141,22 @@ public class TestDB2ESImport {
 		catch (Exception e){
 
 		}
-
+		final DB2ESImportContext importContext = new DB2ESImportContext();
+		importContext.setBatchSize(1000);
+		importContext.setRefreshOption("refresh=true");
+		importContext.setEsIdField("document_id");
 		SQLExecutor.queryByNullRowHandler(new ResultSetHandler() {
 			@Override
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
-				ESJDBC esjdbcResultSet = new ESJDBC();
-				esjdbcResultSet.setResultSet(resultSet);
-				esjdbcResultSet.setEsIdField("document_id");
+				JDBCResultSet jdbcResultSet = new JDBCResultSet();
+
+				jdbcResultSet.setResultSet(resultSet);
+				jdbcResultSet.setMetaData(statementInfo.getMeta());
+				jdbcResultSet.setDbadapter(statementInfo.getDbadapter());
 				/**
 				 * 重新设置es数据结构
 				 */
-				esjdbcResultSet.setDataRefactor(new DataRefactor() {
+				importContext.setDataRefactor(new DataRefactor() {
 					public void refactor(Context context) throws Exception  {
 						CustomObject customObject = new CustomObject();
 						customObject.setAuthor((String)context.getValue("author"));
@@ -159,9 +175,10 @@ public class TestDB2ESImport {
 						context.addIgnoreFieldMapping("subtitle");
 					}
 				});
-				esjdbcResultSet.setMetaData(statementInfo.getMeta());
-				JDBCRestClientUtil jdbcRestClientUtil = new JDBCRestClientUtil();
-				jdbcRestClientUtil.addDocuments("dbclobdemo","dbclobdemo",esjdbcResultSet,"refresh",1000);
+				DB2ESDataTran db2ESDataTran = new DB2ESDataTran(jdbcResultSet,importContext);
+				db2ESDataTran.tran("dbclobdemo","dbclobdemo");
+
+
 			}
 		},"select * from td_cms_document");
 
