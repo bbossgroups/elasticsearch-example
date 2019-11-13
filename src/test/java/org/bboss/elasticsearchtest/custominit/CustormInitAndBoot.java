@@ -49,6 +49,10 @@ public class CustormInitAndBoot {
 		properties.put("elasticsearch.showTemplate","true");
 		//集群节点自动发现
 		properties.put("elasticsearch.discoverHost","true");
+		properties.put("http.timeoutSocket",60000);
+		properties.put("http.timeoutConnection",40000);
+		properties.put("http.connectionRequestTimeout",70000);
+
 		ElasticSearchBoot.boot(properties);
 	}
 	/**

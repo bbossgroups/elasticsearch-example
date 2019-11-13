@@ -23,6 +23,7 @@ import org.frameworkset.elasticsearch.client.ClientOptions;
 import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.entity.InnerSearchHits;
+import org.frameworkset.elasticsearch.entity.MetaMap;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -200,6 +201,48 @@ public class DocumentCRUD {
 				"demo",//索引类型
 				new String[]{"2","3"});//批量删除文档ids
 
+		demo = new Demo();
+		demo.setDemoId(1l);//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.setAgentStarttime(new Date());
+		demo.setApplicationName("blackcatdemo2");
+		demo.setContentbody("this is content body2");
+		demo.setName("刘德华");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
+		response = clientUtil.addDocument("demo",//索引表
+				"demo",//索引类型
+				demo,"refresh=true");
+		System.out.println(response);
+
+	}
+
+	public void testMetaMap(){
+		//创建批量创建文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		MetaMap newDemo = clientUtil.getDocument("demo",//索引表
+				"demo",//索引类型
+				"1",//文档id
+				MetaMap.class
+		);
+		System.out.println(newDemo);
+		System.out.println("getId:"+newDemo.getId());
+		System.out.println("getIndex:"+newDemo.getIndex());
+		System.out.println("getNode:"+newDemo.getNode());
+		System.out.println("getShard:"+newDemo.getShard());
+		System.out.println("getType:"+newDemo.getType());
+		System.out.println("getExplanation:"+newDemo.getExplanation());
+		System.out.println("getFields:"+newDemo.getFields());
+		System.out.println("getHighlight:"+newDemo.getHighlight());
+		System.out.println("getInnerHits:"+newDemo.getInnerHits());
+		System.out.println("getNested:"+newDemo.getNested());
+		System.out.println("getPrimaryTerm:"+newDemo.getPrimaryTerm());
+		System.out.println("getScore:"+newDemo.getScore());
+		System.out.println("getSeqNo:"+newDemo.getSeqNo());
+		System.out.println("getVersion:"+newDemo.getVersion());
+		System.out.println("getParent:"+newDemo.getParent());
+		System.out.println("getRouting:"+newDemo.getRouting());
+		System.out.println("getSort:"+newDemo.getSort());
+		System.out.println("isFound:"+newDemo.isFound());
 	}
 
 

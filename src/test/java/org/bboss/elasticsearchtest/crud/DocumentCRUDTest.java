@@ -19,13 +19,17 @@ import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 public class DocumentCRUDTest {
+	private static Logger logger = LoggerFactory.getLogger(DocumentCRUDTest.class);
 	public static void main(String[] args) throws ParseException {
+		logger.info("aaaa {},{}",0,null);
 //		DocumentCRUD documentCRUD = new DocumentCRUD();
 //		//删除/创建文档索引表
 //		documentCRUD.testCreateIndice();
@@ -62,6 +66,15 @@ public class DocumentCRUDTest {
 		documentCRUD.testBulkAddDocuments();
 		BaseApplicationContext.shutdown();
 
+	}
+	@Test
+	public void testMetaMap() throws ParseException {
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+//		//添加/修改单个文档
+		documentCRUD.testAddAndUpdateDocument();
+		documentCRUD.testMetaMap();
 	}
 	@Test
 	public void testBulkAddDocumentsWithESIndex(){

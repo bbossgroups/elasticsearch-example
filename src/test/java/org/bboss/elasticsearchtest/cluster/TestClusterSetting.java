@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>Description: </p>
+ * <p>Description:
+ * https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
+ * https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
+ *
+ * </p>
  * <p></p>
  * <p>Copyright (c) 2018</p>
  * @Date 2019/3/22 11:21
