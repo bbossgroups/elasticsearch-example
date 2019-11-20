@@ -15,9 +15,10 @@ package org.bboss.elasticsearchtest.db2es;
  * limitations under the License.
  */
 
-import org.frameworkset.elasticsearch.client.DataStream;
-import org.frameworkset.elasticsearch.client.db2es.DB2ESImportBuilder;
-import org.frameworkset.elasticsearch.client.schedule.ImportIncreamentConfig;
+
+import org.frameworkset.tran.DataStream;
+import org.frameworkset.tran.db.input.es.DB2ESImportBuilder;
+import org.frameworkset.tran.schedule.ImportIncreamentConfig;
 import org.junit.Test;
 
 /**
