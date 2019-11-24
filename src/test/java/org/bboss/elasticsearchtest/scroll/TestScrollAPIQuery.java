@@ -14,19 +14,22 @@ package org.bboss.elasticsearchtest.scroll;/*
  *  limitations under the License.
  */
 
+import org.bboss.elasticsearchtest.crud.DocumentCRUD;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.entity.MetaMap;
 import org.frameworkset.elasticsearch.scroll.HandlerInfo;
 import org.frameworkset.elasticsearch.scroll.ParralBreakableScrollHandler;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
 import org.frameworkset.elasticsearch.scroll.SerialBreakableScrollHandler;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TestScrollAPIQuery {
 	@Test
@@ -234,27 +237,189 @@ public class TestScrollAPIQuery {
 	 * 并行方式执行slice scroll操作
 	 */
 	@Test
-	public void testSimpleSliceScrollApiParralHandler() {
+	public void testSimpleSliceScrollApiUUIDdemoHandler() {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll slice分页检索,max对应并行度
-		int max = 6;
+		int max = 5;
 		Map params = new HashMap();
-		params.put("sliceMax", max);//最多6个slice，不能大于share数，必须使用sliceMax作为变量名称
-		params.put("size", 1000);//每页1000条记录
+		params.put("sliceMax", max);//最多5个slice，不能大于share数，必须使用sliceMax作为变量名称
+		params.put("size", 2);//每页5000条记录
 		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
 		//scroll上下文有效期1分钟
-		ESDatas<Map> sliceResponse = clientUtil.scrollSliceParallel("demo/_search",
-				"scrollSliceQuery", params,"1m",Map.class, new ScrollHandler<Map>() {
-					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
-						List<Map> datas = response.getDatas();
+		final Set<String> scrollIds = new HashSet<String>();
+		final List<String> lscrollIds = new ArrayList<String>();
+		final Set dataids = new HashSet();
+		final List ldataids = new ArrayList();
+		final List ddataids = new ArrayList();
+
+		ESDatas<MetaMap> sliceResponse = clientUtil.scrollSlice("uuiddemo/_search",
+				"scrollSliceQuery", params,"1m", MetaMap.class, new ScrollHandler<MetaMap>() {
+					public void handle(ESDatas<MetaMap> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<MetaMap> datas = response.getDatas();
+
+						for(int i = 0; i < datas.size(); i ++){
+							ldataids.add(datas.get(i).getId());
+							dataids.add(datas.get(i).getId());
+							ddataids.add(datas.get(i).get("demoId"));
+							System.out.println("demoId:"+datas.get(i).get("demoId"));
+						}
 						long totalSize = response.getTotalSize();
-						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+//						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+
+						lscrollIds.add(handlerInfo.getScrollId());
+						scrollIds.add(handlerInfo.getScrollId());
+
+
 					}
 				});//并行
 
 		long totalSize = sliceResponse.getTotalSize();
 		System.out.println("totalSize:"+totalSize);
+		System.out.println("lscrollIds :"+lscrollIds);
+		System.out.println("scrollIds :"+scrollIds);
+		System.out.println("ldataids totalSize:"+ldataids.size());
+		System.out.println("dataids totalSize:"+dataids.size());
+		System.out.println("ddataids :"+ddataids.size());
+	}
+	@Before
+	public void inituuiddemoData(){
+		//在uuiddemo索引中构造20万条记录
+		DocumentCRUD documentCRUD = new DocumentCRUD();
 
+		for(int i = 0; i < 10; i ++){
+			documentCRUD.testBulkAddUUIDDocuments(i,10);
+		}
+	}
+	/**
+	 * 并行方式执行slice scroll操作
+	 */
+	@Test
+	public void testSimpleSliceScrollParrelApiUUIDdemoParralHandler() {
+
+
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll slice分页检索,max对应并行度
+		int max = 5;
+		Map params = new HashMap();
+		params.put("sliceMax", max);//最多5个slice，不能大于share数，必须使用sliceMax作为变量名称
+		params.put("size", 2);//每页5000条记录
+		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final Set<String> scrollIds = new HashSet<String>();
+		final List<String> lscrollIds = new ArrayList<String>();
+		final Set dataids = new HashSet();
+		final List ldataids = new ArrayList();
+		final List ddataids = new ArrayList();
+		final Lock lock = new ReentrantLock();
+		ESDatas<MetaMap> sliceResponse = clientUtil.scrollSliceParallel("uuiddemo/_search",
+				"scrollSliceQuery", params,"1m", MetaMap.class, new ScrollHandler<MetaMap>() {
+					public void handle(ESDatas<MetaMap> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<MetaMap> datas = response.getDatas();
+						lock.lock();
+						for(int i = 0; i < datas.size(); i ++){
+							ldataids.add(datas.get(i).getId());
+							dataids.add(datas.get(i).getId());
+							ddataids.add(datas.get(i).get("demoId"));
+							System.out.println("demoId:"+datas.get(i).get("demoId"));
+						}
+						long totalSize = response.getTotalSize();
+//						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+
+						lscrollIds.add(handlerInfo.getScrollId());
+						scrollIds.add(handlerInfo.getScrollId());
+						lock.unlock();
+					}
+				});//并行
+
+		long totalSize = sliceResponse.getTotalSize();
+		System.out.println("totalSize:"+totalSize);
+		System.out.println("lscrollIds :"+lscrollIds);
+		System.out.println("scrollIds :"+scrollIds);
+		System.out.println("ldataids totalSize:"+ldataids.size());
+		System.out.println("dataids totalSize:"+dataids.size());
+		System.out.println("ddataids :"+ddataids.size());
+	}
+
+	/**
+	 * scroll操作
+	 */
+	@Test
+	public void testSimpleScrollApiUUIDdemoHandler() {
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll slice分页检索,max对应并行度
+		Map params = new HashMap();
+		params.put("size", 2);//每页5000条记录
+		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final Set<String> scrollIds = new HashSet<String>();
+		final List<String> lscrollIds = new ArrayList<String>();
+		final Set<String> dataids = new HashSet<String>();
+		final List<String> ldataids = new ArrayList<String>();
+//		clientUtil.scroll("demo/_search", "scrollQuery", "1m", params, Map.class, new SerialBreakableScrollHandler<Map>() {
+		ESDatas<MetaMap> sliceResponse = clientUtil.scroll("uuiddemo/_search",
+				"scrollQuery", "1m", params,MetaMap.class, new ScrollHandler<MetaMap>() {
+					public void handle(ESDatas<MetaMap> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<MetaMap> datas = response.getDatas();
+						for(int i = 0; i < datas.size(); i ++){
+							ldataids.add(datas.get(i).getId());
+							dataids.add(datas.get(i).getId());
+							//System.out.println("demoId:"+datas.get(i).get("demoId"));
+						}
+						long totalSize = response.getTotalSize();
+//						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+
+						lscrollIds.add(handlerInfo.getScrollId());
+						scrollIds.add(handlerInfo.getScrollId());
+					}
+				});//并行
+
+		long totalSize = sliceResponse.getTotalSize();
+		System.out.println("totalSize:"+totalSize);
+		System.out.println("lscrollIds totalSize:"+lscrollIds);
+		System.out.println("scrollIds totalSize:"+scrollIds);
+		System.out.println("ldataids totalSize:"+ldataids.size());
+		System.out.println("dataids totalSize:"+dataids.size());
+	}
+
+	/**
+	 * scroll操作
+	 */
+	@Test
+	public void testSimpleScrollApiParrelUUIDdemoHandler() {
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		//scroll slice分页检索,max对应并行度
+		Map params = new HashMap();
+		params.put("size", 2);//每页5000条记录
+		//采用自定义handler函数处理每个slice scroll的结果集后，sliceResponse中只会包含总记录数，不会包含记录集合
+		//scroll上下文有效期1分钟
+		final Set<String> scrollIds = new HashSet<String>();
+		final List<String> lscrollIds = new ArrayList<String>();
+		final Set<String> dataids = new HashSet<String>();
+		final List<String> ldataids = new ArrayList<String>();
+//		clientUtil.scroll("demo/_search", "scrollQuery", "1m", params, Map.class, new SerialBreakableScrollHandler<Map>() {
+		ESDatas<MetaMap> sliceResponse = clientUtil.scrollParallel("uuiddemo/_search",
+				"scrollQuery", "1m", params,MetaMap.class, new ScrollHandler<MetaMap>() {
+					public void handle(ESDatas<MetaMap> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<MetaMap> datas = response.getDatas();
+						for(int i = 0; i < datas.size(); i ++){
+							ldataids.add(datas.get(i).getId());
+							dataids.add(datas.get(i).getId());
+							System.out.println("demoId:"+datas.get(i).get("demoId"));
+						}
+						long totalSize = response.getTotalSize();
+//						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+
+						lscrollIds.add(handlerInfo.getScrollId());
+						scrollIds.add(handlerInfo.getScrollId());
+					}
+				});//并行
+
+		long totalSize = sliceResponse.getTotalSize();
+		System.out.println("totalSize:"+totalSize);
+		System.out.println("lscrollIds totalSize:"+lscrollIds);
+		System.out.println("scrollIds totalSize:"+scrollIds);
+		System.out.println("ldataids totalSize:"+ldataids.size());
+		System.out.println("dataids totalSize:"+dataids.size());
 	}
 
 	/**

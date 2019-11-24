@@ -514,6 +514,46 @@ public class DocumentCRUD {
 	/**
 	 * 批量导入20002条数据
 	 */
+	public void testBulkAddUUIDDocuments(int j,int datasize) {
+		//创建批量创建文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
+		if(clientUtil.existIndice("uuiddemo") && j == 0){
+			clientUtil.dropIndice("uuiddemo");
+		}
+		List<UUIDDemo> demos = new ArrayList<UUIDDemo>();
+		UUIDDemo demo = null;
+		long start = System.currentTimeMillis();
+		for(int i = 0 ; i < datasize; i ++) {
+			demo = new UUIDDemo();//定义第一个对象
+			demo.setDemoId(datasize*j +(long)i);
+			System.out.println(datasize*j +(long)i);
+			demo.setAgentStarttime(new Date());
+			demo.setApplicationName("blackcatdemo"+i);
+			demo.setContentbody("this is content body"+i);
+			if(i % 2 == 0) {
+				demo.setName("刘德华喜欢唱歌" + i);
+			}
+			else{
+				demo.setName("张学友不喜欢唱歌" + i);
+			}
+
+			demo.setOrderId("NFZF15045871807281445364228");
+			demo.setContrastStatus(2);
+			demos.add(demo);//添加第一个对象到list中
+		}
+		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
+//		ClientOptions clientOptions = new ClientOptions();
+//		clientOptions.setRefreshOption("refresh=true");
+//		clientOptions.setIdField("demoId");
+		String response = clientUtil.addDocuments("uuiddemo","uuiddemo",
+				demos,"refresh=true");//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+
+
+	}
+
+	/**
+	 * 批量导入20002条数据
+	 */
 	public void testBulkAddDocumentsSetIdField() {
 		//创建批量创建文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");

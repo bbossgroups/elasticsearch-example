@@ -9,10 +9,10 @@ import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.tran.DataRefactor;
 import org.frameworkset.tran.DataStream;
 import org.frameworkset.tran.context.Context;
+import org.frameworkset.tran.db.JDBCResultSet;
 import org.frameworkset.tran.db.input.es.DB2ESDataTran;
 import org.frameworkset.tran.db.input.es.DB2ESImportBuilder;
 import org.frameworkset.tran.db.input.es.DB2ESImportContext;
-import org.frameworkset.tran.db.input.es.JDBCResultSet;
 import org.junit.Test;
 
 import java.sql.ResultSet;

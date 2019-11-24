@@ -56,14 +56,17 @@ public class DocumentCRUDTest {
 //		documentCRUDTest.testC();
 
 		DocumentCRUD documentCRUD = new DocumentCRUD();
-		//删除/创建文档索引表
-		documentCRUD.testCreateIndice();
-//		//添加/修改单个文档
-		documentCRUD.testAddAndUpdateDocument();
-
-		documentCRUD.testBulkAddDocument();
-//		//批量修改文档
-		documentCRUD.testBulkAddDocuments();
+//		//删除/创建文档索引表
+//		documentCRUD.testCreateIndice();
+////		//添加/修改单个文档
+//		documentCRUD.testAddAndUpdateDocument();
+//
+//		documentCRUD.testBulkAddDocument();
+////		//批量修改文档
+//		documentCRUD.testBulkAddDocuments();
+		for(int i = 0; i < 10; i ++){
+			documentCRUD.testBulkAddUUIDDocuments(i,10);
+		}
 		BaseApplicationContext.shutdown();
 
 	}
