@@ -35,6 +35,9 @@ import java.util.Map;
  * @version 1.0
  */
 public class TestBulkProcessor {
+	/**
+	 * BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
+	 */
 	private BulkProcessor bulkProcessor;
 	public static void main(String[] args){
 		TestBulkProcessor testBulkProcessor = new TestBulkProcessor();
@@ -43,6 +46,7 @@ public class TestBulkProcessor {
 
 	}
 	public void buildBulkProcessor(){
+		//定义BulkProcessor批处理组件构建器
 		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
 		bulkProcessorBuilder.setBlockedWaitTimeout(10000)//如果数据阻塞排队超过指定的时间，将被拒绝处理，单位：毫秒，默认为0，不拒绝
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
@@ -70,6 +74,9 @@ public class TestBulkProcessor {
 						exception.printStackTrace();
 					}
 				});
+		/**
+		 * 构建BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
+		 */
 		bulkProcessor = bulkProcessorBuilder.build();//构建批处理作业组件
 	}
 	public void testBulkDatas(){
