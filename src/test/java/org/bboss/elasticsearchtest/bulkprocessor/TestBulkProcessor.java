@@ -116,7 +116,7 @@ public class TestBulkProcessor {
 		data = new HashMap<String,Object>();
 		data.put("name","updateduoduo5");
 		data.put("id","5");
-		bulkProcessor.updateData("bulkdemo",data);
+		bulkProcessor.updateData("bulkdemo",data,clientOptions);
 
 	}
 
