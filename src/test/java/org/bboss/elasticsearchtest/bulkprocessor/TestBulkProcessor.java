@@ -48,7 +48,7 @@ public class TestBulkProcessor {
 	public void buildBulkProcessor(){
 		//定义BulkProcessor批处理组件构建器
 		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
-		bulkProcessorBuilder.setBlockedWaitTimeout(10000)//如果数据阻塞排队超过指定的时间，将被拒绝处理，单位：毫秒，默认为0，不拒绝
+		bulkProcessorBuilder.setBlockedWaitTimeout(10000)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
 				.setBulkQueue(1000)//bulk数据缓冲队列大小，越大处理速度越快，根据实际服务器内存资源配置，用户提交的数据首先进入这个队列，然后通过多个工作线程从这个队列中拉取数据进行处理
 				.setBulkSizes(10)//按批处理数据记录数
@@ -82,7 +82,7 @@ public class TestBulkProcessor {
 	public void testBulkDatas(){
 		System.out.println("testBulkDatas");
 		ClientOptions clientOptions = new ClientOptions();
-		clientOptions.setIdField("id");
+		clientOptions.setIdField("id");//通过clientOptions指定map中的key为id的字段值作为文档_id，
 		Map<String,Object> data = new HashMap<String,Object>();
 		data.put("name","duoduo1");
 		data.put("id","1");
