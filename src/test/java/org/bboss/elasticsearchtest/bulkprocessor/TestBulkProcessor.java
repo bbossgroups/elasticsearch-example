@@ -42,21 +42,25 @@ public class TestBulkProcessor {
 	public static void main(String[] args){
 		TestBulkProcessor testBulkProcessor = new TestBulkProcessor();
 		testBulkProcessor.buildBulkProcessor();
+		
 		testBulkProcessor.testBulkDatas();
+		
+		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
+		
 
 	}
 	public void buildBulkProcessor(){
 		//定义BulkProcessor批处理组件构建器
 		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
-		bulkProcessorBuilder.setBlockedWaitTimeout(10000)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
+		bulkProcessorBuilder.setBlockedWaitTimeout(0)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
-				.setBulkQueue(1000)//bulk数据缓冲队列大小，越大处理速度越快，根据实际服务器内存资源配置，用户提交的数据首先进入这个队列，然后通过多个工作线程从这个队列中拉取数据进行处理
+				.setBulkQueue(1)//bulk数据缓冲队列大小，越大处理速度越快，根据实际服务器内存资源配置，用户提交的数据首先进入这个队列，然后通过多个工作线程从这个队列中拉取数据进行处理
 				.setBulkSizes(10)//按批处理数据记录数
 				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，但是有记录，那么强制进行bulk处理
 				.setRefreshOption("refresh")//数据bulk操作结果强制refresh入elasticsearch，便于实时查看数据，测试环境可以打开，生产不要设置
 				.setWarnMultsRejects(1000)//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息
-				.setWorkThreads(100)//bulk处理工作线程数
-				.setWorkThreadQueue(100)//bulk处理工作线程池缓冲队列大小
+				.setWorkThreads(2)//bulk处理工作线程数
+				.setWorkThreadQueue(2)//bulk处理工作线程池缓冲队列大小
 				.setBulkProcessorName("test_bulkprocessor")//工作线程名称，实际名称为BulkProcessorName-+线程编号
 				.setBulkRejectMessage("Reject test bulkprocessor")//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息提示前缀
 				.setElasticsearch("default")//指定Elasticsearch集群数据源名称，bboss可以支持多数据源
@@ -69,11 +73,14 @@ public class TestBulkProcessor {
 						System.out.println("afterBulk："+result);
 					}
 
-					public void errorBulk(BulkCommand bulkCommand, Throwable exception) {
+					public void exceptionBulk(BulkCommand bulkCommand, Throwable exception) {
 						System.out.println("errorBulk：");
 						exception.printStackTrace();
 					}
-				});
+					public void errorBulk(BulkCommand bulkCommand, String result) {
+						System.out.println("errorBulk："+result);
+					}
+				}).setPollTimeOut(10000);
 		/**
 		 * 构建BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 		 */
@@ -118,6 +125,20 @@ public class TestBulkProcessor {
 		data.put("id","5");
 		bulkProcessor.updateData("bulkdemo",data,clientOptions);
 
+	}
+	
+	public void shutdown(boolean asyn) {
+		if(asyn) {
+			Thread t = new Thread() {
+				public void run() {
+						bulkProcessor.shutDown();
+				}
+			};
+			t.start();
+		}
+		else {
+			bulkProcessor.shutDown();
+		}
 	}
 
 }

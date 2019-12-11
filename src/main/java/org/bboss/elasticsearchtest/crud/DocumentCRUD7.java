@@ -79,6 +79,8 @@ public class DocumentCRUD7 {
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();
+
+
 		String datasr = ElasticSearchHelper.getRestClientUtil().executeHttp("demowithesindex-*/_search","{\"size\":1000,\"query\": {\"match_all\": {}}}",ClientInterface.HTTP_POST);
 		System.out.println(datasr);
 		//scroll查询2万条记录：0.6s，参考文档：https://my.oschina.net/bboss/blog/1942562
