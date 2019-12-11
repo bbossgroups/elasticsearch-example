@@ -13,6 +13,7 @@ import org.frameworkset.tran.db.JDBCResultSet;
 import org.frameworkset.tran.db.input.es.DB2ESDataTran;
 import org.frameworkset.tran.db.input.es.DB2ESImportBuilder;
 import org.frameworkset.tran.db.input.es.DB2ESImportContext;
+import org.frameworkset.tran.es.ESField;
 import org.junit.Test;
 
 import java.sql.ResultSet;
@@ -144,7 +145,7 @@ public class TestDB2ESImport {
 		final DB2ESImportContext importContext = new DB2ESImportContext();
 		importContext.setBatchSize(1000);
 		importContext.setRefreshOption("refresh=true");
-		importContext.setEsIdField("document_id");
+		importContext.setEsIdField(new ESField(false,"document_id"));
 		SQLExecutor.queryByNullRowHandler(new ResultSetHandler() {
 			@Override
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
