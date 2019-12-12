@@ -46,7 +46,7 @@ public class TestBulkProcessor {
 		testBulkProcessor.testBulkDatas();
 		
 		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
-		
+
 
 	}
 	public void buildBulkProcessor(){
@@ -139,6 +139,8 @@ public class TestBulkProcessor {
 		else {
 			bulkProcessor.shutDown();
 		}
+
+		System.out.println("bulkProcessor.getTotalSize():"+bulkProcessor.getTotalSize());
 	}
 
 }
