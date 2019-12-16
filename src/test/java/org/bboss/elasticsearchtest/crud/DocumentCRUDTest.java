@@ -30,31 +30,36 @@ public class DocumentCRUDTest {
 	private static Logger logger = LoggerFactory.getLogger(DocumentCRUDTest.class);
 	public static void main(String[] args) throws ParseException {
 		logger.info("aaaa {},{}",0,null);
-//		DocumentCRUD documentCRUD = new DocumentCRUD();
-//		//删除/创建文档索引表
-//		documentCRUD.testCreateIndice();
-//		//添加/修改单个文档
-//		documentCRUD.testAddAndUpdateDocument();
-//		//批量添加文档
-//		documentCRUD.testBulkAddDocument();
-//		//检索文档
-//		documentCRUD.testSearch();
-//		//批量修改文档
-//		documentCRUD.testBulkUpdateDocument();
-//
-//		//检索批量修改后的文档
-//		documentCRUD.testSearch();
-//		//带list复杂参数的文档检索操作
-//		documentCRUD.testSearchArray();
-//		//带from/size分页操作的文档检索操作
-//		documentCRUD.testPagineSearch();
-//		//带sourcefilter的文档检索操作
-//		documentCRUD.testSearchSourceFilter();
-//
-//		documentCRUD.updateDemoIndice();
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+		//添加/修改单个文档
+		documentCRUD.testAddAndUpdateDocument();
+		//批量添加文档
+		documentCRUD.testBulkAddDocument();
+		//检索文档
+		documentCRUD.testSearch();
+		//批量修改文档
+		documentCRUD.testBulkUpdateDocument();
+
+		//检索批量修改后的文档
+		documentCRUD.testSearch();
+		//带list复杂参数的文档检索操作
+		documentCRUD.testSearchArray();
+		//带from/size分页操作的文档检索操作
+		documentCRUD.testPagineSearch();
+		//带sourcefilter的文档检索操作
+		documentCRUD.testSearchSourceFilter();
+
+		documentCRUD.updateDemoIndice();
+		documentCRUD.testBulkAddDocuments();
+		for(int i = 0; i < 10; i ++){
+			documentCRUD.testBulkAddUUIDDocuments(i,10);
+		}
 //		DocumentCRUDTest documentCRUDTest = new DocumentCRUDTest();
 //		documentCRUDTest.testC();
 
+		/**
 		DocumentCRUD documentCRUD = new DocumentCRUD();
 //		//删除/创建文档索引表
 //		documentCRUD.testCreateIndice();
@@ -63,10 +68,10 @@ public class DocumentCRUDTest {
 //
 //		documentCRUD.testBulkAddDocument();
 ////		//批量修改文档
-//		documentCRUD.testBulkAddDocuments();
+		documentCRUD.testBulkAddDocuments();
 		for(int i = 0; i < 10; i ++){
 			documentCRUD.testBulkAddUUIDDocuments(i,10);
-		}
+		}*/
 		BaseApplicationContext.shutdown();
 
 	}

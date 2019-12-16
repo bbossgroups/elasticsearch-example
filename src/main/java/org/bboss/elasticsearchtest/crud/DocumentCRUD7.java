@@ -438,7 +438,7 @@ public class DocumentCRUD7 {
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
 		long start = System.currentTimeMillis();
-		for(int i = 0 ; i < 20002; i ++) {
+		for(int i = 0 ; i < 10; i ++) {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
 			demo.setAgentStarttime(new Date());

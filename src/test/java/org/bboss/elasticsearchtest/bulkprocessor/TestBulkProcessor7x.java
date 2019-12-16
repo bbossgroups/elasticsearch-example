@@ -27,20 +27,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>Description: for elasticsearch 5x,6x</p>
+ * <p>Description: for elasticsearch 7x</p>
  * <p></p>
  * <p>Copyright (c) 2018</p>
  * @Date 2019/12/8 9:57
  * @author biaoping.yin
  * @version 1.0
  */
-public class TestBulkProcessor {
+public class TestBulkProcessor7x {
 	/**
 	 * BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 	 */
 	private BulkProcessor bulkProcessor;
 	public static void main(String[] args){
-		TestBulkProcessor testBulkProcessor = new TestBulkProcessor();
+		TestBulkProcessor7x testBulkProcessor = new TestBulkProcessor7x();
 		testBulkProcessor.buildBulkProcessor();
 		
 		testBulkProcessor.testBulkDatas();
@@ -111,30 +111,30 @@ public class TestBulkProcessor {
 		Map<String,Object> data = new HashMap<String,Object>();
 		data.put("name","duoduo1");
 		data.put("id",1);
-		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
 		data = new HashMap<String,Object>();
 		data.put("name","duoduo2");
 		data.put("id",2);
-		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
 		data = new HashMap<String,Object>();
 		data.put("name","duoduo3");
 		data.put("id",3);
-		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
 		data = new HashMap<String,Object>();
 		data.put("name","duoduo4");
 		data.put("id",4);
-		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
 		data = new HashMap<String,Object>();
 		data.put("name","duoduo5");
 		data.put("id",5);
 
-		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
 		ClientOptions deleteclientOptions = new ClientOptions();
 		 
 
 		deleteclientOptions.setEsRetryOnConflict(1);
 		//.setPipeline("1")
-		bulkProcessor.deleteData("bulkdemo","bulkdemo","1",deleteclientOptions);
+		bulkProcessor.deleteData("bulkdemo","1",deleteclientOptions);
 		List<Object> datas = new ArrayList<Object>();
 		for(int i = 6; i < 106; i ++) {
 			data = new HashMap<String,Object>();
@@ -142,7 +142,7 @@ public class TestBulkProcessor {
 			data.put("id",i);
 			datas.add(data);
 		}
-		bulkProcessor.insertDatas("bulkdemo","bulkdemo",datas,clientOptions);
+		bulkProcessor.insertDatas("bulkdemo",datas,clientOptions);
 		data = new HashMap<String,Object>();
 		data.put("name","updateduoduo5");
 		data.put("id",5);
@@ -169,14 +169,13 @@ public class TestBulkProcessor {
 		updateOptions.setDetectNoop(false)
 				.setDocasupsert(false)
 				.setReturnSource(true)
-//				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
-				.setIdField("id")
-				//.setVersion(10).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
-				.setIfPrimaryTerm(2l)
-				.setIfSeqNo(3l)
-				.setPipeline("1")
+//				.setEsRetryOnConflict(1)
+				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
+				//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
+						.setIfPrimaryTerm(2l)
+				.setIfSeqNo(3l).setPipeline("1")
 		;
-		bulkProcessor.updateData("bulkdemo","bulkdemo",data,updateOptions);
+		bulkProcessor.updateData("bulkdemo",data,updateOptions);
 
 	}
 	
