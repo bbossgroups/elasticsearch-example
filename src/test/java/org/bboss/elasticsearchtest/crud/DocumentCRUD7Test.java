@@ -62,7 +62,21 @@ public class DocumentCRUD7Test {
 		BaseApplicationContext.shutdown();
 
 	}
+	@Test
+	public void testBulkAddDocument() throws ParseException {
+		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
 
+		//批量添加文档
+		documentCRUD.testBulkAddDocument();
+	}
+
+
+	@Test
+	public void testAddAndUpdateDocument() throws ParseException {
+		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
+
+		documentCRUD.testAddAndUpdateDocument();
+	}
 	//先完整执行一边，ok
 	//现在单步debug功能，整个功能演示完毕
 	@Test

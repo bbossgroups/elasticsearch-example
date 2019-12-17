@@ -350,12 +350,31 @@ public class DocumentCRUD {
 				"-3"//文档id
 		);
 		System.out.println(response);
+		ClientOptions updateOptions = new ClientOptions();
+		List<String> sourceUpdateIncludes = new ArrayList<String>();
+		sourceUpdateIncludes.add("name");
+		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
+		updateOptions.setDetectNoop(false)
+				.setDocasupsert(false)
+				.setReturnSource(true)
+//				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
+				.setIdField("demoId")
+//				.setVersion(2).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
+//				.setIfPrimaryTerm(2l)
+//				.setIfSeqNo(3l)
+//				.setPipeline("1")
+				.setEsRetryOnConflict(2)
+				.setTimeout("100s")
+		.setWaitForActiveShards(1)
+		.setRefresh("true");
+				//.setMasterTimeout("10s")
+				;
 		//更新不存在的文档
 		response = clientUtil.updateDocument("demo",//索引表
 				"demo",//索引类型
-				"-3",//文档id
+
 				demo
-		);
+		,updateOptions);
 		System.out.println(response);
 	}
 	public void updateDocumentByScriptQuery(){

@@ -240,10 +240,24 @@ public class DocumentCRUD7 {
 				demo,2l);
 		 */
 		//强制刷新
-		String response = clientUtil.addDocument("demo",//索引表
-				null,
+		ClientOptions addOptions = new ClientOptions();
 
-				demo,"refresh=true");
+		addOptions
+				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
+				.setIdField("demoId")
+//				.setVersion(2).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
+//				.setIfPrimaryTerm(1l)
+//				.setIfSeqNo(13l)
+//				.setPipeline("1")
+				.setTimeout("100s")
+				.setWaitForActiveShards(1)
+				.setRefresh("true")
+				.setRouting(1);
+		//.setMasterTimeout("10s")
+		;
+		String response = clientUtil.addDocument("demo",//索引表
+
+				demo,addOptions);
 
 
 		//向动态index demo-yyyy.MM.dd这种添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -412,11 +426,31 @@ public class DocumentCRUD7 {
 		);
 		System.out.println(response);
 		//更新不存在的文档
+		ClientOptions updateOptions = new ClientOptions();
+		List<String> sourceUpdateIncludes = new ArrayList<String>();
+		sourceUpdateIncludes.add("name");
+		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
+		updateOptions.setDetectNoop(false)
+				.setDocasupsert(false)
+				.setReturnSource(true)
+//				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
+				.setIdField("demoId")
+//				.setVersion(2).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
+				.setIfPrimaryTerm(1l)
+				.setIfSeqNo(13l)
+//				.setPipeline("1")
+//				.setEsRetryOnConflict(2)
+				.setTimeout("100s")
+				.setWaitForActiveShards(1)
+				.setRefresh("true")
+		//.setMasterTimeout("10s")
+		;
+		//更新不存在的文档
 		response = clientUtil.updateDocument("demo",//索引表
+				"demo",//索引类型
 
-				"-3",//文档id
 				demo
-		);
+				,updateOptions);
 		System.out.println(response);
 	}
 	public void updateDocumentByScriptQuery(){

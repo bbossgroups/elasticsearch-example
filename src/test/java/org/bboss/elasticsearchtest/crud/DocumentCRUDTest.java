@@ -250,4 +250,18 @@ public class DocumentCRUDTest {
 
 
 	}
+
+	@Test
+	public void testBulkAddDocumentsSetIdField1() throws ParseException {
+		DocumentCRUD documentCRUD = new DocumentCRUD();
+		//删除/创建文档索引表
+//		documentCRUD.testCreateIndice();
+
+		//批量添加文档
+		documentCRUD.testBulkAddDocument();
+
+
+
+
+	}
 }
