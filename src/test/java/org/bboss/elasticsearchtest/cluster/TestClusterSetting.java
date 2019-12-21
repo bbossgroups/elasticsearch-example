@@ -42,6 +42,7 @@ public class TestClusterSetting {
 	public void testGetClusterSetting(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		System.out.println(clientInterface.getClusterSettings());
+
 	}
 	@Test
 	public void updateClusterSetting(){
