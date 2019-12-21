@@ -164,4 +164,15 @@ public class TestClusterSetting {
 		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
 
 	}
+
+	@Test
+	public void getClusterInfo(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+		//获取Elasticsearch集群信息
+		System.out.println(clientInterface.getClusterInfo());
+		//获取Elasticsearch集群版本号
+		System.out.println(clientInterface.getElasticsearchVersion());
+
+
+	}
 }
