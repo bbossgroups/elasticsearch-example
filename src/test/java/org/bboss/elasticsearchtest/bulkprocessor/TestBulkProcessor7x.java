@@ -54,7 +54,6 @@ public class TestBulkProcessor7x {
 		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
 		bulkProcessorBuilder.setBlockedWaitTimeout(0)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
-				.setBulkQueue(1)//bulk数据缓冲队列大小，越大处理速度越快，根据实际服务器内存资源配置，用户提交的数据首先进入这个队列，然后通过多个工作线程从这个队列中拉取数据进行处理
 				.setBulkSizes(10)//按批处理数据记录数
 				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，但是有记录，那么强制进行bulk处理
 				
@@ -71,6 +70,8 @@ public class TestBulkProcessor7x {
 
 					public void afterBulk(BulkCommand bulkCommand, String result) {
 						System.out.println("afterBulk："+result);
+						System.out.println("totalSize:"+bulkCommand.getTotalSize());
+						System.out.println("totalFailedSize:"+bulkCommand.getTotalFailedSize());
 					}
 
 					public void exceptionBulk(BulkCommand bulkCommand, Throwable exception) {
@@ -91,7 +92,7 @@ public class TestBulkProcessor7x {
 //				.setWaitForActiveShards(2)
 //				.setRouting("1") //(Optional, string) Target the specified primary shard.
 //				.setPipeline("1") // (Optional, string) ID of the pipeline to use to preprocess incoming documents.
-				.setPollTimeOut(10000);
+		;
 		/**
 		 * 构建BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 		 */
@@ -105,8 +106,8 @@ public class TestBulkProcessor7x {
 //							.setPipeline("1")
 
 				.setOpType("index")
-				.setIfPrimaryTerm(2l)
-				.setIfSeqNo(3l)
+//				.setIfPrimaryTerm(2l)
+//				.setIfSeqNo(3l)
 		;
 		Map<String,Object> data = new HashMap<String,Object>();
 		data.put("name","duoduo1");
@@ -172,8 +173,8 @@ public class TestBulkProcessor7x {
 //				.setEsRetryOnConflict(1)
 				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
 				//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
-						.setIfPrimaryTerm(2l)
-				.setIfSeqNo(3l).setPipeline("1")
+//						.setIfPrimaryTerm(2l)
+//				.setIfSeqNo(3l).setPipeline("1")
 		;
 		bulkProcessor.updateData("bulkdemo",data,updateOptions);
 
@@ -192,7 +193,8 @@ public class TestBulkProcessor7x {
 			bulkProcessor.shutDown();
 		}
 
-		System.out.println("bulkProcessor.getTotalSize():"+bulkProcessor.getTotalSize());
+
+//		System.out.println("bulkProcessor.getTotalSize():"+bulkProcessor.getTotalSize());
 	}
 
 }
