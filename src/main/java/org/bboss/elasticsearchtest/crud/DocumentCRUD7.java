@@ -243,7 +243,7 @@ public class DocumentCRUD7 {
 		ClientOptions addOptions = new ClientOptions();
 
 		addOptions
-				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
+//				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
 				.setIdField("demoId")
 //				.setVersion(2).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
 //				.setIfPrimaryTerm(1l)
