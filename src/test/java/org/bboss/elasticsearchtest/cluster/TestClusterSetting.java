@@ -166,6 +166,17 @@ public class TestClusterSetting {
 	}
 
 	@Test
+	public void disableShared(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+//		System.out.println(clientInterface.flushSynced("demo"));//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
+		System.out.println(clientInterface.flushSynced());//https://www.elastic.co/guide/en/elasticsearch/reference/6.3/indices-synced-flush.html
+		System.out.println(clientInterface.disableClusterRoutingAllocation());//禁用share allocation
+
+		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
+
+	}
+
+	@Test
 	public void getClusterInfo(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
 		//获取Elasticsearch集群信息

@@ -18,6 +18,8 @@ package org.bboss.elasticsearchtest.xpack;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * <p>Description: </p>
  * <p></p>
@@ -28,8 +30,13 @@ import org.junit.Test;
  */
 public class CleanMonitor {
 	@Test
-	public void cleanXPaxkMonitor(){
+	public void cleanXPaxkMonitor() throws UnsupportedEncodingException {
 		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
+		System.out.println(ElasticSearchHelper.getRestClientUtil().getIndice(".kibana_task_manager"));
+//		System.out.println(ElasticSearchHelper.getRestClientUtil().executeHttp(java.net.URLEncoder.encode(".kibana_*", "UTF-8") + "?pretty",HTTP_DELETE));
 //		ElasticSearchHelper.getRestClientUtil().deleteTempate("demotemplate_1");
+//		/.kibana_task_manager/_doc/_search
+
+//		System.out.println(ElasticSearchHelper.getRestClientUtil().searchAll(".kibana_task_manager", MetaMap.class));
 	}
 }
