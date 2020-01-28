@@ -108,54 +108,7 @@ public class TestThirdDslContainer7 {
 		int perKeyDSLStructionCacheSize = aopTemplateContainer.getPerKeyDSLStructionCacheSize();
 		boolean alwaysCacheDslStruction = aopTemplateContainer.isAlwaysCacheDslStruction();
 		List<TemplateMeta> templateMetaList = aopTemplateContainer.getTemplateMetas(namespace);
-//		context.start(new BaseStarter() {
-//			public void start(Pro pro, BaseApplicationContext ioc) {
-//				Object _service = ioc.getBeanObject(pro.getName());
-//				if(_service == null || pro.getName().equals(TemplateContainer.NAME_perKeyDSLStructionCacheSize) || pro.getName().equals(TemplateContainer.NAME_alwaysCacheDslStruction))
-//					return;
-//				BaseTemplateMeta baseTemplateMeta = new BaseTemplateMeta();
-//				baseTemplateMeta.setName(pro.getName());
-//				baseTemplateMeta.setNamespace(namespace);
-//				String templateFile = (String)pro.getExtendAttribute(TemplateContainer.NAME_templateFile);
-//				if(templateFile == null)
-//				{
-//					Object o = pro.getObject();
-//					if(o != null && o instanceof String) {
-//
-//						String value = (String) o;
-//						baseTemplateMeta.setDslTemplate(value);
-//						baseTemplateMeta.setVtpl(pro.getBooleanExtendAttribute(TemplateContainer.NAME_istpl, true));//如果sql语句为velocity模板，则在批处理时是否需要每条记录都需要分析sql语句;
-//						//标识sql语句是否为velocity模板;
-//						baseTemplateMeta.setMultiparser(pro.getBooleanExtendAttribute(TemplateContainer.NAME_multiparser, baseTemplateMeta.getVtpl()));
-//						templateMetaList.add(baseTemplateMeta);
-//					}
-//				}
-//				else
-//				{
-//					String templateName = (String)pro.getExtendAttribute(TemplateContainer.NAME_templateName);;
-//					if(templateName == null)
-//					{
-//						logger.warn(new StringBuilder().append("Ignore this DSL template ")
-//								.append(pro.getName()).append(" in the DSl file ")
-//								.append(context.getConfigfile())
-//								.append(" is defined as a reference to the DSL template in another configuration file ")
-//								.append(templateFile)
-//								.append(", but the name of the DSL template statement to be referenced is not specified by the templateName attribute, for example:\r\n")
-//								.append("<property name= \"querySqlTraces\"\r\n")
-//								.append("templateFile= \"esmapper/estrace/ESTracesMapper.xml\"\r\n")
-//								.append("templateName= \"queryTracesByCriteria\"/>").toString());
-//					}
-//					else
-//					{
-//						baseTemplateMeta.setReferenceNamespace(templateFile);
-//						baseTemplateMeta.setReferenceTemplateName(templateName);
-//						baseTemplateMeta.setVtpl(false);
-//						baseTemplateMeta.setMultiparser(false);
-//						templateMetaList.add(baseTemplateMeta);
-//					}
-//				}
-//			}
-//		});
+
 		//保存dsl到表dslconfig
 		SQLExecutor.insertBeans("testdslconfig",
 				"insert into dslconfig(ID,name,namespace,dslTemplate,vtpl,multiparser,referenceNamespace,referenceTemplateName) " +
