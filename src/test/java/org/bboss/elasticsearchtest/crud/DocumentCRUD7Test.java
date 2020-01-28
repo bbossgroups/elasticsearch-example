@@ -14,7 +14,6 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
-import org.frameworkset.spi.BaseApplicationContext;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -59,7 +58,7 @@ public class DocumentCRUD7Test {
 		documentCRUD.testBulkAddDocumentsWithESIndex();
 		//检索文档
 		documentCRUD.testSearch();
-		BaseApplicationContext.shutdown();
+		//BaseApplicationContext.shutdown();
 
 	}
 	@Test
