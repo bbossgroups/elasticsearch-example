@@ -122,7 +122,8 @@ public class TestThirdDslContainer {
 			@Override
 			protected Map<String, TemplateMeta> loadTemplateMetas(String namespace) {
 				try {
-					List<BaseTemplateMeta> templateMetas = SQLExecutor.queryListWithDBName(BaseTemplateMeta.class,"testdslconfig","select * from dslconfig where namespace = ?",namespace);
+					List<BaseTemplateMeta> templateMetas = SQLExecutor.queryListWithDBName(BaseTemplateMeta.class,
+																	"testdslconfig","select * from dslconfig where namespace = ?",namespace);
 					if(templateMetas == null){
 						return null;
 					}
