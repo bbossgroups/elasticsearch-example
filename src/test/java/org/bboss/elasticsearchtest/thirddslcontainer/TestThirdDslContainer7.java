@@ -103,16 +103,23 @@ public class TestThirdDslContainer7 {
 
 		//将配置文件中的sql转存到数据库中
 		String dslpath = "esmapper/demo7.xml";
-	    final String namespace = "testnamespace7";
+	    final String namespace = "testnamespace7";//一个命名空间的dsl可以对应为一个ClientInterface实例
 		AOPTemplateContainerImpl aopTemplateContainer = new AOPTemplateContainerImpl(dslpath);
 		int perKeyDSLStructionCacheSize = aopTemplateContainer.getPerKeyDSLStructionCacheSize();
 		boolean alwaysCacheDslStruction = aopTemplateContainer.isAlwaysCacheDslStruction();
-		List<TemplateMeta> templateMetaList = aopTemplateContainer.getTemplateMetas(namespace);
+		List<TemplateMeta> templateMetaList = aopTemplateContainer.getTemplateMetas(namespace);//将demo.xml文件中配置的dsl转换为属于namespace命名空间的对象列表
 
 		//保存dsl到表dslconfig
 		SQLExecutor.insertBeans("testdslconfig",
 				"insert into dslconfig(ID,name,namespace,dslTemplate,vtpl,multiparser,referenceNamespace,referenceTemplateName) " +
-						"values(#[id],#[name],#[namespace],#[dslTemplate],#[vtpl],#[multiparser],#[referenceNamespace],#[referenceTemplateName])",
+						"values(#[id]," + //主键
+						"#[name]," + //dsl名称
+						"#[namespace]," + //dsl所属命名空间
+						"#[dslTemplate]," + //dsl语句
+						"#[vtpl]," + //一般设置为true， dsl语句中是否包含velocity语法内容，包含为true，否则为false（避免进行velocity语法解析，提升性能），默认为true
+						"#[multiparser]," + // 一般设置为true，dsl如果包含velocity动态语法，是否需要对每次动态生成的dsl进行模板变量#[xxxx]语法解析，true 需要，false不需要，默认true
+						"#[referenceNamespace]," + // 如果对应的配置是一个引用，则需要通过referenceNamespace指定引用的dsl所属的命名空间
+						"#[referenceTemplateName])",// 如果对应的配置是一个引用，则需要通过referenceTemplateName指定引用的dsl对应的名称name
 				templateMetaList);
 	}
 	@Test
