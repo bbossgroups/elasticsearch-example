@@ -15,7 +15,6 @@ package org.bboss.elasticsearchtest.thirddslcontainer;/*
  */
 
 import org.bboss.elasticsearchtest.crud.Demo;
-import org.bboss.elasticsearchtest.crud.DocumentCRUD;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 
@@ -35,7 +34,7 @@ public class HighlightSearch {
 	 * 创建索引表并导入高亮检索功能需要的测试数据
 	 */
 	public void initIndiceAndData(){
-		DocumentCRUD documentCRUD = new DocumentCRUD();
+		DocumentCRUD documentCRUD = new DocumentCRUD(clientInterface);
 		documentCRUD.testCreateIndice();
 		documentCRUD.testBulkAddDocuments();
 	}

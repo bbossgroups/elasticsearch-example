@@ -14,7 +14,6 @@ package org.bboss.elasticsearchtest.thirddslcontainer;/*
  *  limitations under the License.
  */
 
-import org.bboss.elasticsearchtest.crud.DocumentCRUD;
 import org.bboss.elasticsearchtest.script.DynamicPriceTemplate;
 import org.bboss.elasticsearchtest.script.Rule;
 import org.frameworkset.elasticsearch.client.ClientInterface;
@@ -32,7 +31,7 @@ public class ScriptImpl {
 	}
 	public void updateDocumentByScriptPath(){
 		//初始化数据，会创建type为demo的indice demo，并添加docid为2的文档
-		DocumentCRUD documentCRUD = new DocumentCRUD();
+		DocumentCRUD documentCRUD = new DocumentCRUD(clientInterface);
 		documentCRUD.testCreateIndice();
 		documentCRUD.testBulkAddDocument();
 		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
@@ -74,7 +73,7 @@ public class ScriptImpl {
 
 	public void updateDocumentByScriptQueryPath(){
 		//初始化数据，会创建type为demo的indice demo，并添加docid为2的文档
-		DocumentCRUD documentCRUD = new DocumentCRUD();
+		DocumentCRUD documentCRUD = new DocumentCRUD(clientInterface);
 		documentCRUD.testCreateIndice();
 		documentCRUD.testBulkAddDocument();
 		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
