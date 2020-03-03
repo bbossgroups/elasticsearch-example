@@ -101,11 +101,11 @@ public class TestBulkProcessor {
 	public void testBulkDatas(){
 		System.out.println("testBulkDatas");
 		ClientOptions clientOptions = new ClientOptions();
-		clientOptions.setIdField("id")//通过clientOptions指定map中的key为id的字段值作为文档_id，
-				.setEsRetryOnConflict(1)
+		clientOptions.setIdField("id")//通过clientOptions指定map中的key为id的字段值作为文档_id，如果数据是Object,则对应对象中的Field名称
+//				.setEsRetryOnConflict(1)
 //							.setPipeline("1")
 
-				.setOpType("index")
+//				.setOpType("index")
 //				.setIfPrimaryTerm(2l)
 //				.setIfSeqNo(3l)
 		;
@@ -130,6 +130,12 @@ public class TestBulkProcessor {
 		data.put("id",5);
 
 		bulkProcessor.insertData("bulkdemo","bulkdemo",data,clientOptions);
+
+		TestObject testObject = new TestObject();
+		testObject.setId("1000");
+		testObject.setName("duoduo1000");
+
+		bulkProcessor.insertData("bulkdemo","bulkdemo",testObject,clientOptions);
 		ClientOptions deleteclientOptions = new ClientOptions();
 
 
@@ -143,7 +149,8 @@ public class TestBulkProcessor {
 			data.put("id",i);
 			datas.add(data);
 		}
-		bulkProcessor.insertDatas("bulkdemo","bulkdemo",datas,clientOptions);
+//		bulkProcessor.insertDatas("bulkdemo","bulkdemo",datas,clientOptions);
+		bulkProcessor.insertDatas("bulkdemo","bulkdemo",datas);//自动设置文档id，没有通过clientOptions指定id信息
 		data = new HashMap<String,Object>();
 		data.put("name","updateduoduo5");
 		data.put("id",5);
@@ -166,12 +173,13 @@ public class TestBulkProcessor {
 		 * Only index the document if the given version is equal or higher than the version of the stored document. If there is no existing document the operation will succeed as well. The given version will be used as the new version and will be stored with the new document. The supplied version must be a non-negative long number.
 		 * The external_gte version type is meant for special use cases and should be used with care. If used incorrectly, it can result in loss of data. There is another option, force, which is deprecated because it can cause primary and replica shards to diverge.
 		 */
-		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
-		updateOptions.setDetectNoop(false)
-				.setDocasupsert(false)
-				.setReturnSource(true)
-//				.setEsRetryOnConflict(1)
-				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
+		updateOptions.setIdField("id")
+//		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
+//		updateOptions.setDetectNoop(false)
+//				.setDocasupsert(false)
+//				.setReturnSource(true)
+////				.setEsRetryOnConflict(1)
+//				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
 		//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
 //						.setIfPrimaryTerm(2l)
 //				.setIfSeqNo(3l).setPipeline("1")

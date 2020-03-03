@@ -87,8 +87,8 @@ public class TestBulkProcessor7x {
 				// 其中的refresh参数控制bulk操作结果强制refresh入elasticsearch，便于实时查看数据，测试环境可以打开，生产不要设置
 //				.setRefreshOption("refresh")
 //				.setTimeout("100s")
-				.setMasterTimeout("50s")
-				.setRefresh("true")
+//				.setMasterTimeout("50s")
+//				.setRefresh("true")
 //				.setWaitForActiveShards(2)
 //				.setRouting("1") //(Optional, string) Target the specified primary shard.
 //				.setPipeline("1") // (Optional, string) ID of the pipeline to use to preprocess incoming documents.
@@ -102,10 +102,10 @@ public class TestBulkProcessor7x {
 		System.out.println("testBulkDatas");
 		ClientOptions clientOptions = new ClientOptions();
 		clientOptions.setIdField("id")//通过clientOptions指定map中的key为id的字段值作为文档_id，
-		          .setEsRetryOnConflict(1)
+//		          .setEsRetryOnConflict(1)
 //							.setPipeline("1")
 
-				.setOpType("index")
+//				.setOpType("index")
 //				.setIfPrimaryTerm(2l)
 //				.setIfSeqNo(3l)
 		;
@@ -130,12 +130,18 @@ public class TestBulkProcessor7x {
 		data.put("id",5);
 
 		bulkProcessor.insertData("bulkdemo",data,clientOptions);
-		ClientOptions deleteclientOptions = new ClientOptions();
-		 
+//		ClientOptions deleteclientOptions = new ClientOptions();
+		TestObject testObject = new TestObject();
+		testObject.setId("1000");
+		testObject.setName("duoduo1000");
+		ClientOptions clientOptions1 = new ClientOptions();
+		clientOptions.setIdField("id");//通过clientOptions指定map中的key为id的字段值作为文档_id，
+		bulkProcessor.insertData("bulkdemo",testObject,clientOptions1);
 
-		deleteclientOptions.setEsRetryOnConflict(1);
+//		deleteclientOptions.setEsRetryOnConflict(1);
 		//.setPipeline("1")
-		bulkProcessor.deleteData("bulkdemo","1",deleteclientOptions);
+//		bulkProcessor.deleteDataWithClientOptions("bulkdemo","1",deleteclientOptions);
+		bulkProcessor.deleteData("bulkdemo","1");
 		List<Object> datas = new ArrayList<Object>();
 		for(int i = 6; i < 106; i ++) {
 			data = new HashMap<String,Object>();
@@ -143,7 +149,7 @@ public class TestBulkProcessor7x {
 			data.put("id",i);
 			datas.add(data);
 		}
-		bulkProcessor.insertDatas("bulkdemo",datas,clientOptions);
+		bulkProcessor.insertDatas("bulkdemo",datas);
 		data = new HashMap<String,Object>();
 		data.put("name","updateduoduo5");
 		data.put("id",5);
@@ -151,25 +157,26 @@ public class TestBulkProcessor7x {
 //		List<String> sourceUpdateExcludes = new ArrayList<String>();
 //		sourceUpdateExcludes.add("name");
 		//					updateOptions.setSourceUpdateExcludes(sourceUpdateExcludes); //es 7不起作用
-		List<String> sourceUpdateIncludes = new ArrayList<String>();
-		sourceUpdateIncludes.add("name");
-
-		/**
-		 * ersion typesedit
-		 * In addition to the external version type, Elasticsearch also supports other types for specific use cases:
-		 *
-		 * internal
-		 * Only index the document if the given version is identical to the version of the stored document.
-		 * external or external_gt
-		 * Only index the document if the given version is strictly higher than the version of the stored document or if there is no existing document. The given version will be used as the new version and will be stored with the new document. The supplied version must be a non-negative long number.
-		 * external_gte
-		 * Only index the document if the given version is equal or higher than the version of the stored document. If there is no existing document the operation will succeed as well. The given version will be used as the new version and will be stored with the new document. The supplied version must be a non-negative long number.
-		 * The external_gte version type is meant for special use cases and should be used with care. If used incorrectly, it can result in loss of data. There is another option, force, which is deprecated because it can cause primary and replica shards to diverge.
-		 */
-		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
-		updateOptions.setDetectNoop(false)
-				.setDocasupsert(false)
-				.setReturnSource(true)
+//		List<String> sourceUpdateIncludes = new ArrayList<String>();
+//		sourceUpdateIncludes.add("name");
+//
+//		/**
+//		 * ersion typesedit
+//		 * In addition to the external version type, Elasticsearch also supports other types for specific use cases:
+//		 *
+//		 * internal
+//		 * Only index the document if the given version is identical to the version of the stored document.
+//		 * external or external_gt
+//		 * Only index the document if the given version is strictly higher than the version of the stored document or if there is no existing document. The given version will be used as the new version and will be stored with the new document. The supplied version must be a non-negative long number.
+//		 * external_gte
+//		 * Only index the document if the given version is equal or higher than the version of the stored document. If there is no existing document the operation will succeed as well. The given version will be used as the new version and will be stored with the new document. The supplied version must be a non-negative long number.
+//		 * The external_gte version type is meant for special use cases and should be used with care. If used incorrectly, it can result in loss of data. There is another option, force, which is deprecated because it can cause primary and replica shards to diverge.
+//		 */
+//		updateOptions.setSourceUpdateIncludes(sourceUpdateIncludes);//es 7不起作用
+		updateOptions
+//				.setDetectNoop(false)
+//				.setDocasupsert(false)
+//				.setReturnSource(true)
 //				.setEsRetryOnConflict(1)
 				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
 				//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
