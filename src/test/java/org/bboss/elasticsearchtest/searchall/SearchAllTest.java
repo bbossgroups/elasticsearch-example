@@ -97,7 +97,7 @@ public class SearchAllTest {
 				}
 			}
 		},Map.class);
-		List<Map> dataList = esDatas.getDatas();
+		List<Map> dataList = esDatas.getDatas();//数据已经被行处理器处理，所以这里不会有数据返回
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
 			System.out.println("dataList.size:" + dataList.size());
@@ -126,7 +126,7 @@ public class SearchAllTest {
 				}
 			}
 		},Map.class);
-		List<Map> dataList = esDatas.getDatas();
+		List<Map> dataList = esDatas.getDatas();//数据已经被行处理器处理，所以这里不会有数据返回
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
 			System.out.println("dataList.size:" + dataList.size());
@@ -159,7 +159,7 @@ public class SearchAllTest {
 	@Test
 	public void testSearchAllFethchSizeParrrel(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
-		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",10000,Map.class,6);
+		ESDatas<Map> esDatas = clientInterface.searchAllParallel("demo",100,Map.class,6);
 		List<Map> dataList = esDatas.getDatas();
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
@@ -189,7 +189,7 @@ public class SearchAllTest {
 				}
 			}
 		},Map.class,6);
-		List<Map> dataList = esDatas.getDatas();
+		List<Map> dataList = esDatas.getDatas();//数据已经被行处理器处理，所以这里不会有数据返回
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
 			System.out.println("dataList.size:" + dataList.size());
@@ -218,7 +218,7 @@ public class SearchAllTest {
 				}
 			}
 		},Map.class,6);
-		List<Map> dataList = esDatas.getDatas();
+		List<Map> dataList = esDatas.getDatas();//数据已经被行处理器处理，所以这里不会有数据返回
 		System.out.println("TotalSize:"+esDatas.getTotalSize());
 		if(dataList != null) {
 			System.out.println("dataList.size:" + dataList.size());
