@@ -56,6 +56,7 @@ public class DocumentCRUD7Test {
 //		//批量修改文档
 		documentCRUD.testBulkAddDocuments();
 		documentCRUD.testBulkAddDocumentsWithESIndex();
+		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
 		//检索文档
 		documentCRUD.testSearch();
 		//BaseApplicationContext.shutdown();
@@ -68,7 +69,13 @@ public class DocumentCRUD7Test {
 		//批量添加文档
 		documentCRUD.testBulkAddDocument();
 	}
+	@Test
+	public void testBulkAddDocumentsWithESIndexUseBatchName() throws ParseException {
+		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
 
+		//批量添加文档
+		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
+	}
 
 	@Test
 	public void testAddAndUpdateDocument() throws ParseException {
