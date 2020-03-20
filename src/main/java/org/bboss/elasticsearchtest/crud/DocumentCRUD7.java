@@ -516,12 +516,10 @@ public class DocumentCRUD7 {
 				.setRefresh("true")
 		//.setMasterTimeout("10s")
 		;
-		//更新不存在的文档
-		response = clientUtil.updateDocument("demo",//索引表
-				"demo",//索引类型
-
-				demo
-				,updateOptions);
+		DemoWithES7IndexSimple demoWithES7IndexSimple = clientUtil.getDocument("demo","3",DemoWithES7IndexSimple.class);
+		//更新文档
+		demoWithES7IndexSimple.setContentbody("demoWithES7IndexSimple");
+		response = clientUtil.updateDocument("3",demoWithES7IndexSimple);
 		System.out.println(response);
 	}
 	public void updateDocumentByScriptQuery(){
