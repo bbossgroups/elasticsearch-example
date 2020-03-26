@@ -58,10 +58,10 @@
         startTime
         endTime
         通过map传递变量参数值
-
+        cacheDsl:指示框架是否启用dsl语法结构缓存机制，如果启用则只在第一次对dsl进行硬解析dsl语法结构，后续从缓冲中读取解析好的语法结构；如果禁用，则每次都硬解析dsl语法结构，默认true
         变量语法参考文档：https://my.oschina.net/bboss/blog/1556866
     -->
-    <property name="testHighlightSearch">
+    <property name="testHighlightSearch" cacheDsl="false">
         <![CDATA[{
             "query": {
                 "bool": {
