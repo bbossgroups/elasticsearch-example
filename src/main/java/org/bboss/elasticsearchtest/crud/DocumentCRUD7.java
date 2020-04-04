@@ -226,7 +226,7 @@ public class DocumentCRUD7 {
 	}
 	public void testCreateIndice(){
 		//创建加载配置文件的客户端工具，单实例多线程安全
-		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo7.xml");
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
 		try {
 			//判读索引表demo是否存在，存在返回true，不存在返回false
 			boolean exist = clientUtil.existIndice("demo");
