@@ -380,8 +380,7 @@ public class DocumentCRUD7 {
 		System.out.println(response);
 
 //		//删除文档
-//		clientUtil.deleteDocument("demo",//索引表
-//				"demo",//索引类型
+//		clientUtil.deleteDocumentNew("demo",//索引表
 //				"2");//文档id
 
 		//根据文档id获取修改后的文档对象，返回json报文字符串
