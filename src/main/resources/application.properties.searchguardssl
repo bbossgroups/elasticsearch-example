@@ -10,13 +10,13 @@ elasticPassword=admin
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
 #Proxy Node
 #elasticsearch.rest.hostNames=192.168.137.1:9206,192.168.137.1:9207
-elasticsearch.rest.hostNames=https://10.19.85.65:9200
+elasticsearch.rest.hostNames=https://10.13.11.5:9200
 #如果开启了https协议，则需要在elasticsearch地址中添加https://协议头
 #elasticsearch.rest.hostNames=https://10.180.211.27:9280,https://10.180.211.27:9281,https://10.180.211.27:9282
 elasticsearch.dateFormat=yyyy.MM.dd
 elasticsearch.timeZone=Asia/Shanghai
 #在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
-elasticsearch.showTemplate=true
+elasticsearch.showTemplate=false
 #集群节点自动发现开关
 elasticsearch.discoverHost=true
 elasticsearch.useHttps=true
@@ -81,8 +81,9 @@ http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.ConnectionRe
 
 
 # dsl配置文件热加载扫描时间间隔，毫秒为单位，默认5秒扫描一次，<= 0时关闭扫描机制
-dslfile.refreshInterval = -1
-
+dslfile.refreshInterval = 5000
+# 指定存放dsl配置文件的地址
+#dslfile.dslMappingDir=D:/workspace/bbossesdemo/eshelloword-booter/src/main/resources/
 
 # 演示数据库数据导入elasticsearch源配置
 db.name = test
