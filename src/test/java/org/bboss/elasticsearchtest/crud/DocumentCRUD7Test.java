@@ -61,6 +61,7 @@ public class DocumentCRUD7Test {
 		documentCRUD.testSearch();
 		//BaseApplicationContext.shutdown();
 
+
 	}
 	@Test
 	public void testBulkAddDocument() throws ParseException {

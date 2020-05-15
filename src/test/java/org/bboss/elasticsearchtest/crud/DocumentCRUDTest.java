@@ -17,7 +17,6 @@ package org.bboss.elasticsearchtest.crud;/*
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
-import org.frameworkset.spi.BaseApplicationContext;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +71,9 @@ public class DocumentCRUDTest {
 		for(int i = 0; i < 10; i ++){
 			documentCRUD.testBulkAddUUIDDocuments(i,10);
 		}*/
-		BaseApplicationContext.shutdown();
-
+//		BaseApplicationContext.shutdown();
+		ElasticSearchHelper.stopElasticsearch("default");
+		System.out.println();
 	}
 	@Test
 	public void testMetaMap() throws ParseException {
