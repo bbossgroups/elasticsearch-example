@@ -30,6 +30,8 @@ import org.frameworkset.spi.remote.http.callback.HttpClientBuilderCallback;
 public class HttpClientBuilderCallbackDemo implements HttpClientBuilderCallback {
 
 	public HttpClientBuilder customizeHttpClient(HttpClientBuilder builder, ClientConfiguration clientConfiguration) {
+		String user = clientConfiguration.getAuthAccount();
+		String password = clientConfiguration.getAuthPassword();
 		/**
 		 AWSCredentials credentials = new BasicAWSCredentials("", "");
 		 AWS4Signer signer = new AWS4Signer();
