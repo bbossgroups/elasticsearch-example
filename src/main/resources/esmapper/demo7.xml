@@ -3,6 +3,15 @@
         For Elasticsearch 7.0.0
         创建demo需要的索引表结构
     -->
+    <property name="updateDemoIndice">
+        <![CDATA[{
+          "properties": {
+            "email": {
+              "type": "text"
+            }
+          }
+        }]]>
+    </property>
     <property name="createDemoIndice">
         <![CDATA[{
             "settings": {

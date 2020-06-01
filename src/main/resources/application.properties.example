@@ -1,25 +1,23 @@
-##单集群配置，如果需要做多集群配置，参照application.properties.multicluster文件
-elasticsearch.serverNames = default
 
 ##default集群配配置
 # x-pack或者searchguard安全认证和口令配置
-elasticUser=admin
-elasticPassword=admin
+elasticUser=elastic
+elasticPassword=changeme
 
 #集群地址配置
 #elasticsearch.rest.hostNames=10.180.211.27:9280,10.180.211.27:9281,10.180.211.27:9282
 #Proxy Node
 #elasticsearch.rest.hostNames=192.168.137.1:9206,192.168.137.1:9207
-elasticsearch.rest.hostNames=https://10.19.85.65:9200
+elasticsearch.rest.hostNames=192.168.137.1:9200
 #如果开启了https协议，则需要在elasticsearch地址中添加https://协议头
 #elasticsearch.rest.hostNames=https://10.180.211.27:9280,https://10.180.211.27:9281,https://10.180.211.27:9282
 elasticsearch.dateFormat=yyyy.MM.dd
 elasticsearch.timeZone=Asia/Shanghai
 #在控制台输出脚本调试开关showTemplate,false关闭，true打开，同时log4j至少是info级别
-elasticsearch.showTemplate=true
+elasticsearch.showTemplate=false
 #集群节点自动发现开关
 elasticsearch.discoverHost=true
-elasticsearch.useHttps=true
+elasticsearch.useHttps=false
 
 #设置slice scroll查询对应的线程数和等待队列数
 elasticsearch.sliceScrollThreadCount=100
@@ -78,11 +76,12 @@ http.staleConnectionCheckEnabled=false
 #* 方法返回true，进行重试，false不重试
 # http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.DefaultHttpRequestRetryHandler
 http.customHttpRequestRetryHandler=org.frameworkset.spi.remote.http.ConnectionResetHttpRequestRetryHandler
-
+http.backoffAuth=true
 
 # dsl配置文件热加载扫描时间间隔，毫秒为单位，默认5秒扫描一次，<= 0时关闭扫描机制
-dslfile.refreshInterval = -1
-
+dslfile.refreshInterval = 5000
+# 指定存放dsl配置文件的地址
+#dslfile.dslMappingDir=D:/workspace/bbossesdemo/eshelloword-booter/src/main/resources/
 
 # 演示数据库数据导入elasticsearch源配置
 db.name = test

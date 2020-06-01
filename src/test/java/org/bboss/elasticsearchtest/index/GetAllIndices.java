@@ -52,5 +52,6 @@ public class GetAllIndices {
 		clientInterface.openIndex("demo");//打开索引
 		indices = clientInterface.getIndexes();
 		clientInterface.openIndex("demo");//打开索引
+
 	}
 }
