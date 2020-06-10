@@ -14,6 +14,7 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
+import org.apache.http.impl.conn.DefaultHttpResponseParser;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.entity.ESDatas;
@@ -29,6 +30,7 @@ public class DocumentCRUDTest {
 	private static Logger logger = LoggerFactory.getLogger(DocumentCRUDTest.class);
 	public static void main(String[] args) throws ParseException {
 		logger.info("aaaa {},{}",0,null);
+		DefaultHttpResponseParser s;
 		DocumentCRUD documentCRUD = new DocumentCRUD();
 		//删除/创建文档索引表
 		documentCRUD.testCreateIndice();
@@ -72,7 +74,7 @@ public class DocumentCRUDTest {
 			documentCRUD.testBulkAddUUIDDocuments(i,10);
 		}*/
 //		BaseApplicationContext.shutdown();
-		ElasticSearchHelper.stopElasticsearch("default");
+//		ElasticSearchHelper.stopElasticsearch("default");
 		System.out.println();
 	}
 	@Test

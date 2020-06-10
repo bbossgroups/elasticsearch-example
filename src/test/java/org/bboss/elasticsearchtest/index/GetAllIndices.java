@@ -54,4 +54,13 @@ public class GetAllIndices {
 		clientInterface.openIndex("demo");//打开索引
 
 	}
+
+	@Test
+	public void testIndiceGet(){
+		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+
+		List<ESIndice> indices = clientInterface.getIndexes();
+		List<ESIndice> indicesD = clientInterface.getIndexes("d*");
+		System.out.println();
+	}
 }

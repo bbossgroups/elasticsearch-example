@@ -19,6 +19,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.frameworkset.spi.remote.http.ClientConfiguration;
 import org.frameworkset.spi.remote.http.callback.HttpClientBuilderCallback;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * <p>Description: </p>
  * <p></p>
@@ -43,7 +45,7 @@ public class HttpClientBuilderCallbackDemo implements HttpClientBuilderCallback 
 		 "es", signer, awsCredentialsProvider);
 		 builder.addInterceptorLast(interceptor);
 		 */
-
+		builder.evictIdleConnections(clientConfiguration.getTimeToLive(), TimeUnit.MILLISECONDS);
 		return builder;
 	}
 }
