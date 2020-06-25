@@ -15,12 +15,14 @@ package org.bboss.elasticsearchtest.bulkprocessor;
  * limitations under the License.
  */
 
-import org.frameworkset.elasticsearch.bulk.BulkCommand;
-import org.frameworkset.elasticsearch.bulk.BulkInterceptor;
-import org.frameworkset.elasticsearch.bulk.BulkProcessor;
-import org.frameworkset.elasticsearch.bulk.BulkProcessorBuilder;
+import org.apache.http.NoHttpResponseException;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.frameworkset.elasticsearch.bulk.*;
 import org.frameworkset.elasticsearch.client.ClientOptions;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +47,7 @@ public class TestBulkProcessor7x {
 		
 		testBulkProcessor.testBulkDatas();
 		
-		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
+		//testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
 
 
 	}
@@ -82,6 +84,33 @@ public class TestBulkProcessor7x {
 						System.out.println("errorBulk："+result);
 					}
 				})
+
+				// 重试配置
+				.setBulkRetryHandler(new BulkRetryHandler() { //设置重试判断策略，哪些异常需要重试
+					public boolean neadRetry(Exception exception, BulkCommand bulkCommand) { //判断哪些异常需要进行重试
+						if (exception instanceof HttpHostConnectException     //NoHttpResponseException 重试
+								|| exception instanceof ConnectTimeoutException //连接超时重试
+								|| exception instanceof UnknownHostException
+								|| exception instanceof NoHttpResponseException
+//              				|| exception instanceof SocketTimeoutException    //响应超时不重试，避免造成业务数据不一致
+						) {
+
+							return true;//需要重试
+						}
+
+						if(exception instanceof SocketException){
+							String message = exception.getMessage();
+							if(message != null && message.trim().equals("Connection reset")) {
+								return true;//需要重试
+							}
+						}
+
+						return false;//不需要重试
+					}
+				})
+				.setRetryTimes(3) // 设置重试次数，默认为0，设置 > 0的数值，会重试给定的次数，否则不会重试
+				.setRetryInterval(1000l) // 可选，默认为0，不等待直接进行重试，否则等待给定的时间再重试
+
 				// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
 				//下面的参数都是bulk url请求的参数：RefreshOption和其他参数只能二选一，配置了RefreshOption（类似于refresh=true&&aaaa=bb&cc=dd&zz=ee这种形式，将相关参数拼接成合法的url参数格式）就不能配置其他参数，
 				// 其中的refresh参数控制bulk操作结果强制refresh入elasticsearch，便于实时查看数据，测试环境可以打开，生产不要设置

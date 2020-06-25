@@ -73,7 +73,7 @@ public class SQLOrmTest {
 	@Test
 	public void testMapObjectQuery(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
-		Map json = clientUtil.sqlObject(Map.class,"{\"query\": \"SELECT * FROM dbdemo where logId = 143\"}");
+		Map json = clientUtil.sqlObject(Map.class,"{\"query\": \"SELECT * FROM dbdemo where LOG_ID = 143\"}");
 
 
 		System.out.println(json);
