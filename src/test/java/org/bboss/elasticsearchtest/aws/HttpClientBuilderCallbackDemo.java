@@ -15,10 +15,14 @@ package org.bboss.elasticsearchtest.aws;
  * limitations under the License.
  */
 
+import org.apache.http.Header;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.frameworkset.spi.remote.http.ClientConfiguration;
 import org.frameworkset.spi.remote.http.callback.HttpClientBuilderCallback;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,6 +49,9 @@ public class HttpClientBuilderCallbackDemo implements HttpClientBuilderCallback 
 		 "es", signer, awsCredentialsProvider);
 		 builder.addInterceptorLast(interceptor);
 		 */
+		List<Header> headerList = new ArrayList<Header>();
+		Header header = new BasicHeader("test","asdfasdf");
+		builder.setDefaultHeaders(headerList);
 		builder.evictIdleConnections(clientConfiguration.getTimeToLive(), TimeUnit.MILLISECONDS);
 		return builder;
 	}

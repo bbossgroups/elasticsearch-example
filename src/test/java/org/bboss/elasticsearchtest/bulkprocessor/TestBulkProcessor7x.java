@@ -41,13 +41,14 @@ public class TestBulkProcessor7x {
 	 * BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 	 */
 	private BulkProcessor bulkProcessor;
+	private BulkProcessor logBulkProcessor;
 	public static void main(String[] args){
 		TestBulkProcessor7x testBulkProcessor = new TestBulkProcessor7x();
 		testBulkProcessor.buildBulkProcessor();
-		
+		testBulkProcessor.buildLogBulkProcessor();
 		testBulkProcessor.testBulkDatas();
 		
-		//testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
+		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
 
 
 	}
@@ -126,6 +127,82 @@ public class TestBulkProcessor7x {
 		 * 构建BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 		 */
 		bulkProcessor = bulkProcessorBuilder.build();//构建批处理作业组件
+	}
+	public void buildLogBulkProcessor(){
+		//定义BulkProcessor批处理组件构建器
+		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
+		bulkProcessorBuilder.setBlockedWaitTimeout(0)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
+				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
+				.setBulkSizes(10)//按批处理数据记录数
+				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，但是有记录，那么强制进行bulk处理
+
+				.setWarnMultsRejects(1000)//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息
+				.setWorkThreads(2)//bulk处理工作线程数
+				.setWorkThreadQueue(2)//bulk处理工作线程池缓冲队列大小
+				.setBulkProcessorName("test_bulkprocessor")//工作线程名称，实际名称为BulkProcessorName-+线程编号
+				.setBulkRejectMessage("Reject test bulkprocessor")//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息提示前缀
+				.setElasticsearch("logs")//指定Elasticsearch集群数据源名称，bboss可以支持多数据源
+				.addBulkInterceptor(new BulkInterceptor() {
+					public void beforeBulk(BulkCommand bulkCommand) {
+						System.out.println("beforeBulk");
+					}
+
+					public void afterBulk(BulkCommand bulkCommand, String result) {
+						System.out.println("afterBulk："+result);
+						System.out.println("totalSize:"+bulkCommand.getTotalSize());
+						System.out.println("totalFailedSize:"+bulkCommand.getTotalFailedSize());
+					}
+
+					public void exceptionBulk(BulkCommand bulkCommand, Throwable exception) {
+						System.out.println("exceptionBulk：");
+						exception.printStackTrace();
+					}
+					public void errorBulk(BulkCommand bulkCommand, String result) {
+						System.out.println("errorBulk："+result);
+					}
+				})
+
+				// 重试配置
+				.setBulkRetryHandler(new BulkRetryHandler() { //设置重试判断策略，哪些异常需要重试
+					public boolean neadRetry(Exception exception, BulkCommand bulkCommand) { //判断哪些异常需要进行重试
+						if (exception instanceof HttpHostConnectException     //NoHttpResponseException 重试
+								|| exception instanceof ConnectTimeoutException //连接超时重试
+								|| exception instanceof UnknownHostException
+								|| exception instanceof NoHttpResponseException
+//              				|| exception instanceof SocketTimeoutException    //响应超时不重试，避免造成业务数据不一致
+						) {
+
+							return true;//需要重试
+						}
+
+						if(exception instanceof SocketException){
+							String message = exception.getMessage();
+							if(message != null && message.trim().equals("Connection reset")) {
+								return true;//需要重试
+							}
+						}
+
+						return false;//不需要重试
+					}
+				})
+				.setRetryTimes(3) // 设置重试次数，默认为0，设置 > 0的数值，会重试给定的次数，否则不会重试
+				.setRetryInterval(1000l) // 可选，默认为0，不等待直接进行重试，否则等待给定的时间再重试
+
+		// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+		//下面的参数都是bulk url请求的参数：RefreshOption和其他参数只能二选一，配置了RefreshOption（类似于refresh=true&&aaaa=bb&cc=dd&zz=ee这种形式，将相关参数拼接成合法的url参数格式）就不能配置其他参数，
+		// 其中的refresh参数控制bulk操作结果强制refresh入elasticsearch，便于实时查看数据，测试环境可以打开，生产不要设置
+//				.setRefreshOption("refresh")
+//				.setTimeout("100s")
+//				.setMasterTimeout("50s")
+//				.setRefresh("true")
+//				.setWaitForActiveShards(2)
+//				.setRouting("1") //(Optional, string) Target the specified primary shard.
+//				.setPipeline("1") // (Optional, string) ID of the pipeline to use to preprocess incoming documents.
+		;
+		/**
+		 * 构建BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
+		 */
+		logBulkProcessor = bulkProcessorBuilder.build();//构建批处理作业组件
 	}
 	public void testBulkDatas(){
 		System.out.println("testBulkDatas");
@@ -221,12 +298,14 @@ public class TestBulkProcessor7x {
 			Thread t = new Thread() {
 				public void run() {
 						bulkProcessor.shutDown();
+						logBulkProcessor.shutDown();
 				}
 			};
 			t.start();
 		}
 		else {
 			bulkProcessor.shutDown();
+//			logBulkProcessor.shutDown();
 		}
 
 
