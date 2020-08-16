@@ -1,0 +1,6 @@
+The private keys of the root certificate and/or the signing certificate have been saved encrypted with an auto-generated password.
+In order to use these new passwords later again with this tool, you must edit the tool config file and set the new passwords there.
+
+ca:
+   root:
+       pkPassword: YFIBzhTiOkic

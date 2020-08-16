@@ -1,0 +1,8 @@
+Client certificates are used to authenticate REST clients against your authentication backend.
+Thus, the users represented by the client certificates must be also present in your authentication backend.
+
+See http://docs.search-guard.com/latest/client-certificate-auth for more on this topic.
+
+
+CN=spock.example.com,OU=Ops,O=Example Com\, Inc.,DC=example,DC=com Password: VC16h787hOrW
+CN=kirk.example.com,OU=Ops,O=Example Com\, Inc.,DC=example,DC=com Password: BG2dRCZmyo5Y
