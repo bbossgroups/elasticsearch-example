@@ -99,6 +99,15 @@ public class DslTest {
 
 	}
 
+	@Test
+	public void pianduanmlien(){
+		ESUtil esUtil = ESUtil.getInstance("esmapper/sql.xml");
+		Map params = new HashMap();
+		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"sqlPagineQueryUsePianduan",params);
+		//打印解析结果
+		System.out.println(parseResult);
+	}
+
 
 
 }
