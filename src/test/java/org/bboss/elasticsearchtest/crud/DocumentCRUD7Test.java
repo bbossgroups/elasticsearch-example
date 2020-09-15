@@ -50,13 +50,13 @@ public class DocumentCRUD7Test {
 		documentCRUD.testCreateIndice();
 		documentCRUD.getIndiceMapping();
 //		//添加/修改单个文档
-		documentCRUD.testAddAndUpdateDocument();
-		documentCRUD.testBulkAddDocumentWithESIndex();
+//		documentCRUD.testAddAndUpdateDocument();
+//		documentCRUD.testBulkAddDocumentWithESIndex();
 
 //		//批量修改文档
 		documentCRUD.testBulkAddDocuments();
-		documentCRUD.testBulkAddDocumentsWithESIndex();
-		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
+//		documentCRUD.testBulkAddDocumentsWithESIndex();
+//		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
 		//检索文档
 		documentCRUD.testSearch();
 		//BaseApplicationContext.shutdown();

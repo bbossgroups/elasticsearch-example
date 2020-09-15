@@ -9,7 +9,7 @@
                 "bool": {
                     "must": [{
                         "term": {
-                            "cityId": #[cityId]
+                            "cityId": #[cityId,esEncode=false]
                         }
                     },
                     {

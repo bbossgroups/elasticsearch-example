@@ -57,7 +57,7 @@ public class TestPianduan {
 	public void testinnerPianduan(){
 		Map<String,Object> params = new HashMap<String,Object>();
 		//设置参数
-		params.put("cityId","10002");
+		params.put("cityId","sss/+\"sss");
 		params.put("titleId",new String[]{"5",
 				"6",
 				"4",

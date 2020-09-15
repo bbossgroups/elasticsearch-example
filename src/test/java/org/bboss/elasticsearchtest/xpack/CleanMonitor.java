@@ -31,8 +31,17 @@ import java.io.UnsupportedEncodingException;
 public class CleanMonitor {
 	@Test
 	public void cleanXPaxkMonitor() throws UnsupportedEncodingException {
-		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
-		System.out.println(ElasticSearchHelper.getRestClientUtil().getIndice(".kibana_task_manager"));
+//		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
+//		ElasticSearchHelper.getRestClientUtil().removeAlias(".kibana",".kibana_1");
+		ElasticSearchHelper.getRestClientUtil().dropIndice(".monitoring-es-7-2020.08.20");
+		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.18");
+		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.19");
+		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.20");
+//		ElasticSearchHelper.getRestClientUtil().removeAlias(".kibana_task_manager",".kibana_task_manager_1");
+//		ElasticSearchHelper.getRestClientUtil().dropIndice(".kibana");
+//
+//		ElasticSearchHelper.getRestClientUtil().dropIndice(".kibana_task_manager");
+//		System.out.println(ElasticSearchHelper.getRestClientUtil().getIndice(".kibana_task_manager"));
 //		System.out.println(ElasticSearchHelper.getRestClientUtil().executeHttp(java.net.URLEncoder.encode(".kibana_*", "UTF-8") + "?pretty",HTTP_DELETE));
 //		ElasticSearchHelper.getRestClientUtil().deleteTempate("demotemplate_1");
 //		/.kibana_task_manager/_doc/_search

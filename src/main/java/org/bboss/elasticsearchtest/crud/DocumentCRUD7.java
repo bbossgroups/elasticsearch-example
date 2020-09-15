@@ -544,7 +544,7 @@ public class DocumentCRUD7 {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
 			demo.setAgentStarttime(new Date());
-			demo.setApplicationName("blackcatdemo"+i);
+			demo.setApplicationName("black+catdemo"+i);
 			demo.setContentbody("this is content body"+i);
 			if(i % 2 == 0) {
 				demo.setName("刘德华喜欢唱歌" + i);
@@ -763,8 +763,8 @@ public class DocumentCRUD7 {
 		//        endTime
 		Map<String,Object> params = new HashMap<String,Object>();
 		//设置applicationName1和applicationName2两个变量的值
-		params.put("applicationName1","blackcatdemo2");
-		params.put("applicationName2","blackcatdemo3");
+		params.put("applicationName1","black+catdemo2");
+		params.put("applicationName2","black+catdemo3");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
 		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
