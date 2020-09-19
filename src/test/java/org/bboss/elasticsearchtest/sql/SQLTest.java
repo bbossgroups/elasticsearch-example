@@ -16,6 +16,7 @@ package org.bboss.elasticsearchtest.sql;/*
 
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.handler.ESStringResponseHandler;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,13 +33,13 @@ public class SQLTest {
 	@Test
 	public void testQuery(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
-		String json = clientUtil.executeHttp("/_xpack/sql?format=txt",
+		String json = clientUtil.executeHttp("_sql?format=txt",
 				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
-				ClientInterface.HTTP_POST
+				ClientInterface.HTTP_POST,new ESStringResponseHandler("UTF-8")
 				);
 		System.out.println(json);
 
-		json = clientUtil.executeHttp("/_xpack/sql?format=json",
+		json = clientUtil.executeHttp("_sql?format=json",
 				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
 				ClientInterface.HTTP_POST
 		);
@@ -51,8 +52,8 @@ public class SQLTest {
 	@Test
 	public void testTranslate(){
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
-		String json = clientUtil.executeHttp("/_xpack/sql/translate",
-				"{\"query\": \"SELECT * FROM agentinfo\"}",
+		String json = clientUtil.executeHttp("_sql/translate",
+				"{\"query\": \"SELECT * FROM dbclobdemo\"}",
 				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
@@ -68,7 +69,7 @@ public class SQLTest {
 		//设置sql查询的参数
 		Map params = new HashMap();
 		params.put("channelId",1);
-		String json = clientUtil.executeHttp("/_xpack/sql","sqlQuery",params,
+		String json = clientUtil.executeHttp("_sql","sqlQuery",params,
 				ClientInterface.HTTP_POST
 		);
 		System.out.println(json);
