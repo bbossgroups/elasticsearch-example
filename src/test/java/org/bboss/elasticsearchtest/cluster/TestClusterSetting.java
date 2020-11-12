@@ -147,7 +147,8 @@ public class TestClusterSetting {
 		settings.put("index.number_of_replicas",6);
 		clientInterface.updateIndiceSettings("demo",settings);
 		System.out.println(clientInterface.getIndiceSetting("demo","pretty"));//获取索引demo配置
-
+		//获取指定的配置项的值
+		System.out.println(clientInterface.getIndiceSettingByName("demo","index.number_of_shards"));
 	}
 
 	/**
