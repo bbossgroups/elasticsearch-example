@@ -6,13 +6,14 @@ import com.frameworkset.common.poolman.handle.ResultSetHandler;
 import com.frameworkset.common.poolman.util.SQLUtil;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.tran.BaseElasticsearchDataTran;
 import org.frameworkset.tran.DataRefactor;
 import org.frameworkset.tran.DataStream;
 import org.frameworkset.tran.context.Context;
+import org.frameworkset.tran.db.DBImportContext;
 import org.frameworkset.tran.db.JDBCResultSet;
-import org.frameworkset.tran.db.input.es.DB2ESDataTran;
 import org.frameworkset.tran.db.input.es.DB2ESImportBuilder;
-import org.frameworkset.tran.db.input.es.DB2ESImportContext;
+import org.frameworkset.tran.db.input.es.DBDataTranPlugin;
 import org.frameworkset.tran.es.ESField;
 import org.junit.Test;
 
@@ -46,9 +47,10 @@ public class TestDB2ESImport {
 		catch (Exception e){
 
 		}
-		final DB2ESImportContext importContext = new DB2ESImportContext();
+		final DBImportContext importContext = new DBImportContext();
 		importContext.setBatchSize(98);
 		importContext.setRefreshOption("refresh=true");
+		DBDataTranPlugin dataTranPlugin = new DBDataTranPlugin(  importContext,  importContext);
 		SQLExecutor.queryByNullRowHandler(new ResultSetHandler() {
 			@Override
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
@@ -58,7 +60,7 @@ public class TestDB2ESImport {
 				jdbcResultSet.setMetaData(statementInfo.getMeta());
 				jdbcResultSet.setDbadapter(statementInfo.getDbadapter());
 				//esjdbcResultSet.setEsIdField("id");
-				DB2ESDataTran db2ESDataTran = new DB2ESDataTran(jdbcResultSet,importContext);
+				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(jdbcResultSet,importContext,importContext);
 				db2ESDataTran.tran("dbdemo","dbdemo");
 			}
 		},"select * from td_sm_log");
@@ -142,10 +144,11 @@ public class TestDB2ESImport {
 		catch (Exception e){
 
 		}
-		final DB2ESImportContext importContext = new DB2ESImportContext();
+		final DBImportContext importContext = new DBImportContext();
 		importContext.setBatchSize(1000);
 		importContext.setRefreshOption("refresh=true");
 		importContext.setEsIdField(new ESField(false,"document_id"));
+		DBDataTranPlugin dataTranPlugin = new DBDataTranPlugin(  importContext,  importContext);
 		SQLExecutor.queryByNullRowHandler(new ResultSetHandler() {
 			@Override
 			public void handleResult(ResultSet resultSet, StatementInfo statementInfo) throws Exception {
@@ -176,7 +179,7 @@ public class TestDB2ESImport {
 						context.addIgnoreFieldMapping("subtitle");
 					}
 				});
-				DB2ESDataTran db2ESDataTran = new DB2ESDataTran(jdbcResultSet,importContext);
+				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(jdbcResultSet,importContext,importContext);
 				db2ESDataTran.tran("dbclobdemo","dbclobdemo");
 
 

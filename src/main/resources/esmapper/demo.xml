@@ -1,4 +1,5 @@
 <properties>
+    <property name="alwaysCacheDslStruction" value="true"/>
     <!--
         创建demo需要的索引表结构
     -->
