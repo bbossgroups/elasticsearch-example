@@ -31,12 +31,12 @@ import java.io.UnsupportedEncodingException;
 public class CleanMonitor {
 	@Test
 	public void cleanXPaxkMonitor() throws UnsupportedEncodingException {
-//		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
+		ElasticSearchHelper.getRestClientUtil().cleanAllXPackIndices();
 //		ElasticSearchHelper.getRestClientUtil().removeAlias(".kibana",".kibana_1");
-		ElasticSearchHelper.getRestClientUtil().dropIndice(".monitoring-es-7-2020.08.20");
-		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.18");
-		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.19");
-		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.20");
+//		ElasticSearchHelper.getRestClientUtil().dropIndice(".monitoring-es-7-2020.08.20");
+//		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.18");
+//		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.19");
+//		ElasticSearchHelper.getRestClientUtil().dropIndice("vops-chbizcollect-2020.08.20");
 //		ElasticSearchHelper.getRestClientUtil().removeAlias(".kibana_task_manager",".kibana_task_manager_1");
 //		ElasticSearchHelper.getRestClientUtil().dropIndice(".kibana");
 //

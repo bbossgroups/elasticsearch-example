@@ -60,7 +60,7 @@ public class TestDB2ESImport {
 				jdbcResultSet.setMetaData(statementInfo.getMeta());
 				jdbcResultSet.setDbadapter(statementInfo.getDbadapter());
 				//esjdbcResultSet.setEsIdField("id");
-				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(jdbcResultSet,importContext,importContext);
+				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(null,jdbcResultSet,importContext,importContext);
 				db2ESDataTran.tran("dbdemo","dbdemo");
 			}
 		},"select * from td_sm_log");
@@ -179,7 +179,7 @@ public class TestDB2ESImport {
 						context.addIgnoreFieldMapping("subtitle");
 					}
 				});
-				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(jdbcResultSet,importContext,importContext);
+				BaseElasticsearchDataTran db2ESDataTran = new BaseElasticsearchDataTran(null,jdbcResultSet,importContext,importContext);
 				db2ESDataTran.tran("dbclobdemo","dbclobdemo");
 
 
