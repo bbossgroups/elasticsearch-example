@@ -20,6 +20,8 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.frameworkset.elasticsearch.bulk.*;
 import org.frameworkset.elasticsearch.client.ClientOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -37,6 +39,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class TestBulkProcessor7x {
+	private static Logger logger = LoggerFactory.getLogger(TestBulkProcessor7x.class);
 	/**
 	 * BulkProcessor批处理组件，一般作为单实例使用，单实例多线程安全，可放心使用
 	 */
@@ -45,7 +48,7 @@ public class TestBulkProcessor7x {
 	public static void main(String[] args){
 		TestBulkProcessor7x testBulkProcessor = new TestBulkProcessor7x();
 		testBulkProcessor.buildBulkProcessor();
-		testBulkProcessor.buildLogBulkProcessor();
+//		testBulkProcessor.buildLogBulkProcessor();
 		testBulkProcessor.testBulkDatas();
 		
 		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
@@ -68,21 +71,20 @@ public class TestBulkProcessor7x {
 				.setElasticsearch("default")//指定Elasticsearch集群数据源名称，bboss可以支持多数据源
 				.addBulkInterceptor(new BulkInterceptor() {
 					public void beforeBulk(BulkCommand bulkCommand) {
-						System.out.println("beforeBulk");
+						logger.debug("beforeBulk");
 					}
 
 					public void afterBulk(BulkCommand bulkCommand, String result) {
-						System.out.println("afterBulk："+result);
-						System.out.println("totalSize:"+bulkCommand.getTotalSize());
-						System.out.println("totalFailedSize:"+bulkCommand.getTotalFailedSize());
+						logger.debug("afterBulk："+result);
+						logger.debug("totalSize:"+bulkCommand.getTotalSize());
+						logger.debug("totalFailedSize:"+bulkCommand.getTotalFailedSize());
 					}
 
 					public void exceptionBulk(BulkCommand bulkCommand, Throwable exception) {
-						System.out.println("exceptionBulk：");
-						exception.printStackTrace();
+						logger.error("exceptionBulk：",exception);
 					}
 					public void errorBulk(BulkCommand bulkCommand, String result) {
-						System.out.println("errorBulk："+result);
+						logger.warn("errorBulk："+result);
 					}
 				})
 
@@ -247,7 +249,7 @@ public class TestBulkProcessor7x {
 //		deleteclientOptions.setEsRetryOnConflict(1);
 		//.setPipeline("1")
 //		bulkProcessor.deleteDataWithClientOptions("bulkdemo","1",deleteclientOptions);
-		bulkProcessor.deleteData("bulkdemo","1");
+		bulkProcessor.deleteData("bulkdemo1","1");//验证error回调方法
 		List<Object> datas = new ArrayList<Object>();
 		for(int i = 6; i < 106; i ++) {
 			data = new HashMap<String,Object>();
@@ -257,7 +259,7 @@ public class TestBulkProcessor7x {
 		}
 		bulkProcessor.insertDatas("bulkdemo",datas);
 		data = new HashMap<String,Object>();
-		data.put("name","updateduoduo5");
+		data.put("name",5);//error data
 		data.put("id",5);
 		ClientOptions updateOptions = new ClientOptions();
 //		List<String> sourceUpdateExcludes = new ArrayList<String>();
@@ -284,7 +286,8 @@ public class TestBulkProcessor7x {
 //				.setDocasupsert(false)
 //				.setReturnSource(true)
 //				.setEsRetryOnConflict(1)
-				.setIdField("id") //elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
+				.setIdField("id1") //验证exception回调方法
+		//elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
 				//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
 //						.setIfPrimaryTerm(2l)
 //				.setIfSeqNo(3l).setPipeline("1")
