@@ -153,6 +153,33 @@ public class SearchAllTest {
 			System.out.println("dataList.size:0");
 		}
 	}
+
+	/**
+	 * 并行方式执行slice scroll操作：将一个es的数据导入另外一个es数据，需要在application.properties文件中定义default和es233的两个集群
+	 */
+	@Test
+	public void testSimpleSliceScrollApiParralHandlerExport() {
+		ClientInterface clientUtil522 = ElasticSearchHelper.getRestClientUtil("default");//定义一个对应目标集群default的客户端组件实例
+
+		final ClientInterface clientUtil234 = ElasticSearchHelper.getRestClientUtil("es233"); //定义一个对应源集群es233的客户端组件实例
+
+		//从源集群索引demo中按每批10000笔记录查询数据，在handler中通过addDocuments将批量检索出的数据导入目标库
+		ESDatas<Map> sliceResponse = clientUtil522.searchAllParallel("demo",10000, new ScrollHandler<Map>() {
+					public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果,注意结果是异步检索的
+						List<Map> datas = response.getDatas();
+						clientUtil234.addDocuments("index233","indextype233",datas);
+						//将分批查询的数据导入目标集群索引index233，索引类型为indextype233，如果是elasticsearch 7以上的版本，可以去掉索引类型参数，例如：
+						//clientUtil234.addDocuments("index233",datas);
+						long totalSize = response.getTotalSize();
+						System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+					}
+				},Map.class //指定检索的文档封装类型
+				,6);//6个工作线程并发导入
+
+		long totalSize = sliceResponse.getTotalSize();
+		System.out.println("totalSize:"+totalSize);
+
+	}
 	/**
 	 * 并行检索索引表所有文档数据，按指定的10000条记录一批从es获取数据，指定了并行的线程数为6
 	 */

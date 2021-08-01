@@ -16,8 +16,8 @@ package org.bboss.elasticsearchtest.crud;
  */
 
 import com.frameworkset.util.SimpleStringUtil;
-import org.frameworkset.elasticsearch.client.SlowDslCallback;
-import org.frameworkset.elasticsearch.entity.SlowDsl;
+import org.frameworkset.elasticsearch.client.LogDslCallback;
+import org.frameworkset.elasticsearch.entity.LogDsl;
 
 /**
  * <p>Description: </p>
@@ -27,8 +27,8 @@ import org.frameworkset.elasticsearch.entity.SlowDsl;
  * @author biaoping.yin
  * @version 1.0
  */
-public class TestSlowDslCallback implements SlowDslCallback {
-	public void slowDslHandle(SlowDsl slowDsl) {
+public class TestSlowDslCallback implements LogDslCallback {
+	public void logDsl(LogDsl slowDsl) {
 		System.out.println(SimpleStringUtil.object2json(slowDsl));
 	}
 }
