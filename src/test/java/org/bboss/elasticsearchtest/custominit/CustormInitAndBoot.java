@@ -15,7 +15,9 @@ package org.bboss.elasticsearchtest.custominit;
  * limitations under the License.
  */
 
+import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.boot.ElasticSearchBoot;
+import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -44,7 +46,7 @@ public class CustormInitAndBoot {
 		properties.put("elasticUser","elastic");
 		properties.put("elasticPassword","changeme");
 		//es服务器地址和端口，多个用逗号分隔
-		properties.put("elasticsearch.rest.hostNames","10.13.11.6:9200");
+		properties.put("elasticsearch.rest.hostNames","10.13.6.6:9200");
 		//是否在控制台打印dsl语句，log4j组件日志级别为INFO或者DEBUG
 		properties.put("elasticsearch.showTemplate","true");
 		//集群节点自动发现
@@ -54,6 +56,10 @@ public class CustormInitAndBoot {
 		properties.put("http.connectionRequestTimeout",70000);
 
 		ElasticSearchBoot.boot(properties);
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		//获取ES版本信息
+		String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
+		System.out.println(result);
 	}
 	/**
 	 * 初始化多个Elasticsearch数据源
@@ -93,11 +99,23 @@ public class CustormInitAndBoot {
 		properties.put("es233.elasticUser","elastic");
 		properties.put("es233.elasticPassword","changeme");
 		//es服务器地址和端口，多个用逗号分隔
-		properties.put("es233.elasticsearch.rest.hostNames","192.168.137.1:9200");
+		properties.put("es233.elasticsearch.rest.hostNames","10.13.11.6:9201");
 		//是否在控制台打印dsl语句，log4j组件日志级别为INFO或者DEBUG
 		properties.put("es233.elasticsearch.showTemplate","true");
 		//集群节点自动发现
 		properties.put("es233.elasticsearch.discoverHost","true");
 		ElasticSearchBoot.boot(properties);
+
+		//验证default数据源，构建es233数据源的client api实例
+		ClientInterface defaultClientUtil = ElasticSearchHelper.getRestClientUtil("default");
+		//获取ES版本信息
+		String result = defaultClientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
+		System.out.println(result);
+
+		//验证es233数据源，构建es233数据源的client api实例
+		ClientInterface es233ClientUtil = ElasticSearchHelper.getRestClientUtil("es233");
+		//获取ES版本信息
+		result = es233ClientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
+		System.out.println(result);
 	}
 }
