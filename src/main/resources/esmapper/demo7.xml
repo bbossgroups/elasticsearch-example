@@ -12,6 +12,27 @@
           }
         }]]>
     </property>
+    <property name="createsmartcn">
+        <![CDATA[{
+            "settings": {
+                "number_of_shards": 1,
+                "index.refresh_interval": "5s"
+            },
+            "mappings": {
+                "properties": {
+
+                    "contentbody": {
+                        "type": "text",
+                         "analyzer": "smartcn"
+
+                    }
+
+                }
+            }
+        }]]>
+    </property>
+
+
     <property name="createDemoIndice">
         <![CDATA[{
             "settings": {

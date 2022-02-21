@@ -1,0 +1,205 @@
+<properties>
+    <!--
+        For Elasticsearch 7.0.0,8.0.0
+        创建demo需要的索引表结构
+
+        https://cloud.tencent.com/developer/article/1452022
+    -->
+
+    <property name="createsmartcn">
+        <![CDATA[{
+            "settings": {
+                "number_of_shards": 1,
+                "index.refresh_interval": "5s"
+            },
+            "mappings": {
+                "properties": {
+
+                    "title": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }]]>
+    </property>
+
+
+
+    <property name="createcnmy_shingle_analyzer">
+        <![CDATA[{
+            "settings": {
+                "number_of_shards": 10,
+                "number_of_replicas": 1,
+                "index.refresh_interval": "20s",
+                "analysis": {
+                   "filter": {
+                       "my_shingle_filter": {
+                           "type":             "shingle",
+                           "min_shingle_size": 2,
+                           "max_shingle_size": 2,
+                           "output_unigrams":  false
+                       }
+                   },
+                   "analyzer": {
+                       "my_shingle_analyzer": {
+                           "type":             "custom",
+                           "tokenizer":        "smartcn_tokenizer",
+                           "filter": [
+                               "lowercase",
+                               "my_shingle_filter"
+                           ]
+                       }
+                   }
+               }
+
+            },
+            "mappings": {
+                "properties": {
+
+                    "title": {
+                        "type": "text",
+                         "analyzer": "my_shingle_analyzer",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }]]>
+    </property>
+    <property name="searchcontentbody">
+    <![CDATA[{
+            "query":{
+                "match":{
+                    "title":{
+                        "query":#[title],
+                         "analyzer": "my_shingle_analyzer"
+                    }
+                }
+            }
+    }]]>
+    </property>
+    <!--
+        简单的query案例：定义评分脚本
+        https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting-using.html
+    https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
+    -->
+    <property name="titleInfoScore">
+        <![CDATA[
+     {
+       "script": {
+          "lang": "painless",
+          "source": @"""
+                double position_score = 0;
+                double similarity_score = 0;
+
+                int title_length = doc['title.keyword'].value.length();
+                int param_length = params.keyword.length();
+                int score = title_length - param_length+100;
+
+                // 在下面调节各分值的权重
+                return score;
+          """
+        }
+    }
+    ]]>
+    </property>
+
+    <!--
+   简单的query案例
+   https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
+   https://elasticsearch.cn/question/1890
+   评分相似度文档：https://blog.csdn.net/qq_19598855/article/details/50581945
+-->
+    <property name="titleScriptScoreQuery">
+        <![CDATA[{
+          "size": 1000,
+          "query": {
+
+                 "function_score": {
+                     "query": {
+                        "match": {
+                          "title": {
+                            "query": "学校终工作总结",
+                            "analyzer": "my_shingle_analyzer"
+                          }
+                        }
+                      },
+
+                     "script_score": {
+                         "script": {
+                             "id": "title_info_score",
+                             "params": {
+                                 "keyword":"学校终工作总结"
+                             }
+                         }
+                     },
+
+                     "boost_mode": "sum"
+                 }
+               }
+        }]]>
+    </property>
+    <property name="createdoctitle">
+        <![CDATA[{
+            "settings": {
+                "analysis": {
+                   "filter": {
+                       "my_shingle_filter": {
+                           "type":             "shingle",
+                           "min_shingle_size": 2,
+                           "max_shingle_size": 2,
+                           "output_unigrams":  false
+                       }
+                   },
+                   "analyzer": {
+                       "my_shingle_analyzer": {
+                           "type":             "custom",
+                           "tokenizer":        "smartcn",
+                           "filter": [
+                               "lowercase",
+                               "my_shingle_filter"
+                           ]
+                       }
+                   }
+               }
+
+            },
+            "mappings": {
+                "properties": {
+
+                    "title": {
+                        "type": "text",
+                         "analyzer": "my_shingle_analyzer",
+                        "index_options": "docs",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword"
+                            }
+                        }
+                    }
+
+                }
+            }
+        }]]>
+    </property>
+
+
+    <property name="analyzer">
+        <![CDATA[{
+          "analyzer" : "smartcn",
+          "text" : "学校终工作总结"
+        }]]>
+    </property>
+</properties>
