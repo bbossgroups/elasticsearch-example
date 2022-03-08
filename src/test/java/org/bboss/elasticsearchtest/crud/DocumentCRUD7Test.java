@@ -97,6 +97,9 @@ public class DocumentCRUD7Test {
 		documentCRUD.testBulkAddDocument();
 		//检索文档
 		documentCRUD.testSearch();
+
+		//检索文档
+		documentCRUD.testMetaMap();
 		//批量修改文档
 		documentCRUD.testBulkUpdateDocument();
 

@@ -58,8 +58,7 @@
                             "keyword": {
                                 "type": "keyword"
                             }
-                        },
-                        "boost":30
+                        }
                     },
                     "name": {
                         "type": "text"

@@ -14,6 +14,7 @@ package org.bboss.elasticsearchtest.crud;/*
  *  limitations under the License.
  */
 
+import com.frameworkset.util.SimpleStringUtil;
 import org.bboss.elasticsearchtest.script.DynamicPriceTemplate;
 import org.bboss.elasticsearchtest.script.Rule;
 import org.frameworkset.elasticsearch.ElasticSearchException;
@@ -23,6 +24,7 @@ import org.frameworkset.elasticsearch.client.ClientOptions;
 import org.frameworkset.elasticsearch.client.ClientUtil;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.entity.IndexField;
+import org.frameworkset.elasticsearch.entity.MetaMap;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -313,6 +315,20 @@ public class DocumentCRUD7 {
 		//强制刷新
 		ClientOptions addOptions = new ClientOptions();
 
+//		addOptions
+////				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
+//				.setIdField("demoId")
+////				.setVersion(2).setVersionType("internal")  //使用IfPrimaryTerm和IfSeqNo代替version
+////				.setIfPrimaryTerm(1l)
+////				.setIfSeqNo(13l)
+////				.setPipeline("1")
+//				.setTimeout("100s")
+//				.setWaitForActiveShards(1)
+//				.setRefresh("true")
+//				.setRouting(1);
+//		//.setMasterTimeout("10s")
+//		;
+
 		addOptions
 //				.setEsRetryOnConflict(1) // elasticsearch不能同时指定EsRetryOnConflict和version
 				.setIdField("demoId")
@@ -320,17 +336,38 @@ public class DocumentCRUD7 {
 //				.setIfPrimaryTerm(1l)
 //				.setIfSeqNo(13l)
 //				.setPipeline("1")
-				.setTimeout("100s")
-				.setWaitForActiveShards(1)
-				.setRefresh("true")
-				.setRouting(1);
-		//.setMasterTimeout("10s")
-		;
+
+				.setRefresh("true");
 		String response = clientUtil.addDocument("demo",//索引表
 
 				demo,addOptions);
 
+		demo = new Demo();
+		demo.setDemoId(1l);//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.setAgentStarttime(new Date());
+		demo.setApplicationName("blackcatdemo1");
+		demo.setContentbody("this-is content body1");
+		demo.setName("|周华健");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(2);
 
+		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
+		/**
+		 //通过@ESId注解的字段值设置文档id
+		 String response = clientUtil.addDocument("demo"//索引表
+
+		 demo);
+		 */
+		/**
+		 //直接指定文档id
+		 String response = clientUtil.addDocumentWithId("demo",//索引表
+
+		 demo,2l);
+		 */
+
+		response = clientUtil.addDocument("demo",//索引表
+
+				demo,addOptions);
 		//向动态index demo-yyyy.MM.dd这种添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
 		//elasticsearch.dateFormat=yyyy.MM.dd 按照日期生成动态index名称，例如：
 		// 到月 elasticsearch.dateFormat=yyyy.MM demo-2018.03
@@ -530,7 +567,37 @@ public class DocumentCRUD7 {
 		params.put("applicationName1","blackcatdemo2");
 		params.put("applicationName2","blackcatdemo3");
 	}
+	public void testMetaMap(){
+		//创建批量创建文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		MetaMap newDemo = clientUtil.getDocument("demo",//索引表
 
+				"1",//文档id
+				MetaMap.class
+		);
+		if(newDemo != null) {
+			System.out.println(SimpleStringUtil.object2json(newDemo));
+			System.out.println("getId:" + newDemo.getId());
+			System.out.println("getIndex:" + newDemo.getIndex());
+			System.out.println("getNode:" + newDemo.getNode());
+			System.out.println("getShard:" + newDemo.getShard());
+			System.out.println("getType:" + newDemo.getType());
+			System.out.println("getExplanation:" + newDemo.getExplanation());
+			System.out.println("getFields:" + newDemo.getFields());
+			System.out.println("getHighlight:" + newDemo.getHighlight());
+			System.out.println("getInnerHits:" + newDemo.getInnerHits());
+			System.out.println("getNested:" + newDemo.getNested());
+			System.out.println("getPrimaryTerm:" + newDemo.getPrimaryTerm());
+			System.out.println("getScore:" + newDemo.getScore());
+			System.out.println("getSeqNo:" + newDemo.getSeqNo());
+			System.out.println("getVersion:" + newDemo.getVersion());
+			System.out.println("getParent:" + newDemo.getParent());
+			System.out.println("getRouting:" + newDemo.getRouting());
+			System.out.println("getSort:" + newDemo.getSort());
+			System.out.println("isFound:" + newDemo.isFound());
+		}
+
+	}
 	/**
 	 * 批量导入20002条数据
 	 */
