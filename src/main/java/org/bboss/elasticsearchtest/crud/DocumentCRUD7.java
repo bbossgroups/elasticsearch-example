@@ -321,8 +321,75 @@ public class DocumentCRUD7 {
 		//强制刷新
 		ClientOptions addOptions = new ClientOptions();
 		addOptions.setIdField("orderId");
+		//如果orderId对应的文档已经存在则更新，不存在则插入新增
 		String response = clientUtil.addDocument("demo",//索引表
 				demo,addOptions);
+
+
+	}
+
+	/**
+	 * 批量添加map记录
+	 * @throws ParseException
+	 */
+	public void testAddAndUpdateMapDocuments() throws ParseException {
+		//创建创建/修改/获取/删除文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		List<Map> datas = new ArrayList<Map>();
+		//构建一个对象，日期类型，字符串类型属性演示
+		Map demo = new LinkedHashMap();
+		demo.put("demoId","2");//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.put("agentStarttime",new Date());
+		demo.put("applicationName","blackcatdemo2");
+		demo.put("contentbody","this-is content body2");
+		demo.put("agentStarttime",new Date());
+		demo.put("name","|刘德华");
+		demo.put("orderId","NFZF15045871807281445364228");
+		demo.put("contrastStatus",2);
+		datas.add(demo);
+
+		demo = new LinkedHashMap();
+		demo.put("demoId","3");//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.put("agentStarttime",new Date());
+		demo.put("applicationName","blackcatdemo3");
+		demo.put("contentbody","this-is content body3");
+		demo.put("agentStarttime",new Date());
+		demo.put("name","张三");
+		demo.put("orderId","NFZF15045871807281445364228");
+		demo.put("contrastStatus",3);
+		datas.add(demo);
+
+
+		demo = new LinkedHashMap();
+		demo.put("demoId","4");//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.put("agentStarttime",new Date());
+		demo.put("applicationName","blackcatdemo4");
+		demo.put("contentbody","this-is content body4");
+		demo.put("agentStarttime",new Date());
+		demo.put("name","李四");
+		demo.put("orderId","NFZF15045871807281445364229");
+		demo.put("contrastStatus",4);
+		datas.add(demo);
+
+		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
+		/**
+		 //通过@ESId注解的字段值设置文档id
+		 String response = clientUtil.addDocument("demo"//索引表
+
+		 demo);
+		 */
+		/**
+		 //直接指定文档id
+		 String response = clientUtil.addDocumentWithId("demo",//索引表
+
+		 demo,2l);
+		 */
+		//强制刷新
+		ClientOptions addOptions = new ClientOptions();
+		addOptions.setIdField("orderId");
+		//如果orderId对应的文档已经存在则更新，不存在则插入新增
+		String response = clientUtil.addDocuments("demo",//索引表
+				datas,addOptions);
 
 
 	}

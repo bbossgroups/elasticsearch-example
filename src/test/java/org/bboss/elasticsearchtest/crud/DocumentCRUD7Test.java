@@ -46,6 +46,8 @@ public class DocumentCRUD7Test {
 //		documentCRUDTest.testC();
 
 		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
+		documentCRUD.testAddAndUpdateMapDocument();
+		documentCRUD.testAddAndUpdateMapDocuments();
 		//删除/创建文档索引表
 		documentCRUD.testCreateIndice();
 		documentCRUD.getIndiceMapping();
