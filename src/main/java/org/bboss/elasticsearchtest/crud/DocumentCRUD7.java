@@ -731,10 +731,14 @@ public class DocumentCRUD7 {
 			demo.setContrastStatus(2);
 			demos.add(demo);//添加第一个对象到list中
 		}
+		ClientOptions clientOptions = new ClientOptions();
+		clientOptions.setRefreshOption("refresh=false");//为了测试效果,能够实时查看数据，启用强制刷新机制，可是修改为"refresh=true"
+		//为了提升性能，并没有把所有响应数据都返回，过滤掉了部分数据，可以自行设置FilterPath进行控制
+		clientOptions.setFilterPath("took,errors,items.*.error");
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
 		String response = clientUtil.addDocuments("demo",//索引表
-
-				demos,"refresh=true");//为了测试效果,启用强制刷新机制，实际线上环境去掉最后一个参数"refresh=true"
+									demos,//批量处理数据集合
+									clientOptions);
 		long end = System.currentTimeMillis();
 		System.out.println("BulkAdd 20002 Documents elapsed:"+(end - start)+"毫秒");
 		start = System.currentTimeMillis();

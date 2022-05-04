@@ -87,6 +87,8 @@ public class TestBulkProcessor7x {
 						logger.warn("errorBulk："+result);
 					}
 				})
+				//为了提升性能，并没有把所有响应数据都返回，过滤掉了部分数据，可以自行设置FilterPath进行控制
+				.setFilterPath("took,errors,items.*.error")
 
 				// 重试配置
 				.setBulkRetryHandler(new BulkRetryHandler() { //设置重试判断策略，哪些异常需要重试
