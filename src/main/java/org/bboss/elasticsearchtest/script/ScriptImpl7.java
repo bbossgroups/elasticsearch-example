@@ -107,7 +107,8 @@ public class ScriptImpl7 {
 		params.put("id",3);
 		params.put("dynamicPriceTemplate",dynamicPriceTemplate);
 		//通过script脚本为id为2的文档增加last和nick两个属性，为了演示效果强制refresh，实际环境慎用
-		clientUtil.updateByPath("demo/_update_by_query?refresh","scriptDslByQuery",params);
+		//如果报版本冲突，可以添加wait_for_completion=false参数
+		clientUtil.updateByPath("demo/_update_by_query?wait_for_completion=false&refresh","scriptDslByQuery",params);
 		//获取更新后的文档，会看到新加的2个字段属性
 		String doc = clientUtil.getDocument("demo","3");
 		System.out.println(doc);
