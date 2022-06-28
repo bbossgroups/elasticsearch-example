@@ -61,6 +61,5 @@ public class GetAllIndices {
 
 		List<ESIndice> indices = clientInterface.getIndexes();
 		List<ESIndice> indicesD = clientInterface.getIndexes("d*");
-		System.out.println();
 	}
 }

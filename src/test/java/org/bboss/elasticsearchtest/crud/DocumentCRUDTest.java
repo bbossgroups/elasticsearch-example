@@ -75,7 +75,6 @@ public class DocumentCRUDTest {
 		}*/
 //		BaseApplicationContext.shutdown();
 //		ElasticSearchHelper.stopElasticsearch("default");
-		System.out.println();
 	}
 	@Test
 	public void testMetaMap() throws ParseException {

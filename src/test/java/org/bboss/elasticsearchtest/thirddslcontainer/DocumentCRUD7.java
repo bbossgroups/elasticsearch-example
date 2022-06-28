@@ -144,7 +144,6 @@ public class DocumentCRUD7 {
 	}
 	public void getIndiceMapping(){
 		List<IndexField> ffs = clientInterface.getIndexMappingFields("demo");
-		System.out.println();
 	}
 	public void testCreateIndice(){
 		//创建加载配置文件的客户端工具，单实例多线程安全

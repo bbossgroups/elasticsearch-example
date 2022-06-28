@@ -96,7 +96,6 @@ public class ScheduleImportTaskTest {
 		DataStream dataStream = importBuilder.builder();
 		dataStream.execute();//执行导入操作
 
-		System.out.println();
 
 		
 	}

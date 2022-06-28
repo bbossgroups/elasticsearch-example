@@ -29,7 +29,6 @@ public class StopTest {
 	public static void main(String[] args) {
 		ElasticSearchHelper.getRestClientUtil();
 		ElasticSearchHelper.stopElasticsearch("default");
-		System.out.println();
 	}
 
 }
