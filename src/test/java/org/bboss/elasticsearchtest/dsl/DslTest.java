@@ -18,9 +18,10 @@ package org.bboss.elasticsearchtest.dsl;
 import org.bboss.elasticsearchtest.crud.Demo;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.client.ConfigHolder;
 import org.frameworkset.elasticsearch.entity.ESDatas;
 import org.frameworkset.elasticsearch.template.ESTemplateHelper;
-import org.frameworkset.elasticsearch.template.ESUtil;
+import org.frameworkset.elasticsearch.template.ConfigDSLUtil;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -92,7 +93,8 @@ public class DslTest {
 		params.put("conditions",conditions);
 		params.put("size",1000);
 		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
-		ESUtil esUtil = ESUtil.getInstance("esmapper/dsl.xml");
+		ConfigHolder configHolder = new ConfigHolder();
+		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/dsl.xml");
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
 		//打印解析结果
 		System.out.println(parseResult);
@@ -101,7 +103,8 @@ public class DslTest {
 
 	@Test
 	public void pianduanmlien(){
-		ESUtil esUtil = ESUtil.getInstance("esmapper/sql.xml");
+		ConfigHolder configHolder = new ConfigHolder();
+		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/sql.xml");
 		Map params = new HashMap();
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"sqlPagineQueryUsePianduan",params);
 		//打印解析结果

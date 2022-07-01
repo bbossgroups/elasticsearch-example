@@ -1,7 +1,7 @@
 <properties>
     <property name="testGoodDsl">
         <![CDATA[{ ## 最多返回1000条记录
-            size: #[size],
+            "size": #[size],
             "query": {
                 "bool": {
                     "must": [{
