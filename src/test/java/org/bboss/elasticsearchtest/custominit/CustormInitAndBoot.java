@@ -43,23 +43,25 @@ public class CustormInitAndBoot {
 		 *
 		 */
 		//认证账号和口令配置，如果启用了安全认证才需要，支持xpack和searchguard
-		properties.put("elasticUser","elastic");
-		properties.put("elasticPassword","changeme");
+		properties.put("elasticsearch.serverNames","es233");
+		properties.put("es233.elasticUser","elastic");
+		properties.put("es233.elasticPassword","changeme");
 		//es服务器地址和端口，多个用逗号分隔
-		properties.put("elasticsearch.rest.hostNames","10.13.6.6:9200");
+		properties.put("es233.elasticsearch.rest.hostNames","10.13.6.6:9200");
 		//是否在控制台打印dsl语句，log4j组件日志级别为INFO或者DEBUG
-		properties.put("elasticsearch.showTemplate","true");
+		properties.put("es233.elasticsearch.showTemplate","true");
 		//集群节点自动发现
-		properties.put("elasticsearch.discoverHost","true");
-		properties.put("http.timeoutSocket",60000);
-		properties.put("http.timeoutConnection",40000);
-		properties.put("http.connectionRequestTimeout",70000);
+		properties.put("es233.elasticsearch.discoverHost","true");
+//		properties.put("http.timeoutSocket",60000);
+//		properties.put("http.timeoutConnection",40000);
+//		properties.put("http.connectionRequestTimeout",70000);
 
 		ElasticSearchBoot.boot(properties);
-		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
 		//获取ES版本信息
 		String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
 		System.out.println(result);
+		System.out.println(clientUtil.getClusterSettings());
 	}
 	/**
 	 * 初始化多个Elasticsearch数据源
