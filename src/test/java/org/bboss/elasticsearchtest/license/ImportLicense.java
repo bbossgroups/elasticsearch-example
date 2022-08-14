@@ -33,7 +33,15 @@ public class ImportLicense {
 	public void testLicense(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/license.xml");
 
-		String ttt = clientUtil.executeHttp("_xpack/license?acknowledge=true","license",ClientUtil.HTTP_PUT);
+		/**
+		 * Elasticsearch 6.x ，7.x导入license
+		 */
+//		String ttt = clientUtil.executeHttp("_xpack/license?acknowledge=true","license",ClientUtil.HTTP_PUT);
+		/**
+		 * Elasticsearch 8.x导入license
+		 */
+		String ttt = clientUtil.executeHttp("_license?acknowledge=true","license",ClientUtil.HTTP_PUT);
+
 		System.out.println(ttt);
 //		ttt = clientUtil.createTempate("tracesql_template","traceSQLTemplate");
 	}
