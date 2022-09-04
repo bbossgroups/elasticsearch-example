@@ -718,7 +718,7 @@ public class DocumentCRUD7 {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
 			demo.setAgentStarttime(new Date());
-			demo.setApplicationName("black+catdemo"+i);
+			demo.setApplicationName("blackcatdemo"+i);
 			demo.setContentbody("this is content body"+i);
 			if(i % 2 == 0) {
 				demo.setName("刘德华喜欢唱歌" + i);
@@ -941,23 +941,23 @@ public class DocumentCRUD7 {
 		//        endTime
 		Map<String,Object> params = new HashMap<String,Object>();
 		//设置applicationName1和applicationName2两个变量的值
-		params.put("applicationName1","black+catdemo2");
-		params.put("applicationName2","black+catdemo3");
+		params.put("applicationName1","blackcatdemo2");
+		params.put("applicationName2","blackcatdemo3");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//设置时间范围,时间参数接受long值
 		params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
 		params.put("endTime",new Date());
 		//执行查询，demo为索引表，_search为检索操作action
-		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+		ESDatas<NewDemo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
 				"searchDatas",//esmapper/demo.xml中定义的dsl语句
 				params,//变量参数
-				Demo.class);//返回的文档封装对象类型
+						NewDemo.class);//返回的文档封装对象类型
 
 		long count = clientUtil.count("demo","countDatas",//esmapper/demo.xml中定义的dsl语句
 				params);//变量参数
 		//获取结果对象列表，最多返回1000条记录
-		List<Demo> demos = esDatas.getDatas();
+		List<NewDemo> demos = esDatas.getDatas();
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
 //				"searchDatas",//esmapper/demo.xml中定义的dsl语句
@@ -969,7 +969,7 @@ public class DocumentCRUD7 {
 		System.out.println(totalSize);
 
 		esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
-				clientUtil.searchAll("demo",Demo.class);
+				clientUtil.searchAll("demo",NewDemo.class);
 		totalSize = esDatas.getTotalSize();
 		System.out.println(totalSize);
 

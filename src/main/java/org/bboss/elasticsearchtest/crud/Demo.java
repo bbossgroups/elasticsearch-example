@@ -16,6 +16,7 @@ package org.bboss.elasticsearchtest.crud;/*
 
 
 import com.frameworkset.orm.annotation.ESId;
+import com.frameworkset.orm.annotation.ESMatchedQueries;
 import org.frameworkset.elasticsearch.entity.ESBaseData;
 
 import java.util.Date;
@@ -28,6 +29,8 @@ public class Demo extends ESBaseData {
 	//设定文档标识字段
 	@ESId(readSet = true,persistent = false)
 	private Long demoId;
+	@ESMatchedQueries
+	private String[] testMatchedQueries;
 	private String contentbody;
 	/**  当在mapping定义中指定了日期格式时，则需要指定以下两个注解,例如
 	 *
@@ -108,5 +111,14 @@ public class Demo extends ESBaseData {
 
 	public void setContrastStatus(int contrastStatus) {
 		this.contrastStatus = contrastStatus;
+	}
+
+
+	public String[] getTestMatchedQueries() {
+		return testMatchedQueries;
+	}
+
+	public void setTestMatchedQueries(String[] testMatchedQueries) {
+		this.testMatchedQueries = testMatchedQueries;
 	}
 }

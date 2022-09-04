@@ -160,7 +160,8 @@
                     "filter": [
                         {  ## 多值检索，查找多个应用名称对应的文档记录
                             "terms": {
-                                "applicationName.keyword": [#[applicationName1],#[applicationName2]]
+                                "applicationName.keyword": [#[applicationName1],#[applicationName2]],
+                                "_name": "applicationName_exact_recall"
                             }
                         },
                         {   ## 时间范围检索，返回对应时间范围内的记录，接受long型的值
