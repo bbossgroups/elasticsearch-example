@@ -393,6 +393,31 @@ public class DocumentCRUD7 {
 
 
 	}
+
+	public void testAddAndUpdateDocumentDefault() throws ParseException {
+		//创建创建/修改/获取/删除文档的客户端对象，单实例多线程安全
+		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
+		//构建一个对象，日期类型，字符串类型属性演示
+		NewDemoPersistent demo = new NewDemoPersistent();
+		demo.setDemoId(20l);//文档id，唯一标识，@PrimaryKey注解标示,如果demoId已经存在做修改操作，否则做添加文档操作
+		demo.setAgentStarttime(new Date());
+		demo.setApplicationName("blackcatdemo2");
+		demo.setContentbody("this-is content body2");
+		demo.setName("|刘德华");
+		demo.setOrderId("NFZF15045871807281445364228");
+		demo.setContrastStatus(3);
+
+		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
+
+
+		String response = clientUtil.addDocument("demo",//索引表
+
+				demo,"refresh");
+
+		NewDemoPersistent newDemoPersistent = clientUtil.getDocument("demo","20",NewDemoPersistent.class);
+
+		System.out.println();
+	}
 	public void testAddAndUpdateDocument() throws ParseException {
 		//创建创建/修改/获取/删除文档的客户端对象，单实例多线程安全
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();

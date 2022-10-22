@@ -1,34 +1,47 @@
-package org.bboss.elasticsearchtest.crud;/*
- *  Copyright 2008 biaoping.yin
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+package org.bboss.elasticsearchtest.crud;
+/**
+ * Copyright 2008 biaoping.yin
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 
 import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESMatchedQueries;
-import org.frameworkset.elasticsearch.entity.ESBaseData;
 
 import java.util.Date;
 
 /**
- * 测试实体，可以从ESBaseData对象继承meta属性，检索时会将文档的一下meta属性设置到对象实例中
+ * <p>Description: </p>
+ * <p></p>
+ * <p>Copyright (c) 2018</p>
+ * @Date 2018/7/8 13:41
+ * @author biaoping.yin
+ * @version 1.0
  */
-public class Demo extends ESBaseData {
-	private Object dynamicPriceTemplate;
-	//设定文档标识字段
+public class NewDemoPersistent {
 	@ESId(readSet = true,persistent = true)
 	private Long demoId;
+
+	public Long getDemoId() {
+		return demoId;
+	}
+
+	public void setDemoId(Long demoId) {
+		this.demoId = demoId;
+	}
+
+	private Object dynamicPriceTemplate;
+
 	@ESMatchedQueries
 	private String[] testMatchedQueries;
 	private String contentbody;
@@ -81,13 +94,7 @@ public class Demo extends ESBaseData {
 		this.applicationName = applicationName;
 	}
 
-	public Long getDemoId() {
-		return demoId;
-	}
 
-	public void setDemoId(Long demoId) {
-		this.demoId = demoId;
-	}
 
 	public Object getDynamicPriceTemplate() {
 		return dynamicPriceTemplate;

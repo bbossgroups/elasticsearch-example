@@ -51,7 +51,7 @@ public class TestBulkProcessor7x {
 //		testBulkProcessor.buildLogBulkProcessor();
 		testBulkProcessor.testBulkDatas();
 		
-		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
+//		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
 
 
 	}
@@ -244,14 +244,13 @@ public class TestBulkProcessor7x {
 		TestObject testObject = new TestObject();
 		testObject.setId("1000");
 		testObject.setName("duoduo1000");
-		ClientOptions clientOptions1 = new ClientOptions();
 		clientOptions.setIdField("id");//通过clientOptions指定map中的key为id的字段值作为文档_id，
-		bulkProcessor.insertData("bulkdemo",testObject,clientOptions1);
+		bulkProcessor.insertData("bulkdemo",testObject,clientOptions);
 
 //		deleteclientOptions.setEsRetryOnConflict(1);
 		//.setPipeline("1")
 //		bulkProcessor.deleteDataWithClientOptions("bulkdemo","1",deleteclientOptions);
-		bulkProcessor.deleteData("bulkdemo1","1");//验证error回调方法
+		bulkProcessor.deleteData("bulkdemo","1");//验证error回调方法
 		List<Object> datas = new ArrayList<Object>();
 		for(int i = 6; i < 106; i ++) {
 			data = new HashMap<String,Object>();
@@ -288,13 +287,30 @@ public class TestBulkProcessor7x {
 //				.setDocasupsert(false)
 //				.setReturnSource(true)
 //				.setEsRetryOnConflict(1)
-				.setIdField("id1") //验证exception回调方法
+				.setIdField("id") //验证exception回调方法
 		//elasticsearch7不能同时指定EsRetryOnConflict和IfPrimaryTerm/IfSeqNo
 				//.setVersion(10).setVersionType("internal") elasticsearch 7x必须使用IfPrimaryTerm和IfSeqNo代替version
 //						.setIfPrimaryTerm(2l)
 //				.setIfSeqNo(3l).setPipeline("1")
 		;
 		bulkProcessor.updateData("bulkdemo",data,updateOptions);
+
+
+		data = new HashMap<String,Object>();
+		data.put("id",1000);
+		data.put("script","{\"name\":\"duoduo104\",\"goodsid\":104}");
+		clientOptions = new ClientOptions();
+		clientOptions.setIdField("id");
+		clientOptions.setScriptField("script");
+		bulkProcessor.insertData("bulkdemo",data,clientOptions);
+
+		data = new HashMap<String,Object>();
+		data.put("id",1000);
+		data.put("script","{\"name\":\"updateduoduo104\",\"goodsid\":1104}");
+		clientOptions = new ClientOptions();
+		clientOptions.setIdField("id");
+		clientOptions.setScriptField("script");
+		bulkProcessor.updateData("bulkdemo",data,clientOptions);
 
 	}
 	

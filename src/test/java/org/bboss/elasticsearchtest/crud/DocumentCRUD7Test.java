@@ -205,6 +205,20 @@ public class DocumentCRUD7Test {
 		documentCRUD.testSearchSourceFilter();
 	}
 
+	//测试插入单条文档
+	//现在单步debug功能，整个功能演示完毕
+	@Test
+	public void testSC() throws ParseException {
+		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
+		//删除/创建文档索引表
+		documentCRUD.testCreateIndice();
+
+		//添加/修改单个文档
+		documentCRUD.testAddAndUpdateDocumentDefault();
+
+
+
+	}
 
 	//测试批量插入和查询的性能
 	//现在单步debug功能，整个功能演示完毕
