@@ -156,7 +156,7 @@
     <property name="searchDatas">
         <![CDATA[{
             "query": {
-                "bool": {
+                "bool11": {
                     "filter": [
                         {  ## 多值检索，查找多个应用名称对应的文档记录
                             "terms": {
