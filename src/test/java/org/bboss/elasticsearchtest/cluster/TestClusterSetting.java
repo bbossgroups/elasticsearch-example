@@ -106,9 +106,31 @@ public class TestClusterSetting {
 		clusterSetting.setPersistent(false);
 		clusterSettingList.add(clusterSetting);
 
+        clusterSetting = new ClusterSetting();
+        clusterSetting.setKey("cluster.max_shards_per_node");
+        clusterSetting.setValue(20000);
+        clusterSetting.setPersistent(true);
+        clusterSettingList.add(clusterSetting);
+
 		clientInterface.updateClusterSettings(clusterSettingList);
 		System.out.println(clientInterface.getClusterSettings(false));
 	}
+
+    @Test
+    public void updateClusterSettingsShards(){
+        ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+        List<ClusterSetting> clusterSettingList = new ArrayList<ClusterSetting>();
+
+        ClusterSetting clusterSetting = new ClusterSetting();
+
+        clusterSetting.setKey("cluster.max_shards_per_node");
+        clusterSetting.setValue(20000);
+        clusterSetting.setPersistent(true);
+        clusterSettingList.add(clusterSetting);
+
+        clientInterface.updateClusterSettings(clusterSettingList);
+        System.out.println(clientInterface.getClusterSettings(false));
+    }
 	@Test
 	public void updateUnassigned(){
 		ClientInterface clientInterface =  ElasticSearchHelper.getRestClientUtil();
