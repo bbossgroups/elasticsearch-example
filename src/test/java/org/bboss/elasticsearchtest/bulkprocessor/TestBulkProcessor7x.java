@@ -60,8 +60,12 @@ public class TestBulkProcessor7x {
 		BulkProcessorBuilder bulkProcessorBuilder = new BulkProcessorBuilder();
 		bulkProcessorBuilder.setBlockedWaitTimeout(0)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
-				.setBulkSizes(10)//按批处理数据记录数
-				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，但是有记录，那么强制进行bulk处理
+				.setBulkSizes(10)//按批处理数据记录数，达到BulkSizes对应的值时，执行一次bulk操作
+                //设置批量记录占用内存最大值20M，以字节为单位，达到最大值时，执行一次bulk操作
+                // 可以根据实际情况调整maxMemSize参数，如果不设置maxMemSize，则按照按批处理数据记录数BulkSizes来判别是否执行执行一次bulk操作
+                //maxMemSize参数默认值为0，不起作用，只有>0才起作用
+                .setMaxMemSize(20*1024*1024)
+				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，或者没有满足maxMemSize，但是有记录，那么强制进行bulk处理
 				
 				.setWarnMultsRejects(1000)//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息
 				.setWorkThreads(2)//bulk处理工作线程数
@@ -138,6 +142,9 @@ public class TestBulkProcessor7x {
 		bulkProcessorBuilder.setBlockedWaitTimeout(0)//指定bulk数据缓冲队列已满时后续添加的bulk数据排队等待时间，如果超过指定的时候数据将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
 				.setBulkFailRetry(1)//如果处理失败，重试次数，暂时不起作用
 				.setBulkSizes(10)//按批处理数据记录数
+                //设置批量记录占用内存最大值20M，以字节为单位，达到最大值时，执行一次bulk操作，
+                // 可以根据实际情况调整maxMemSize参数，如果不设置maxMemSize，则按照按批处理数据记录数BulkSizes来判别是否执行执行一次bulk操作
+                .setMaxMemSize(20*1024*1024)
 				.setFlushInterval(5000)//强制bulk操作时间，单位毫秒，如果自上次bulk操作flushInterval毫秒后，数据量没有满足BulkSizes对应的记录数，但是有记录，那么强制进行bulk处理
 
 				.setWarnMultsRejects(1000)//bulk处理操作被每被拒绝WarnMultsRejects次（1000次），在日志文件中输出拒绝告警信息
