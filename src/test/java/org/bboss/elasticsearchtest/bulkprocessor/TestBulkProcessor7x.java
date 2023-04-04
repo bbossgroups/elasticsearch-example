@@ -52,11 +52,11 @@ public class TestBulkProcessor7x {
         //maxMemSize参数默认值为0，不起作用，只有>0才起作用
 		testBulkProcessor.buildBulkProcessor(20*1024*1024);//20M
 
-        testBulkProcessor.buildBulkProcessor(0);//20M
+//        testBulkProcessor.buildBulkProcessor(0);//20M
 //		testBulkProcessor.buildLogBulkProcessor();
 		testBulkProcessor.testBulkDatas();
 		
-//		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
+		testBulkProcessor.shutdown(false);//调用shutDown停止方法后，BulkProcessor不会接收新的请求，但是会处理完所有已经进入bulk队列的数据
 
 
 	}
