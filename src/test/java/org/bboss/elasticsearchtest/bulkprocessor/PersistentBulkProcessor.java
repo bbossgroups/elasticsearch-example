@@ -2,6 +2,7 @@ package org.bboss.elasticsearchtest.bulkprocessor;
 
 import com.frameworkset.common.poolman.BatchHandler;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.util.SQLUtil;
 import com.frameworkset.util.SimpleStringUtil;
 import org.frameworkset.bulk.*;
 import org.frameworkset.util.concurrent.Count;
@@ -28,6 +29,12 @@ public class PersistentBulkProcessor {
         int workThreadQueue = 100;
 		final ConfigSQLExecutor executor = new ConfigSQLExecutor("dbbulktest.xml");//加载sql配置文件，初始化一个db dao组件
 //		DBInit.startDatasource(""); //初始化bboss数据源方法，参考文档：https://doc.bbossgroups.com/#/persistent/PersistenceLayer1
+        SQLUtil.startPool("default",//数据源名称
+                "com.mysql.jdbc.Driver",//oracle驱动
+                "jdbc:mysql://localhost:3306/bboss",//mysql链接串
+                "root","123456",//数据库账号和口令
+                "select 1 " //数据库连接校验sql
+        );
         //定义BulkProcessor批处理组件构建器
 		CommonBulkProcessorBuilder bulkProcessorBuilder = new CommonBulkProcessorBuilder();
         bulkProcessorBuilder.setBlockedWaitTimeout(-1)//指定bulk工作线程缓冲队列已满时后续添加的bulk处理排队等待时间，如果超过指定的时候bulk将被拒绝处理，单位：毫秒，默认为0，不拒绝并一直等待成功为止
@@ -46,7 +53,12 @@ public class PersistentBulkProcessor {
 					 * @param bulkCommand
 					 */
 					public void beforeBulk(CommonBulkCommand bulkCommand) {
-
+                        //查看队列中追加的总记录数
+                        logger.info("appendSize:"+bulkCommand.getAppendRecords());
+                        //查看已经被处理成功的总记录数
+                        logger.info("totalSize:"+bulkCommand.getTotalSize());
+                        //查看处理失败的记录数
+                        logger.info("totalFailedSize:"+bulkCommand.getTotalFailedSize());
                     }
 
 					/**
@@ -58,6 +70,12 @@ public class PersistentBulkProcessor {
                        if(logger.isDebugEnabled()){
 //                           logger.debug(result.getResult());
                        }
+                        //查看队列中追加的总记录数
+                        logger.info("appendSize:"+bulkCommand.getAppendRecords());
+                        //查看已经被处理成功的总记录数
+                        logger.info("totalSize:"+bulkCommand.getTotalSize());
+                        //查看处理失败的记录数
+                        logger.info("totalFailedSize:"+bulkCommand.getTotalFailedSize());
                     }
 
 					/**
@@ -69,6 +87,12 @@ public class PersistentBulkProcessor {
                         if(logger.isErrorEnabled()){
                             logger.error("exceptionBulk",exception);
                         }
+                        //查看队列中追加的总记录数
+                        logger.info("appendSize:"+bulkCommand.getAppendRecords());
+                        //查看已经被处理成功的总记录数
+                        logger.info("totalSize:"+bulkCommand.getTotalSize());
+                        //查看处理失败的记录数
+                        logger.info("totalFailedSize:"+bulkCommand.getTotalFailedSize());
                     }
 
 					/**
@@ -80,6 +104,12 @@ public class PersistentBulkProcessor {
                         if(logger.isWarnEnabled()){
 //                            logger.warn(result);
                         }
+                        //查看队列中追加的总记录数
+                        logger.info("appendSize:"+bulkCommand.getAppendRecords());
+                        //查看已经被处理成功的总记录数
+                        logger.info("totalSize:"+bulkCommand.getTotalSize());
+                        //查看处理失败的记录数
+                        logger.info("totalFailedSize:"+bulkCommand.getTotalFailedSize());
                     }
                 })//添加批量处理执行拦截器，可以通过addBulkInterceptor方法添加多个拦截器
 				/**
