@@ -62,7 +62,9 @@ public class DocumentCRUD7Test {
 		//检索文档
 		documentCRUD.testSearch();
 		//BaseApplicationContext.shutdown();
-
+        documentCRUD.testPitIdSearchAfter();
+        documentCRUD.testMSearch();
+        documentCRUD.testMSearchRestResponse();
 
 	}
 	@Test

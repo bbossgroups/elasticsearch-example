@@ -22,9 +22,9 @@ import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.frameworkset.elasticsearch.client.ClientOptions;
 import org.frameworkset.elasticsearch.client.ClientUtil;
-import org.frameworkset.elasticsearch.entity.ESDatas;
-import org.frameworkset.elasticsearch.entity.IndexField;
-import org.frameworkset.elasticsearch.entity.MetaMap;
+import org.frameworkset.elasticsearch.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,6 +35,7 @@ import java.util.*;
  * for Elasticsearch 7.0 and upper
  */
 public class DocumentCRUD7 {
+    private static Logger logger = LoggerFactory.getLogger(DocumentCRUD7.class);
 	private String mappath = "esmapper/demo7.xml";
 	public static void main(String[] args){
 		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
@@ -730,7 +731,87 @@ public class DocumentCRUD7 {
 		}
 
 	}
-	/**
+    public void testPitIdSearchAfter(){
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo7.xml");
+        //申请pitid
+        PitId pitId = clientUtil.requestPitId("dbdemofull","1m");
+        logger.info("pitId.getId() {}",pitId.getId());
+        Map params = new HashMap();
+        params.put("size",100);
+        params.put("user","admin");
+        String pid = pitId.getId();
+
+        String prePid = null;
+        List<String> pids = new ArrayList<>();
+        pids.add(pid);
+        do {
+
+            params.put("pid",pid);
+            prePid = pid;
+            ESDatas<MetaMap> datas = clientUtil.searchList("/_search", "queryPidSearchAfter", params, MetaMap.class);
+            pid = datas.getPitId();
+            pids.add(pid);
+            List<MetaMap> metaMaps = datas.getDatas();
+            if(metaMaps != null && metaMaps.size() > 0 ){
+                MetaMap metaMap = metaMaps.get(metaMaps.size() - 1);
+                Object[] sort = metaMap.getSort();
+                params.put("timestamp",sort[0]);
+                params.put("_shard_doc",sort[1]);
+            }
+
+            if(metaMaps.size() < 100){
+                //达到最后一页，分页查询结束
+                break;
+            }
+            logger.info("datas.getPitId() {}", pid);
+            // logger.info(clientUtil.deletePitId(prePid));
+
+        }while (true);
+        String pre = null;
+        for(int i =0 ; i < pids.size(); i ++){
+            if(pre == null)
+                pre = pids.get(i);
+            else{
+                logger.info("pre:"+pre + "\r\n" + "now:"+pids.get(i)  + "\r\n" + "now equals pre:"+pre.equals(pids.get(i)) );
+                pre = pids.get(i);
+            }
+            logger.info(clientUtil.deletePitId(pids.get(i)));
+        }
+
+    }
+
+    public void testMSearch(){
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo7.xml");
+
+        Map params = new HashMap();
+        params.put("size",100);
+        params.put("user","admin");
+        List<ESDatas<MetaMap>> esDatas = clientUtil.msearchList("dbdemofull/_msearch","msearchList",params,MetaMap.class);
+        for(int i = 0; esDatas != null && i < esDatas.size(); i ++){
+            ESDatas<MetaMap> esData = esDatas.get(i);
+            List<MetaMap> metaMaps = esData.getDatas();//msearch 中每个search的记录集合
+            logger.info(String.valueOf(metaMaps.size()));
+        }
+
+
+    }
+
+    public void testMSearchRestResponse(){
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo7.xml");
+
+        Map params = new HashMap();
+        params.put("size",100);
+        params.put("user","admin");
+        List<RestResponse> esDatas = clientUtil.msearch("dbdemofull/_msearch","msearchList",params,MetaMap.class);
+        for(int i = 0; esDatas != null && i < esDatas.size(); i ++){
+            RestResponse esData = esDatas.get(i);
+            logger.info(SimpleStringUtil.object2json(esData));
+        }
+
+
+    }
+
+    /**
 	 * 批量导入20002条数据
 	 */
 	public void testBulkAddDocuments() {
@@ -739,7 +820,7 @@ public class DocumentCRUD7 {
 		List<Demo> demos = new ArrayList<Demo>();
 		Demo demo = null;
 		long start = System.currentTimeMillis();
-		for(int i = 0 ; i < 10; i ++) {
+		for(int i = 0 ; i < 1000; i ++) {
 			demo = new Demo();//定义第一个对象
 			demo.setDemoId((long)i);
 			demo.setAgentStarttime(new Date());

@@ -156,7 +156,7 @@
     <property name="searchDatas">
         <![CDATA[{
             "query": {
-                "bool11": {
+                "bool": {
                     "filter": [
                         {  ## 多值检索，查找多个应用名称对应的文档记录
                             "terms": {
@@ -693,5 +693,50 @@
 			}
 		}]]>
     </property>
+
+    <property name="queryPidSearchAfter"><![CDATA[{
+              "size": #[size],
+              "query": {
+                "match" : {
+                    "logOperuser.keyword":#[user]
+                }
+              },
+              "pit": {
+                    "id":  #[pid],
+                    "keep_alive": "1m"
+              },
+              #if($_shard_doc)
+              "search_after": [
+                #[timestamp],
+                 #[_shard_doc]
+              ]
+              ,
+              #end
+              "sort": [
+                {"collecttime": "asc"},
+                {"_shard_doc": "desc"}
+              ]
+            }
+     ]]>
+    </property>
+
+    <property name="msearchList" escapeQuoted="false"><![CDATA[
+    { }
+    #"""{
+      "size": #[size],
+      "query": {
+        "match" : {
+            "logOperuser.keyword":#[user]
+        }
+      },
+      "sort": [
+        {"collecttime": "asc"}
+      ]
+    }"""
+    {"index": "dbdemofull"}
+    {"query" : {"match_all" : {}}}
+     ]]>
+    </property>
+
 
 </properties>
