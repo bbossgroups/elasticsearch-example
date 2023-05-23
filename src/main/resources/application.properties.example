@@ -9,7 +9,7 @@ elasticPassword=changeme
 #Proxy Node
 #elasticsearch.rest.hostNames=192.168.137.1:9206,192.168.137.1:9207
 #elasticsearch.rest.hostNames=192.168.137.1:9200
-elasticsearch.rest.hostNames=10.13.11.5:9201
+elasticsearch.rest.hostNames=localhost:9201
 #如果开启了https协议，则需要在elasticsearch地址中添加https://协议头
 #elasticsearch.rest.hostNames=https://10.180.211.27:9280,https://10.180.211.27:9281,https://10.180.211.27:9282
 elasticsearch.dateFormat=yyyy.MM.dd
