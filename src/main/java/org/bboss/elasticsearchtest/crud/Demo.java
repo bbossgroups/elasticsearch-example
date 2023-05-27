@@ -19,6 +19,7 @@ import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESMatchedQueries;
 import org.frameworkset.elasticsearch.entity.ESBaseData;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -32,6 +33,7 @@ public class Demo extends ESBaseData {
 	@ESMatchedQueries
 	private String[] testMatchedQueries;
 	private String contentbody;
+    private LocalDateTime localDateTime;
 	/**  当在mapping定义中指定了日期格式时，则需要指定以下两个注解,例如
 	 *
 	 "agentStarttime": {
@@ -121,4 +123,12 @@ public class Demo extends ESBaseData {
 	public void setTestMatchedQueries(String[] testMatchedQueries) {
 		this.testMatchedQueries = testMatchedQueries;
 	}
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 }

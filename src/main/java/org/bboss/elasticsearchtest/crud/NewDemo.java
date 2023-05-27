@@ -18,6 +18,7 @@ package org.bboss.elasticsearchtest.crud;
 import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESMatchedQueries;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -29,6 +30,7 @@ import java.util.Date;
  * @version 1.0
  */
 public class NewDemo {
+    private LocalDateTime localDateTime;
 	@ESId(readSet = true)
 	private Long demoId;
 
@@ -128,4 +130,12 @@ public class NewDemo {
 	public void setTestMatchedQueries(String[] testMatchedQueries) {
 		this.testMatchedQueries = testMatchedQueries;
 	}
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 }

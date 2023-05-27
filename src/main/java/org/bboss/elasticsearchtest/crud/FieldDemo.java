@@ -15,6 +15,7 @@ package org.bboss.elasticsearchtest.crud;/*
  */
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -34,7 +35,7 @@ public class FieldDemo  {
 	 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	 @Column(dataformat = "yyyy-MM-dd HH:mm:ss.SSS")
 	 */
-
+    private LocalDateTime localDateTime;
 	protected Date agentStarttime;
 	private String applicationName;
 	private String orderId;
@@ -105,4 +106,12 @@ public class FieldDemo  {
 	public void setContrastStatus(int contrastStatus) {
 		this.contrastStatus = contrastStatus;
 	}
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 }

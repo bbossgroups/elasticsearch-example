@@ -19,6 +19,7 @@ import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESIndex;
 import org.frameworkset.elasticsearch.entity.ESBaseData;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -32,7 +33,16 @@ public class DemoWithES7Index extends ESBaseData {
 	@ESId(readSet = true,persistent = false)
 	private Long demoId;
 	private String contentbody;
-	/**  当在mapping定义中指定了日期格式时，则需要指定以下两个注解,例如
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    /**  当在mapping定义中指定了日期格式时，则需要指定以下两个注解,例如
 	 *
 	 "agentStarttime": {
 	 "type": "date",###指定多个日期格式
@@ -41,7 +51,7 @@ public class DemoWithES7Index extends ESBaseData {
 	 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	 @Column(dataformat = "yyyy-MM-dd HH:mm:ss.SSS")
 	 */
-
+    private LocalDateTime localDateTime;
 	protected Date agentStarttime;
 	private String applicationName;
 	private String orderId;

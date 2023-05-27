@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -71,6 +72,7 @@ public class DocumentCRUD7 {
 
 			demo.setOrderId("NFZF15045871807281445364228");
 			demo.setContrastStatus(2);
+            demo.setLocalDateTime( LocalDateTime.now());
 			demos.add(demo);//添加第一个对象到list中
 		}
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
@@ -139,7 +141,7 @@ public class DocumentCRUD7 {
 			else{
 				demo.setName("张学友不喜欢唱歌" + i);
 			}
-
+            demo.setLocalDateTime( LocalDateTime.now());
 			demo.setOrderId("NFZF15045871807281445364228");
 			demo.setContrastStatus(2);
 			demos.add(demo);//添加第一个对象到list中
@@ -209,7 +211,7 @@ public class DocumentCRUD7 {
 			else{
 				demo.setName("张学友不喜欢唱歌" + i);
 			}
-
+            demo.setLocalDateTime( LocalDateTime.now());
 			demo.setOrderId("NFZF15045871807281445364228");
 			demo.setContrastStatus(2);
 
@@ -305,6 +307,7 @@ public class DocumentCRUD7 {
 		demo.put("name","|刘德华");
 		demo.put("orderId","NFZF15045871807281445364228");
 		demo.put("contrastStatus",2);
+        demo.put("localDateTime", LocalDateTime.now());
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
 		/**
@@ -347,6 +350,7 @@ public class DocumentCRUD7 {
 		demo.put("name","|刘德华");
 		demo.put("orderId","NFZF15045871807281445364228");
 		demo.put("contrastStatus",2);
+        demo.put("localDateTime", LocalDateTime.now());
 		datas.add(demo);
 
 		demo = new LinkedHashMap();
@@ -358,6 +362,7 @@ public class DocumentCRUD7 {
 		demo.put("name","张三");
 		demo.put("orderId","NFZF15045871807281445364228");
 		demo.put("contrastStatus",3);
+        demo.put("localDateTime", LocalDateTime.now());
 		datas.add(demo);
 
 
@@ -370,6 +375,7 @@ public class DocumentCRUD7 {
 		demo.put("name","李四");
 		demo.put("orderId","NFZF15045871807281445364229");
 		demo.put("contrastStatus",4);
+        demo.put("localDateTime", LocalDateTime.now());
 		datas.add(demo);
 
 		//向固定index demo添加或者修改文档,如果demoId已经存在做修改操作，否则做添加文档操作，返回处理结果
@@ -835,10 +841,48 @@ public class DocumentCRUD7 {
 
 			demo.setOrderId("NFZF15045871807281445364228");
 			demo.setContrastStatus(2);
+            demo.setLocalDateTime( LocalDateTime.of(2022,10,20,12,23,30,100000000));
 			demos.add(demo);//添加第一个对象到list中
 		}
+        for(int i = 1000 ; i < 2000; i ++) {
+            demo = new Demo();//定义第一个对象
+            demo.setDemoId((long)i);
+            demo.setAgentStarttime(new Date());
+            demo.setApplicationName("blackcatdemo"+i);
+            demo.setContentbody("this is content body"+i);
+            if(i % 2 == 0) {
+                demo.setName("刘德华喜欢唱歌" + i);
+            }
+            else{
+                demo.setName("张学友不喜欢唱歌" + i);
+            }
+
+            demo.setOrderId("NFZF15045871807281445364228");
+            demo.setContrastStatus(2);
+            demo.setLocalDateTime( LocalDateTime.of(1966,10,20,12,23,30,100000000));
+            demos.add(demo);//添加第一个对象到list中
+        }
+
+        for(int i = 2000 ; i < 3000; i ++) {
+            demo = new Demo();//定义第一个对象
+            demo.setDemoId((long)i);
+            demo.setAgentStarttime(new Date());
+            demo.setApplicationName("blackcatdemo"+i);
+            demo.setContentbody("this is content body"+i);
+            if(i % 2 == 0) {
+                demo.setName("刘德华喜欢唱歌" + i);
+            }
+            else{
+                demo.setName("张学友不喜欢唱歌" + i);
+            }
+
+            demo.setOrderId("NFZF15045871807281445364228");
+            demo.setContrastStatus(2);
+            demo.setLocalDateTime( LocalDateTime.of(2023,10,20,12,23,30,100000000));
+            demos.add(demo);//添加第一个对象到list中
+        }
 		ClientOptions clientOptions = new ClientOptions();
-		clientOptions.setRefreshOption("refresh=false");//为了测试效果,能够实时查看数据，启用强制刷新机制，可是修改为"refresh=true"
+		clientOptions.setRefreshOption("refresh=true");//为了测试效果,能够实时查看数据，启用强制刷新机制，可是修改为"refresh=true"
 		//为了提升性能，并没有把所有响应数据都返回，过滤掉了部分数据，可以自行设置FilterPath进行控制
 		clientOptions.setFilterPath("took,errors,items.*.error");
 		//批量添加或者修改2万个文档，将两个对象添加到索引表demo中，批量添加2万条记录耗时1.8s，
@@ -886,6 +930,7 @@ public class DocumentCRUD7 {
 
 				"3",//文档id
 				Demo.class);
+        System.out.println("addDocuments-------------------------" +count);
 	}
 
 	/**
@@ -912,6 +957,7 @@ public class DocumentCRUD7 {
 
 			demo.setOrderId("NFZF15045871807281445364228");
 			demo.setContrastStatus(2);
+            demo.setLocalDateTime( LocalDateTime.now());
 			demos.add(demo);//添加第一个对象到list中
 		}
 		//通过clientOptions设置相关的控制参数，
@@ -990,6 +1036,7 @@ public class DocumentCRUD7 {
 		demo.setName("刘\n德华bulk update ");
 		demo.setOrderId("NFZF15045871807281445364228");
 		demo.setContrastStatus(2);
+        demo.setLocalDateTime( LocalDateTime.now());
 		demos.add(demo);
 
 		demo = new Demo();
@@ -1000,6 +1047,7 @@ public class DocumentCRUD7 {
 		demo.setName("张学友bulk update ");
 		demo.setOrderId("NFZF15045871807281445364228");
 		demo.setContrastStatus(2);
+        demo.setLocalDateTime( LocalDateTime.now());
 		demos.add(demo);
 
 		//批量修改文档

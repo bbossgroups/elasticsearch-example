@@ -19,6 +19,7 @@ import com.frameworkset.orm.annotation.ESId;
 import com.frameworkset.orm.annotation.ESIndex;
 import org.frameworkset.elasticsearch.entity.ESBaseData;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -42,7 +43,7 @@ public class DemoWithES7IndexUseBatch extends ESBaseData {
 	 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	 @Column(dataformat = "yyyy-MM-dd HH:mm:ss.SSS")
 	 */
-
+    private LocalDateTime localDateTime;
 	protected Date agentStarttime;
 	private String applicationName;
 	private String orderId;
@@ -113,4 +114,12 @@ public class DemoWithES7IndexUseBatch extends ESBaseData {
 	public void setContrastStatus(int contrastStatus) {
 		this.contrastStatus = contrastStatus;
 	}
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 }
