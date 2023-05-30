@@ -322,6 +322,7 @@ public class TestBulkProcessor7x {
 		clientOptions = new ClientOptions();
 		clientOptions.setIdField("id");
 		clientOptions.setScriptField("script");
+        clientOptions.setHaveScriptDoc(false);//默认值false
 		bulkProcessor.updateData("bulkdemo",data,clientOptions);
 
 	}
