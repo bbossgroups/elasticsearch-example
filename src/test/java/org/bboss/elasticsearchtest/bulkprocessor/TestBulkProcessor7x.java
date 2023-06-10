@@ -84,6 +84,7 @@ public class TestBulkProcessor7x {
 					}
 
 					public void afterBulk(BulkCommand bulkCommand, String result) {
+                        List<BulkData> bulkDatas = bulkCommand.getBatchBulkDatas();
 						logger.debug("afterBulk："+result);
 						logger.debug("totalSize:"+bulkCommand.getTotalSize());
 						logger.debug("totalFailedSize:"+bulkCommand.getTotalFailedSize());
@@ -91,9 +92,11 @@ public class TestBulkProcessor7x {
 
 					public void exceptionBulk(BulkCommand bulkCommand, Throwable exception) {
 						logger.error("exceptionBulk：",exception);
+                        List<BulkData> bulkDatas = bulkCommand.getBatchBulkDatas();
 					}
 					public void errorBulk(BulkCommand bulkCommand, String result) {
 						logger.warn("errorBulk："+result);
+                        List<BulkData> bulkDatas = bulkCommand.getBatchBulkDatas();
 					}
 				})
 				//为了提升性能，并没有把所有响应数据都返回，过滤掉了部分数据，可以自行设置FilterPath进行控制
