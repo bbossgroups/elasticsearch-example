@@ -35,7 +35,7 @@ public class TestBulkProcessor7x_Size {
         // 可以根据实际情况调整maxMemSize参数，如果不设置maxMemSize，则按照按批处理数据记录数BulkSizes来判别是否执行执行一次bulk操作
         //maxMemSize参数默认值为0，不起作用，只有>0才起作用
 
-        testBulkProcessor.buildBulkProcessor(0);//禁用maxMemSize参数
+        testBulkProcessor.buildBulkProcessor(0,1000);//禁用maxMemSize参数
 //		testBulkProcessor.buildLogBulkProcessor();
 		testBulkProcessor.testBulkDatas();
 		
