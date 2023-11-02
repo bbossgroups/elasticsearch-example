@@ -207,6 +207,25 @@ public class TestClusterSetting {
 		//获取Elasticsearch集群版本号
 		System.out.println(clientInterface.getElasticsearchVersion());
 
+		System.out.println(clientInterface.getClusterInfo());
+
+		try {
+			System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
+
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+		try {
+			System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
+
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+
 
 	}
 }
