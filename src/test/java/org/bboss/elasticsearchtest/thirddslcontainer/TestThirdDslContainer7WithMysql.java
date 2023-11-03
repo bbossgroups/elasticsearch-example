@@ -61,7 +61,7 @@ public class TestThirdDslContainer7WithMysql {
 		//定义保存dsl的数据源testdslconfig
 		SQLUtil.startPool("testdslconfig",//数据源名称
 				"com.mysql.cj.jdbc.Driver",
-				"jdbc:mysql://192.168.137.1:3306/bboss?useUnicode=true&characterEncoding=utf-8&useSSL=false" ,
+				"jdbc:mysql://192.168.137.1:3306/bboss?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf-8&useSSL=false" ,
 				"root", "123456",
 				null,//"false",
 				null,// "READ_UNCOMMITTED",
