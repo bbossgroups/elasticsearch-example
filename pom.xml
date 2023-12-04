@@ -9,7 +9,7 @@
     </properties>
 
     <groupId>org.bboss.eshelloword</groupId>
-    <artifactId>eshelloword-booter</artifactId>
+    <artifactId>elasticsearch-example</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
