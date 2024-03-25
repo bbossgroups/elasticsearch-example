@@ -231,6 +231,23 @@ public class SQLPagineTest {
 
 	}
 
+    /**
+     * 配置文件中的sql dsl检索,返回Map类型集合，亦可以返回自定义的对象集合
+     */
+    @Test
+    public void sqlLimitQuery(){
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/sql.xml");//初始化一个加载sql配置文件的es客户端接口
+        //设置sql查询的参数
+
+        Map params = new HashMap();
+        params.put("channelId",1);
+//设置sql查询的参数
+        List<Map> json = clientUtil.sql(Map.class,"sqlLimitQuery",params);
+        System.out.println(json);
+       
+
+    }
+
 	/**
 	 * 代码中的sql检索，返回 DocObject类型集合
 	 */
