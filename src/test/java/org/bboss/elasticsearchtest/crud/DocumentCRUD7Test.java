@@ -46,28 +46,38 @@ public class DocumentCRUD7Test {
 //		documentCRUDTest.testC();
 
 		DocumentCRUD7 documentCRUD = new DocumentCRUD7();
-		documentCRUD.testAddAndUpdateMapDocument();
-		documentCRUD.testAddAndUpdateMapDocuments();
-
-        documentCRUD.testAddAndUpdateMapNoPersistentIdDocument();
-        documentCRUD.testAddAndUpdateMapNoPersistentIdDocuments();
-		//删除/创建文档索引表
-		documentCRUD.testCreateIndice();
-		documentCRUD.getIndiceMapping();
-//		//添加/修改单个文档
-//		documentCRUD.testAddAndUpdateDocument();
-//		documentCRUD.testBulkAddDocumentWithESIndex();
-
-//		//批量修改文档
-		documentCRUD.testBulkAddDocuments();
-//		documentCRUD.testBulkAddDocumentsWithESIndex();
-//		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
-		//检索文档
-		documentCRUD.testSearch();
-		//BaseApplicationContext.shutdown();
-        documentCRUD.testPitIdSearchAfter();
-        documentCRUD.testMSearch();
-        documentCRUD.testMSearchRestResponse();
+        while(true) {
+            
+            try {
+                Thread.sleep(1000L);
+                documentCRUD.testAddAndUpdateMapDocument();
+               
+            } catch (Exception e) {
+//                throw new RuntimeException(e);
+                e.printStackTrace();
+            }
+        }
+//		documentCRUD.testAddAndUpdateMapDocuments();
+//
+//        documentCRUD.testAddAndUpdateMapNoPersistentIdDocument();
+//        documentCRUD.testAddAndUpdateMapNoPersistentIdDocuments();
+//		//删除/创建文档索引表
+//		documentCRUD.testCreateIndice();
+//		documentCRUD.getIndiceMapping();
+////		//添加/修改单个文档
+////		documentCRUD.testAddAndUpdateDocument();
+////		documentCRUD.testBulkAddDocumentWithESIndex();
+//
+////		//批量修改文档
+//		documentCRUD.testBulkAddDocuments();
+////		documentCRUD.testBulkAddDocumentsWithESIndex();
+////		documentCRUD.testBulkAddDocumentsWithESIndexUseBatchName();
+//		//检索文档
+//		documentCRUD.testSearch();
+//		//BaseApplicationContext.shutdown();
+//        documentCRUD.testPitIdSearchAfter();
+//        documentCRUD.testMSearch();
+//        documentCRUD.testMSearchRestResponse();
 
 	}
 	@Test
