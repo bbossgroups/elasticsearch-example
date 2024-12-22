@@ -9,9 +9,21 @@
              <Policies>
                  <TimeBasedTriggeringPolicy/>
                  <SizeBasedTriggeringPolicy size="5 MB"/>
-                 <DefaultRolloverStrategy max="5"/>  <!--最多产生多少个日志文件，如果更多，将以前的覆盖-->
+               
              </Policies>
+            <DefaultRolloverStrategy max="5"/>  <!--最多产生多少个日志文件，如果更多，将以前的覆盖-->
        </RollingFile>
+
+      <RollingFile name="bboss.org.apache.velocity" fileName="elasticsearch-example.log"
+                   filePattern="elasticsearch-example-%i.log">
+          <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+          <Policies>
+
+              <SizeBasedTriggeringPolicy size="20 MB"/>
+          </Policies>
+          <DefaultRolloverStrategy max="5"/>  <!--最多产生多少个日志文件，如果更多，将以前的覆盖-->
+      </RollingFile>
+
   </Appenders>
   <Loggers>
 
@@ -19,5 +31,9 @@
         <AppenderRef ref="Console"/>
         <AppenderRef ref="RollingFile"/>
     </Root>
+
+      <Logger name="bboss.org.apache.velocity" level="INFO" additivity="false">
+          <AppenderRef ref="bboss.org.apache.velocity"/>
+      </Logger>
   </Loggers>
 </Configuration>

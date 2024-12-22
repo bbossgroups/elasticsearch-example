@@ -24,6 +24,7 @@ import org.frameworkset.elasticsearch.template.ESTemplateHelper;
 import org.frameworkset.elasticsearch.template.ConfigDSLUtil;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,14 +91,35 @@ public class DslTest {
 		conditions.put("terms",terms);
 
 		Map params = new HashMap();
-		params.put("conditions",conditions);
+		params.put("conditions",conditions);       
+        
 		params.put("size",1000);
+        
+        String strs = "a";
+        List list = new ArrayList();
+        list.add("a");
+        params.put("strs",strs);
+        params.put("list",list);
+        
 		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
 		ConfigHolder configHolder = new ConfigHolder();
 		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/dsl.xml");
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
 		//打印解析结果
 		System.out.println(parseResult);
+
+
+        strs = "";
+        list = new ArrayList();
+        params.put("strs",strs);
+        params.put("list",list);
+
+        //加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
+        configHolder = new ConfigHolder();
+        esUtil = configHolder.getConfigDSLUtil("esmapper/dsl.xml");
+        parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
+        //打印解析结果
+        System.out.println(parseResult);
 
 	}
 

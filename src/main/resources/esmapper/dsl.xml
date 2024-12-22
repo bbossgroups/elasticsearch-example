@@ -9,6 +9,9 @@
                             "cityId": #[cityId]
                         }
                     },
+                    #*
+                    注释内容
+                    *#
                     {
                         "terms": {
                             "titleId": #[titleId,serialJson=true]
@@ -45,9 +48,20 @@
                 "bool": {
                     "must": [
                     #set($needComma = false)
+                    #if($strs)
+                       strs not empty
+                    #end
+                    #if($list)
+                       list not empty
+                    #end
+                    #*
+                    注释内容
+                    *#
                     #foreach($condition in $conditions.entrySet())
                         #foreach($item in $condition.value.entrySet())
-                        #if($needComma), #else #set($needComma = true) #end
+                        $foreach.index
+                        $foreach.count
+                        #if($foreach.index > 0),  #end
                         {
                             "$condition.key": {
                                 "$item.key": #[conditions[$condition.key][$item.key],serialJson=true]

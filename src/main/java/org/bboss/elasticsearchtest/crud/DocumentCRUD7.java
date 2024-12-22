@@ -248,7 +248,7 @@ public class DocumentCRUD7 {
 			}
 			//创建索引表demo
 			clientUtil.createIndiceMapping("demo",//索引表名称
-					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo.xml中定义createDemoIndice
+					"createDemoIndice");//索引表mapping dsl脚本名称，在esmapper/demo7.xml中定义createDemoIndice
 
 			String demoIndice = clientUtil.getIndice("demo");//获取最新建立的索引表结构
 			System.out.println("after createIndiceMapping clientUtil.getIndice(\"demo\") response:"+demoIndice);
@@ -261,7 +261,7 @@ public class DocumentCRUD7 {
 
 	public void updateDemoIndice(){
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
-		//修改索引表demo中type为demo的mapping结构，增加email字段，对应的dsl片段updateDemoIndice定义在esmapper/demo.xml文件中
+		//修改索引表demo中type为demo的mapping结构，增加email字段，对应的dsl片段updateDemoIndice定义在esmapper/demo7.xml文件中
 		String response = clientUtil.executeHttp("demo/_mapping","updateDemoIndice",ClientUtil.HTTP_PUT);
 		System.out.println(response);
 		//获取修改后的索引mapping结构
@@ -273,7 +273,7 @@ public class DocumentCRUD7 {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
 		//创建模板
 		String response = clientUtil.createTempate("demotemplate_1",//模板名称
-				"demoTemplate");//模板对应的脚本名称，在esmapper/demo.xml中配置
+				"demoTemplate");//模板对应的脚本名称，在esmapper/demo7.xml中配置
 		System.out.println("createTempate-------------------------");
 		System.out.println(response);
 		//获取模板
@@ -1217,17 +1217,17 @@ public class DocumentCRUD7 {
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<NewDemo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-				"searchDatas",//esmapper/demo.xml中定义的dsl语句
+				"searchDatas",//esmapper/demo7.xml中定义的dsl语句
 				params,//变量参数
 						NewDemo.class);//返回的文档封装对象类型
 
-		long count = clientUtil.count("demo","countDatas",//esmapper/demo.xml中定义的dsl语句
+		long count = clientUtil.count("demo","countDatas",//esmapper/demo7.xml中定义的dsl语句
 				params);//变量参数
 		//获取结果对象列表，最多返回1000条记录
 		List<NewDemo> demos = esDatas.getDatas();
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
-//				"searchDatas",//esmapper/demo.xml中定义的dsl语句
+//				"searchDatas",//esmapper/demo7.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
@@ -1266,19 +1266,19 @@ public class DocumentCRUD7 {
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-						"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
+						"searchWithCustomEscape",//esmapper/demo7.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
 		//检索单个文档
 		Demo single = clientUtil.searchObject("demo/_search",//demo为索引表，_search为检索操作action
-				"searchWithCustomEscape",//esmapper/demo.xml中定义的dsl语句
+				"searchWithCustomEscape",//esmapper/demo7.xml中定义的dsl语句
 				params,//变量参数
 				Demo.class );
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
-//				"searchDatas",//esmapper/demo.xml中定义的dsl语句
+//				"searchDatas",//esmapper/demo7.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
@@ -1290,7 +1290,7 @@ public class DocumentCRUD7 {
 			//执行查询，demo为索引表，_search为检索操作action
 			esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 					clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-							"searchWithCustomEscapeWithError",//esmapper/demo.xml中定义的dsl语句
+							"searchWithCustomEscapeWithError",//esmapper/demo7.xml中定义的dsl语句
 							params,//变量参数
 							Demo.class);//返回的文档封装对象类型
 			//获取结果对象列表，最多返回1000条记录
@@ -1308,7 +1308,7 @@ public class DocumentCRUD7 {
 	 */
 	public void testSearchSourceFilter() throws ParseException {
 		//创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
-		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo.xml");
+		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/demo7.xml");
 		//设定查询条件,通过map传递变量参数值,key对于dsl中的变量名称
 		//dsl中有四个变量
 		//        applicationName1
@@ -1343,7 +1343,7 @@ public class DocumentCRUD7 {
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-						"searchSourceFilter",//esmapper/demo.xml中定义的dsl语句
+						"searchSourceFilter",//esmapper/demo7.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
 		//获取总记录数
@@ -1356,7 +1356,7 @@ public class DocumentCRUD7 {
 
 		//以下是返回原始检索json报文检索代码
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
-//				"searchSourceFilter",//esmapper/demo.xml中定义的dsl语句
+//				"searchSourceFilter",//esmapper/demo7.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
@@ -1400,7 +1400,7 @@ public class DocumentCRUD7 {
 			//执行查询，demo为索引表，_search为检索操作action
 			 esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 					clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-							"searchPagineDatas",//esmapper/demo.xml中定义的dsl语句
+							"searchPagineDatas",//esmapper/demo7.xml中定义的dsl语句
 							params,//变量参数
 							Demo.class);//返回的文档封装对象类型
 			demos = esDatas.getDatas();//每页结果对象列表，最多返回1000条记录
@@ -1410,7 +1410,7 @@ public class DocumentCRUD7 {
 		}while(true);
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
-//				"searchDatas",//esmapper/demo.xml中定义的dsl语句
+//				"searchDatas",//esmapper/demo7.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
@@ -1446,14 +1446,14 @@ public class DocumentCRUD7 {
 		//执行查询，demo为索引表，_search为检索操作action
 		ESDatas<Demo> esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
 				clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-						"searchDatasArray",//esmapper/demo.xml中定义的dsl语句
+						"searchDatasArray",//esmapper/demo7.xml中定义的dsl语句
 						params,//变量参数
 						Demo.class);//返回的文档封装对象类型
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
 
 //		String json = clientUtil.executeRequest("demo/_search",//demo为索引表，_search为检索操作action
-//				"searchDatas",//esmapper/demo.xml中定义的dsl语句
+//				"searchDatas",//esmapper/demo7.xml中定义的dsl语句
 //				params);
 
 //		String json = com.frameworkset.util.SimpleStringUtil.object2json(demos);
@@ -1483,7 +1483,7 @@ public class DocumentCRUD7 {
 
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/orderQuery.xml");
 		ESDatas<Demo> esDatas =clientUtil.searchList("demo/_search",//demo为索引表，_search为检索操作action
-				"queryOrderList",//esmapper/demo.xml中定义的dsl语句
+				"queryOrderList",//esmapper/demo7.xml中定义的dsl语句
 				Demo.class);
 		//获取结果对象列表，最多返回1000条记录
 		List<Demo> demos = esDatas.getDatas();
