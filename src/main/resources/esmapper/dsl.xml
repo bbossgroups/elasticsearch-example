@@ -58,10 +58,16 @@
                     注释内容
                     *#
                     #foreach($condition in $conditions.entrySet())
+                        out velocityCount:$velocityCount
+                        out foreach.index: $foreach.index
+                        out foreach.count: $foreach.count
+                        out foreach.hasNext: $foreach.hasNext
                         #foreach($item in $condition.value.entrySet())
-                        $foreach.index
-                        $foreach.count
-                        #if($foreach.index > 0),  #end
+                        velocityCount:$velocityCount
+                        foreach.index: $foreach.index
+                        foreach.count: $foreach.count
+                        foreach.hasNext: $foreach.hasNext
+                        #if($foreach.hasNext),  #end
                         {
                             "$condition.key": {
                                 "$item.key": #[conditions[$condition.key][$item.key],serialJson=true]

@@ -16,13 +16,24 @@
             <groupId>com.bbossgroups.plugins</groupId>
             <artifactId>bboss-datatran-jdbc</artifactId>
             <version>7.3.1</version>
-            <!--<exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>-->
+            <!--
+                兼容1.7，需要排除2.5包
+            -->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>bboss-velocity</artifactId>-->
+<!--                    <groupId>com.bbossgroups</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
+        <!--
+                兼容1.7，导入兼容包
+         -->
+<!--        <dependency>-->
+<!--            <groupId>com.bbossgroups.plugins</groupId>-->
+<!--            <artifactId>bboss-elasticsearch-rest-bc</artifactId>-->
+<!--            <version>7.3.1</version>-->
+<!--        </dependency>-->
         <!-- <dependency>
              <groupId>org.apache.logging.log4j</groupId>
              <artifactId>log4j-slf4j-impl</artifactId>
