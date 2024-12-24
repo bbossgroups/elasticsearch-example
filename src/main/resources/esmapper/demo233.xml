@@ -88,7 +88,7 @@
                                 "applicationName.keyword":[
                                 #if($applicationNames && $applicationNames.size() > 0)
                                     #foreach($applicationName in $applicationNames)
-                                         #if($velocityCount > 0),#end "$applicationName"
+                                         #if($foreach.index > 0),#end "$applicationName"
                                     #end
                                 #end
                                 ]

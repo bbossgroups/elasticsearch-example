@@ -58,12 +58,12 @@
                     注释内容
                     *#
                     #foreach($condition in $conditions.entrySet())
-                        out velocityCount:$velocityCount
+                        out foreach.index:$foreach.index
                         out foreach.index: $foreach.index
                         out foreach.count: $foreach.count
                         out foreach.hasNext: $foreach.hasNext
                         #foreach($item in $condition.value.entrySet())
-                        velocityCount:$velocityCount
+                        foreach.index:$foreach.index
                         foreach.index: $foreach.index
                         foreach.count: $foreach.count
                         foreach.hasNext: $foreach.hasNext
