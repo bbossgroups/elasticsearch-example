@@ -61,6 +61,21 @@ public class TestClusterSetting {
 		System.out.println(clientInterface.getClusterSettings());
 	}
 
+    @Test
+    public void diskthresholdEnabledfalse(){
+        ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
+        ClusterSetting clusterSetting = new ClusterSetting();
+        clusterSetting.setKey("cluster.routing.allocation.disk.threshold_enabled");
+        clusterSetting.setValue(false);
+        clusterSetting.setPersistent(true);
+        clientInterface.updateClusterSetting(clusterSetting);
+        System.out.println(clientInterface.getClusterSettings());
+        
+    }
+
+
+
+
 	@Test
 	public void updateClusterSettings(){
 		ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil();
@@ -198,6 +213,8 @@ public class TestClusterSetting {
 		System.out.println(clientInterface.getClusterSettings(false));//获取人工设置的集群配置，看看刚才的修改是否生效
 
 	}
+    
+    
 
 	@Test
 	public void getClusterInfo(){
