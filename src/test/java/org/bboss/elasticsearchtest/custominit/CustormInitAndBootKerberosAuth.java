@@ -72,7 +72,7 @@ public class CustormInitAndBootKerberosAuth {
 		ElasticSearchBoot.boot(properties);
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
 		//获取ES版本信息
-		String result = clientUtil.executeHttp("/333?pretty", ClientInterface.HTTP_GET);
+		String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
 		System.out.println(result);
 		System.out.println(clientUtil.getClusterSettings());
 	}
