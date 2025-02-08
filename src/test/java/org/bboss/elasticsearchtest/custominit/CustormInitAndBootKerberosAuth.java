@@ -67,7 +67,7 @@ public class CustormInitAndBootKerberosAuth {
         properties.put("es233.http.kerberos.doNotPrompt","true");
         properties.put("es233.http.kerberos.isInitiator","true");
         properties.put("es233.http.kerberos.debug","false");
- 
+        properties.put("es233.http.kerberos.loginContextName","Krb5Login");
 
 		ElasticSearchBoot.boot(properties);
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
@@ -97,7 +97,7 @@ public class CustormInitAndBootKerberosAuth {
 //        # kerberos安全认证配置
         properties.put("es233.http.kerberos.krb5Location","C:/environment/es/8.13.2/elasticsearch-8.13.2/config/krb5.conf");
         properties.put("es233.http.kerberos.loginConfig","C:/environment/es/8.13.2/elasticsearch-8.13.2/config/jaas.conf");
-        
+        properties.put("es233.http.kerberos.loginContextName","test");
         properties.put("es233.http.kerberos.debug","true");
 
 
