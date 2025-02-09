@@ -68,6 +68,8 @@ public class CustormInitAndBootKerberosAuth {
         properties.put("es233.http.kerberos.isInitiator","true");
         properties.put("es233.http.kerberos.debug","false");
         properties.put("es233.http.kerberos.loginContextName","Krb5Login");
+        properties.put("es233.http.kerberos.useSubjectCredsOnly","true");
+        
 
 		ElasticSearchBoot.boot(properties);
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
