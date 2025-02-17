@@ -61,12 +61,12 @@ public class CustormInitAndBootKerberosAuth {
         
         //#Krb5 in GSS API needs to be refreshed so it does not throw the error
         //#Specified version of key is not available
-        properties.put("es233.http.kerberos.refreshKrb5Config","true");
+        properties.put("es233.http.kerberos.refreshKrb5Config","false");
         
         properties.put("es233.http.kerberos.storeKey","true");
         properties.put("es233.http.kerberos.doNotPrompt","true");
         properties.put("es233.http.kerberos.isInitiator","true");
-        properties.put("es233.http.kerberos.debug","false");
+        properties.put("es233.http.kerberos.debug","true");
         properties.put("es233.http.kerberos.loginContextName","Krb5Login");
         properties.put("es233.http.kerberos.useSubjectCredsOnly","true");
         
