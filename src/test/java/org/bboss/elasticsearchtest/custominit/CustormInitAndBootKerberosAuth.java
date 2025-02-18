@@ -19,6 +19,8 @@ import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.boot.ElasticSearchBoot;
 import org.frameworkset.elasticsearch.client.ClientInterface;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class CustormInitAndBootKerberosAuth {
+    private static final Logger logger = LoggerFactory.getLogger(CustormInitAndBootKerberosAuth.class);
 	/**
 	 * 初始化一个Elasticsearch数据源
 	 */
@@ -75,8 +78,8 @@ public class CustormInitAndBootKerberosAuth {
 		ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
 		//获取ES版本信息
 		String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
-		System.out.println(result);
-		System.out.println(clientUtil.getClusterSettings());
+        logger.info(result);
+        logger.info(clientUtil.getClusterSettings());
 	}
 
     @Test
@@ -107,8 +110,15 @@ public class CustormInitAndBootKerberosAuth {
         ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("es233");
         //获取ES版本信息
         String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
-        System.out.println(result);
-        System.out.println(clientUtil.getClusterSettings());
+        logger.info(result);
+        logger.info(clientUtil.getClusterSettings());
+        boolean exist = clientUtil.existIndice("xxxxx");
+        
+        logger.info(exist+"");
+
+        String doc = clientUtil.getDocument("xxxxx","1");
+
+        logger.info(doc+"");
     }
 	
 }
