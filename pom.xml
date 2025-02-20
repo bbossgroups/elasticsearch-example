@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.bbossgroups.plugins</groupId>
             <artifactId>bboss-datatran-jdbc</artifactId>
-            <version>7.3.5</version>
+            <version>7.3.6</version>
             <!--
                 兼容Velocity 1.7，需要排除2.5包,如需兼容Velocity 1.7放开注释
             -->
