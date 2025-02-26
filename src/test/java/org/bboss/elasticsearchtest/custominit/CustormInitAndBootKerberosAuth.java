@@ -120,5 +120,65 @@ public class CustormInitAndBootKerberosAuth {
 
         logger.info(doc+"");
     }
+
+    @Test
+    public void testServerrealmKerberos(){
+        Map properties = new HashMap();
+        /**
+         * 配置Elasticsearch数据源参数，这里只设置必须的配置项，更多配置参考文件：
+         * https://gitee.com/bboss/elasticsearchdemo/blob/master/src/main/resources/application.properties
+         */
+        //定义Elasticsearch数据源名称：esDS，后续通过esDS获取对应数据源的客户端API操作和访问Elasticsearch
+        properties.put("elasticsearch.serverNames","esDS");
+        //es服务器地址和端口，多个用逗号分隔
+        properties.put("esDS.elasticsearch.rest.hostNames","192.168.137.1:8200");
+        //是否在控制台打印dsl语句，log4j组件日志级别为INFO或者DEBUG
+        properties.put("esDS.elasticsearch.showTemplate","true");
+        //集群节点自动发现,关闭服务发现机制
+        properties.put("esDS.elasticsearch.discoverHost","false");
+
+        //Kerberos安全认证配置--开始
+        
+        properties.put("esDS.http.kerberos.serverRealmPath","/elasticsearch/serverrealm");//配置华为云Elasticsearch服务端Princpal查询服务地址
+        properties.put("esDS.http.kerberos.useSubjectCredsOnly","false");
+        //华为云Elasticsearch krb5.conf文件，由华为提供
+        properties.put("esDS.http.kerberos.krb5Location","C:/environment/es/8.13.2/elasticsearch-8.13.2/config/krb5.conf");
+        //华为云Elasticsearch jaas.conf文件，由华为提供
+        properties.put("esDS.http.kerberos.loginConfig","C:/environment/es/8.13.2/elasticsearch-8.13.2/config/jaas.conf");
+
+        //配置登录模块名称，与华为云Elasticsearch jaas.conf文件中的模块名称一致
+        properties.put("esDS.http.kerberos.loginContextName","ESClient");
+        
+        //配置是否debug Kerberos认证详细日志
+        properties.put("esDS.http.kerberos.debug","true");
+
+        //Kerberos安全认证配置--结束
+        
+        //启动和初始化Elasticsearch数据源
+        ElasticSearchBoot.boot(properties);
+        
+        //通过Elasticsearch数据源名称esDS获取对应数据源的客户端API，操作和访问Elasticsearch
+        ClientInterface clientInterface = ElasticSearchHelper.getRestClientUtil("esDS");
+        
+        //验证客户端：通过Elasticsearch rest服务获取ES集群信息
+        String result = clientInterface.executeHttp("/?pretty", ClientInterface.HTTP_GET);
+        logger.info(result);
+        
+        //验证客户端：通过API获取ES集群配置参数
+        logger.info(clientInterface.getClusterSettings());
+
+        //验证客户端：通过API判断索引demo是否存在
+        boolean exist = clientInterface.existIndice("demo");
+
+        logger.info(exist+"");
+        //验证客户端：通过API从索引demo获取文档id为1的文档数据（String报文）
+        String doc = clientInterface.getDocument("demo","1");
+
+        logger.info(doc+"");
+
+        //验证客户端：通过API从索引demo获取文档id为1的文档数据（or mapping示例：返回Map结构的数据，亦可以转换为PO对象）
+        Map mapdoc = clientInterface.getDocument("demo","1",Map.class);
+        
+    }
 	
 }
