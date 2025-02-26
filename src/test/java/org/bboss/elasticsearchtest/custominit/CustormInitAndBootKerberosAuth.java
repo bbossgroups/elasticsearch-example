@@ -121,6 +121,9 @@ public class CustormInitAndBootKerberosAuth {
         logger.info(doc+"");
     }
 
+    /**
+     * 华为云Elasticsearch对接案例
+     */
     @Test
     public void testServerrealmKerberos(){
         Map properties = new HashMap();
