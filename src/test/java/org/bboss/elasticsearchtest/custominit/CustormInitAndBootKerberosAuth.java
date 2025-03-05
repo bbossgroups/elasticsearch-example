@@ -118,7 +118,7 @@ public class CustormInitAndBootKerberosAuth {
 
         String doc = clientUtil.getDocument("xxxxx","1");
 
-        logger.info(doc+"");
+        logger.info(doc);
     }
 
     /**
