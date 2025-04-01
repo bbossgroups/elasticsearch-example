@@ -85,6 +85,7 @@ public class TestThirdDslContainer7 {
 			//SQLExecutor.updateWithDBName("gencode","drop table BBOSS_GENCODE");
 
 			SQLExecutor.queryObjectWithDBName(int.class,"testdslconfig", exist);
+            //测试看效果，通过重建表清空数据，也可以通过删除数据，演示达到效果即可（秀一把bboss的持久层功能）
 			logger.info("重建建dslconfig表："+createStatusTableSQL+"。");
 			SQLExecutor.updateWithDBName("testdslconfig","drop table dslconfig");
 			SQLExecutor.updateWithDBName("testdslconfig",createStatusTableSQL);
