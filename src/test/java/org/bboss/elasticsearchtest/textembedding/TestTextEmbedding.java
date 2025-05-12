@@ -24,12 +24,14 @@ import org.junit.Test;
 public class TestTextEmbedding {
     @Test
     public void testEmbedding(){
+        //Elasticsearch KNN search参考文档：https://www.elastic.co/docs/solutions/search/vector/knn#knn-search-filter-example
         TextEmbedding textEmbedding = new TextEmbedding();
         textEmbedding.init();
-//        textEmbedding.testCreateTextEmbeddingIndex();
-//        textEmbedding.bulkdata();
-//        textEmbedding.search();
-//        textEmbedding.search1();
+        textEmbedding.testCreateTextEmbeddingIndex();
+        textEmbedding.bulkdata();
+        textEmbedding.search();
+        textEmbedding.search1();
+        textEmbedding.searchWithFilter();
         textEmbedding.searchWithScore();
     }
     

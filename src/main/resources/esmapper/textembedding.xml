@@ -76,6 +76,25 @@
         }]]>
     </property>
 
+    <property name="searchWithFilter">
+        <![CDATA[{
+           "size":#[size],
+          "knn": {
+            "field": "text_embedding",
+            "query_vector": #[condition,serialJson=true],
+            "k": #[k],
+            "filter": {
+              "term": {
+                "key": #[key]
+              }
+            },
+            "num_candidates": 100,
+            "boost": 0.9
+          } 
+        }]]>
+    </property>
+     
+
      
 
 </properties>

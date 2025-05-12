@@ -146,6 +146,25 @@ public class TextEmbedding {
         logger.info("datas.getDatas():"+ SimpleStringUtil.object2json(datas.getDatas()));
     }
 
+    public void searchWithFilter(){
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
+        Map params = new LinkedHashMap();
+        params.put("condition",text2embedding("bboss"));
+        params.put("k",50);
+        params.put("size",100);
+        params.put("key","bboss");
+        ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","searchWithFilter",params, MetaMap.class);
+        logger.info("datas.getTotalSize():"+datas.getTotalSize());
+//        logger.info("datas.getDatas():"+ SimpleStringUtil.object2json(datas.getDatas()));
+        List<MetaMap> metaMaps = datas.getDatas();
+        for(int i = 0; i < metaMaps.size(); i ++){
+            MetaMap metaMap = metaMaps.get(i);
+            logger.info("score: {}",metaMap.getScore());
+            logger.info("text: {}",metaMap.get("text"));
+
+        }
+    }
+    
     public void searchWithScore(){
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
         Map params = new LinkedHashMap();
