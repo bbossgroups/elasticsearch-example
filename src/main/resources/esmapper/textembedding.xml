@@ -1,0 +1,81 @@
+<properties>
+    <property name="createTextEmbeddingIndex">
+        <![CDATA[
+        {
+          "mappings": {
+            "properties": {
+              "text_embedding": {
+                "type": "dense_vector",
+                "dims": 1024,                        
+                "index": true,
+                "similarity": "cosine"
+              },
+              "text": {
+                "type": "text"
+              },
+              "key": {
+                "type": "keyword"
+              }
+            }
+          }
+        }]]>
+    </property>
+    
+    <property name="search">
+        <![CDATA[
+         
+        {
+          "retriever": {
+            "knn": {
+              "field": "text_embedding",
+              "query_vector": #[condition,serialJson=true],
+              "k": 2,
+              "num_candidates": 5
+            }
+          }
+        }]]>
+    </property>
+
+    <property name="search1">
+        <![CDATA[{
+           "size":#[size],
+          "knn": {
+            "field": "text_embedding",
+            "query_vector": #[condition,serialJson=true],
+            "k": #[k],
+            "num_candidates": 100,
+            "boost": 0.6
+          } 
+        }]]>
+    </property>
+
+    <property name="search1">
+        <![CDATA[{
+           "size":#[size],
+          "knn": {
+            "field": "text_embedding",
+            "query_vector": #[condition,serialJson=true],
+            "k": #[k],
+            "num_candidates": 100,
+            "boost": 0.9
+          } 
+        }]]>
+    </property>
+    
+    <property name="searchWithScore">
+        <![CDATA[{
+           "size":#[size],
+          "knn": {
+            "field": "text_embedding",
+            "query_vector": #[condition,serialJson=true],
+            "k": #[k],
+            "similarity": #[similarity],
+            "num_candidates": 100,
+            "boost": 0.9
+          } 
+        }]]>
+    </property>
+
+     
+
+</properties>

@@ -27,6 +27,8 @@ public class DocumentCRUD7Test {
 		documentCRUD.testAddAndUpdateDocument();
 		//批量添加文档
 		documentCRUD.testBulkAddDocument();
+        //检索文档
+        documentCRUD.testLowlevelSearch();
 		//检索文档
 		documentCRUD.testSearch();
 		//批量修改文档

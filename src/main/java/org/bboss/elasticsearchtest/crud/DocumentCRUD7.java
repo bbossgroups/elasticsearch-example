@@ -1242,6 +1242,40 @@ public class DocumentCRUD7 {
 
 	}
 
+
+    /**
+     * 检索文档
+     * @throws ParseException
+     */
+    public void testLowlevelSearch() throws ParseException {
+        //创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil(mappath);
+        //设定查询条件,通过map传递变量参数值,key对于dsl中的变量名称
+        //dsl中有四个变量
+        //        applicationName1
+        //        applicationName2
+        //        startTime
+        //        endTime
+        Map<String,Object> params = new HashMap<String,Object>();
+        //设置applicationName1和applicationName2两个变量的值
+        params.put("applicationName1","blackcatdemo2");
+        params.put("applicationName2","blackcatdemo3");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //设置时间范围,时间参数接受long值
+        params.put("startTime",dateFormat.parse("2017-09-02 00:00:00"));
+        params.put("endTime",new Date());
+        //执行查询，demo为索引表，_search为检索操作action
+        MapRestResponse esDatas =  //ESDatas包含当前检索的记录集合，最多1000条记录，由dsl中的size属性指定
+                clientUtil.search("demo/_search",//demo为索引表，_search为检索操作action
+                        "searchDatas",//esmapper/demo7.xml中定义的dsl语句
+                        params//变量参数
+                      );//返回的文档封装对象类型
+
+        logger.info("");
+ 
+
+    }
+
 	/**
 	 * 检索文档
 	 * @throws ParseException
