@@ -90,6 +90,7 @@ public class TextEmbedding {
             }
             data.put("text",content);
           
+            //数据向量化处理
             float[] embedding = text2embedding(  content);
             if (embedding != null){
                 data.put("text_embedding", embedding);//设置向量数据
@@ -98,16 +99,21 @@ public class TextEmbedding {
             datas.add(data);
             
         }
-
+        //将向量数据批量写入向量表
         ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil();
         clientUtil.addDocuments("collection-with-embeddings",datas);
         
     }
-    
+
+    /**
+     * 数据向量化处理方法
+     * @param text
+     * @return
+     */
     private float[] text2embedding(String text){
         Map params = new HashMap();
-        params.put("input", text);
-        params.put("model", "custom-bge-large-zh-v1.5");
+        params.put("input", text);//设置将要向量化的数据
+        params.put("model", "custom-bge-large-zh-v1.5");//指定Xinference向量模型id
         //                   {"input": ["\\u5411\\u91cf\\u8f6c\\u6362"], "model": "custom-bge-large-zh-v1.5", "encoding_format": "base64"}
 //                   String params = "{\"input\": [\"\\u5411\\u91cf\\u8f6c\\u6362\"], \"model\": \"custom-bge-large-zh-v1.5\", \"encoding_format\": \"base64\"}";
 //                   Headers({'host': '172.24.176.18:9997', 'accept-encoding': 'gzip, deflate, br', 'connection': 'keep-alive', 
@@ -117,6 +123,7 @@ public class TextEmbedding {
 //                   'authorization': '[secure]', 'x-stainless-async': 'false', 
 //                   'openai-organization': '', 'content-length': '105'})
 
+        //调用向量服务，对数据进行向量化
         XinferenceResponse result = HttpRequestProxy.sendJsonBody("embedding_model", params, "/v1/embeddings", XinferenceResponse.class);
         if (result != null) {
             float[] embedding = result.embedding();
@@ -129,38 +136,64 @@ public class TextEmbedding {
     public void search(){
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
         Map params = new LinkedHashMap();
-        params.put("condition",text2embedding("bboss"));
-        ESDatas<Map> datas = clientUtil.searchList("/collection-with-embeddings/_search","search",params,Map.class);
-        logger.info("datas.getTotalSize():"+datas.getTotalSize());
-        logger.info("datas.getDatas():"+ SimpleStringUtil.object2json(datas.getDatas()));
+        //设置向量查询条件，调用数据向量化方法，将检索文本bboss转化为向量数据，默认最多返回10条数据
+        params.put("condition",text2embedding("bboss"));       
+        //返回MetaMap类型，为LinkHashMap的子类，但是包含索引记录元数据，元数据参考文档:https://esdoc.bbossgroups.com/#/document-crud?id=_62-%e5%b8%a6%e5%85%83%e6%95%b0%e6%8d%ae%e7%9a%84map%e5%af%b9%e8%b1%a1metamap%e4%bd%bf%e7%94%a8
+        ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","search1",params, MetaMap.class);
+        logger.info("datas.getTotalSize():"+datas.getTotalSize());//匹配条件的总记录数
+        List<MetaMap> metaMaps = datas.getDatas();//返回的结果数据
+        for(int i = 0; i < metaMaps.size(); i ++){
+            MetaMap metaMap = metaMaps.get(i);
+            logger.info("score: {}",metaMap.getScore());//相似度分数
+            logger.info("text: {}",metaMap.get("text"));//检索的原始文本
+            logger.info("key: {}",metaMap.get("key"));//检索的key字段值
+
+        }
     }
 
     public void search1(){
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
         Map params = new LinkedHashMap();
+        //设置向量查询条件，调用数据向量化方法，将检索文本bboss转化为向量数据
         params.put("condition",text2embedding("bboss"));
+        //设置返回top k条数据
         params.put("k",50);
+        //设置Elasticsearch query size：最多返回记录数，需大于k参数值
         params.put("size",100);
+        //返回MetaMap类型，为LinkHashMap的子类，但是包含索引记录元数据，元数据参考文档:https://esdoc.bbossgroups.com/#/document-crud?id=_62-%e5%b8%a6%e5%85%83%e6%95%b0%e6%8d%ae%e7%9a%84map%e5%af%b9%e8%b1%a1metamap%e4%bd%bf%e7%94%a8
         ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","search1",params, MetaMap.class);
-        logger.info("datas.getTotalSize():"+datas.getTotalSize());
-        logger.info("datas.getDatas():"+ SimpleStringUtil.object2json(datas.getDatas()));
+        logger.info("datas.getTotalSize():"+datas.getTotalSize());//匹配条件的总记录数
+        List<MetaMap> metaMaps = datas.getDatas();//返回的结果数据
+        for(int i = 0; i < metaMaps.size(); i ++){
+            MetaMap metaMap = metaMaps.get(i);
+            logger.info("score: {}",metaMap.getScore());//相似度分数
+            logger.info("text: {}",metaMap.get("text"));//检索的原始文本
+            logger.info("key: {}",metaMap.get("key"));//检索的key字段值
+
+        }
     }
 
     public void searchWithFilter(){
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
         Map params = new LinkedHashMap();
+        //设置向量查询条件，调用数据向量化方法，将检索文本bboss转化为向量数据
         params.put("condition",text2embedding("bboss"));
+        //设置返回top k条数据
         params.put("k",50);
+        //设置Elasticsearch query size：最多返回记录数，需大于k参数值
         params.put("size",100);
+        //指定向量相似度阈值，不会返回向量检索相似度低于similarity值的记录
+        params.put("similarity",0.5);
+        //设置混合检索条件：指定key字段值条件
         params.put("key","bboss");
         ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","searchWithFilter",params, MetaMap.class);
         logger.info("datas.getTotalSize():"+datas.getTotalSize());
-//        logger.info("datas.getDatas():"+ SimpleStringUtil.object2json(datas.getDatas()));
         List<MetaMap> metaMaps = datas.getDatas();
         for(int i = 0; i < metaMaps.size(); i ++){
             MetaMap metaMap = metaMaps.get(i);
-            logger.info("score: {}",metaMap.getScore());
-            logger.info("text: {}",metaMap.get("text"));
+            logger.info("score: {}",metaMap.getScore());//相似度分数
+            logger.info("text: {}",metaMap.get("text"));//检索的原始文本
+            logger.info("key: {}",metaMap.get("key"));//检索的key字段值
 
         }
     }
@@ -168,10 +201,13 @@ public class TextEmbedding {
     public void searchWithScore(){
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
         Map params = new LinkedHashMap();
+        //设置向量查询条件，调用数据向量化方法，将检索文本bboss转化为向量数据
         params.put("condition",text2embedding("bboss"));
+        //设置返回top k条数据
         params.put("k",50);
+        //设置Elasticsearch query size：最多返回记录数，需大于k参数值
         params.put("size",100);
-
+        //指定向量相似度阈值，不会返回向量检索相似度低于similarity值的记录
         params.put("similarity",0.5);
         ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","searchWithScore",params, MetaMap.class);
         logger.info("datas.getTotalSize():"+datas.getTotalSize());
@@ -179,8 +215,9 @@ public class TextEmbedding {
         List<MetaMap> metaMaps = datas.getDatas();
         for(int i = 0; i < metaMaps.size(); i ++){
             MetaMap metaMap = metaMaps.get(i);
-            logger.info("score: {}",metaMap.getScore());
-            logger.info("text: {}",metaMap.get("text"));
+            logger.info("score: {}",metaMap.getScore());//相似度分数
+            logger.info("text: {}",metaMap.get("text"));//检索的原始文本
+            logger.info("key: {}",metaMap.get("key"));//检索的key字段值
 
         }
     }

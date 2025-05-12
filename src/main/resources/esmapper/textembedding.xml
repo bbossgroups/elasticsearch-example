@@ -36,18 +36,7 @@
         }]]>
     </property>
 
-    <property name="search1">
-        <![CDATA[{
-           "size":#[size],
-          "knn": {
-            "field": "text_embedding",
-            "query_vector": #[condition,serialJson=true],
-            "k": #[k],
-            "num_candidates": 100,
-            "boost": 0.6
-          } 
-        }]]>
-    </property>
+    
 
     <property name="search1">
         <![CDATA[{
@@ -83,6 +72,7 @@
             "field": "text_embedding",
             "query_vector": #[condition,serialJson=true],
             "k": #[k],
+            "similarity": #[similarity],
             "filter": {
               "term": {
                 "key": #[key]
