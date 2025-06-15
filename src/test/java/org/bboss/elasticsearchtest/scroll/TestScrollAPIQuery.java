@@ -14,6 +14,7 @@ package org.bboss.elasticsearchtest.scroll;/*
  *  limitations under the License.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.bboss.elasticsearchtest.crud.DocumentCRUD;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
@@ -23,6 +24,7 @@ import org.frameworkset.elasticsearch.scroll.HandlerInfo;
 import org.frameworkset.elasticsearch.scroll.ParralBreakableScrollHandler;
 import org.frameworkset.elasticsearch.scroll.ScrollHandler;
 import org.frameworkset.elasticsearch.scroll.SerialBreakableScrollHandler;
+import org.frameworkset.util.concurrent.IntegerCount;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,18 +93,24 @@ public class TestScrollAPIQuery {
 		ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/scroll.xml");
 		//scroll分页检索
 		Map params = new HashMap();
-		params.put("size", 5000);//每页5000条记录
+		params.put("size", 1);//每页5000条记录
 		//采用自定义handler函数处理每个scroll的结果集后，response中只会包含总记录数，不会包含记录集合
 		//scroll上下文有效期1分钟
-		ESDatas<Map> response = clientUtil.scroll("demo/_search", "scrollQuery", "1m", params, Map.class, new ScrollHandler<Map>() {
+        IntegerCount integerCount = new IntegerCount();
+		ESDatas<Map> response = clientUtil.scroll("filelogdemo/_search", "scrollQuery", "1m", params, Map.class, new ScrollHandler<Map>() {
 			public void handle(ESDatas<Map> response, HandlerInfo handlerInfo) throws Exception {//自己处理每次scroll的结果
 				List<Map> datas = response.getDatas();
 				long totalSize = response.getTotalSize();
 				System.out.println("totalSize:"+totalSize+",datas.size:"+datas.size());
+                integerCount.increament();
+//                if(StringUtils.isNotEmpty(handlerInfo.getScrollId()))
+                    //clientUtil.deleteScrolls(new String[]{handlerInfo.getScrollId()});
 			}
 		});
 
 		System.out.println("response realzie:"+response.getTotalSize());
+        
+        System.out.println(" integerCount.increament():"+ integerCount.getCountUnSynchronized());
 
 	}
 
