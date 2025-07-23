@@ -18,6 +18,7 @@ package org.bboss.elasticsearchtest.custominit;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.boot.ElasticSearchBoot;
 import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.spi.remote.http.HttpMethodName;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,6 +145,8 @@ public class CustormInitAndBootKerberosAuth {
         
         properties.put("esDS.http.kerberos.serverRealmPath","/elasticsearch/serverrealm");//配置华为云Elasticsearch服务端Princpal查询服务地址
         properties.put("esDS.http.kerberos.useSubjectCredsOnly","false");
+        properties.put("esDS.http.kerberos.serverRealmHttpMethod", HttpMethodName.HTTP_POST);
+        
         //华为云Elasticsearch krb5.conf文件，由华为提供
         properties.put("esDS.http.kerberos.krb5Location","C:/environment/es/8.13.2/elasticsearch-8.13.2/config/krb5.conf");
         //华为云Elasticsearch jaas.conf文件，由华为提供

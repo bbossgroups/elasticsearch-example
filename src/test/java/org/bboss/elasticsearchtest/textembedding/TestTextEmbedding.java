@@ -33,6 +33,15 @@ public class TestTextEmbedding {
         textEmbedding.search1();
         textEmbedding.searchWithFilter();
         textEmbedding.searchWithScore();
+        textEmbedding.searchVectorAndRerank();
+    }
+
+    @Test
+    public void testEmbedding1(){
+        //Elasticsearch KNN search参考文档：https://www.elastic.co/docs/solutions/search/vector/knn#knn-search-filter-example
+        TextEmbedding textEmbedding = new TextEmbedding();
+        textEmbedding.init();
+        textEmbedding.searchVectorAndRerank();
     }
     
    
