@@ -37,7 +37,12 @@ public class TextEmbedding {
     public void testCreateTextEmbeddingIndex(){
         //创建加载配置文件的客户端工具，用来检索文档，单实例多线程安全
         ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/textembedding.xml");
-        clientUtil.dropIndice("collection-with-embeddings");
+        try {
+            clientUtil.dropIndice("collection-with-embeddings");
+        }
+        catch (Exception e){
+            
+        }
         clientUtil.createIndiceMapping("collection-with-embeddings","createTextEmbeddingIndex");
     }
     
@@ -146,10 +151,10 @@ public class TextEmbedding {
         params.put("size",100);
         params.put("k",50);
         //返回MetaMap类型，为LinkHashMap的子类，但是包含索引记录元数据，元数据参考文档:https://esdoc.bbossgroups.com/#/document-crud?id=_62-%e5%b8%a6%e5%85%83%e6%95%b0%e6%8d%ae%e7%9a%84map%e5%af%b9%e8%b1%a1metamap%e4%bd%bf%e7%94%a8
-        ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","search1",params, MetaMap.class);
+        ESDatas<MetaMap> datas = clientUtil.searchList("/collection-with-embeddings/_search","search",params, MetaMap.class);
         logger.info("datas.getTotalSize():"+datas.getTotalSize());//匹配条件的总记录数
         List<MetaMap> metaMaps = datas.getDatas();//返回的结果数据
-        for(int i = 0; i < metaMaps.size(); i ++){
+        for(int i = 0; metaMaps != null && i < metaMaps.size(); i ++){
             MetaMap metaMap = metaMaps.get(i);
             logger.info("score: {}",metaMap.getScore());//相似度分数
             logger.info("text: {}",metaMap.get("text"));//检索的原始文本
@@ -257,7 +262,7 @@ public class TextEmbedding {
         
         //对检索结果进行Rerank处理
         Map rerankParams = new LinkedHashMap();
-        rerankParams.put("model","bge-reranker-base");//指定基于Xinference部署的Rerank模型
+        rerankParams.put("model","bge-reranker-large");//指定基于Xinference部署的Rerank模型
         rerankParams.put("documents",rerankDatas);//根据问题进行向量检索返回的数据
         rerankParams.put("query","bboss介绍");//问题
 
@@ -268,7 +273,7 @@ public class TextEmbedding {
 
 
 //        String requestBody =
-//                "{\"model\": \"bge-reranker-base\", " +
+//                "{\"model\": \"bge-reranker-large\", " +
 //                        "\"documents\": [\"A man is eating food.\",  " +
 //                        "\"A man is eating a piece of bread.\",  " +
 //                        "\"The girl is carrying a baby.\", " +
