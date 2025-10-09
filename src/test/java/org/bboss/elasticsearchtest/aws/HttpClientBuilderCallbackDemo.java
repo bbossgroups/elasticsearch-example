@@ -15,9 +15,11 @@ package org.bboss.elasticsearchtest.aws;
  * limitations under the License.
  */
 
-import org.apache.http.Header;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHeader;
+
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.message.BasicHeader;
+import org.apache.hc.core5.util.TimeValue;
 import org.frameworkset.spi.remote.http.ClientConfiguration;
 import org.frameworkset.spi.remote.http.callback.HttpClientBuilderCallback;
 
@@ -52,7 +54,7 @@ public class HttpClientBuilderCallbackDemo implements HttpClientBuilderCallback 
 		List<Header> headerList = new ArrayList<Header>();
 		Header header = new BasicHeader("test","asdfasdf");
 		builder.setDefaultHeaders(headerList);
-		builder.evictIdleConnections(clientConfiguration.getTimeToLive(), TimeUnit.MILLISECONDS);
+		builder.evictIdleConnections(TimeValue.ofMilliseconds(clientConfiguration.getTimeToLive()));
 		return builder;
 	}
 }

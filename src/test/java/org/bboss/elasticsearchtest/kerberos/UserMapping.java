@@ -1,0 +1,46 @@
+package org.bboss.elasticsearchtest.kerberos;
+/**
+ * Copyright 2025 bboss
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.frameworkset.elasticsearch.ElasticSearchHelper;
+import org.frameworkset.elasticsearch.client.ClientInterface;
+import org.frameworkset.elasticsearch.client.ClientUtil;
+import org.junit.Test;
+
+/**
+ * @author biaoping.yin
+ * @Date 2025/10/9
+ */
+public class UserMapping {
+    @Test
+    public void userMapping(){
+        
+
+        ClientInterface clientUtil = ElasticSearchHelper.getConfigRestClientUtil("esmapper/license.xml");
+
+        /**
+         * Elasticsearch 6.x ，7.x导入license
+         */
+//		String ttt = clientUtil.executeHttp("_xpack/license?acknowledge=true","license",ClientUtil.HTTP_PUT);
+        /**
+         * Elasticsearch 8.x导入license
+         */
+        String ttt = clientUtil.executeHttp("/_security/role_mapping/kerbrolemapping","userMapping", ClientUtil.HTTP_POST);
+
+        System.out.println(ttt);
+    }
+
+}

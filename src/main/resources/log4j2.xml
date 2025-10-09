@@ -27,12 +27,12 @@
   </Appenders>
   <Loggers>
 
-    <Root level="INFO">
+    <Root level="DEBUG">
         <AppenderRef ref="Console"/>
         <AppenderRef ref="RollingFile"/>
     </Root>
 
-      <Logger name="bboss.org.apache.velocity" level="INFO" additivity="false">
+      <Logger name="bboss.org.apache.velocity" level="DEBUG" additivity="false">
           <AppenderRef ref="bboss.org.apache.velocity"/>
       </Logger>
   </Loggers>
