@@ -92,5 +92,21 @@ public class CustormInitAndBoot1 {
         }
        
 	}
+
+    /**
+     * 初始化一个Elasticsearch数据源
+     */
+    @Test
+    public void testSingleESDatasource(){
+ 
+
+        ClientInterface clientUtil = ElasticSearchHelper.getRestClientUtil("ssss");
+         
+// 清除DNS缓存
+       String result = clientUtil.executeHttp("/?pretty", ClientInterface.HTTP_GET);
+
+           
+
+    }
 	 
 }
