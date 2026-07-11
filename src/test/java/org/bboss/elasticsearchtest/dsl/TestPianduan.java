@@ -15,8 +15,8 @@ package org.bboss.elasticsearchtest.dsl;
  * limitations under the License.
  */
 
-import org.frameworkset.elasticsearch.client.ConfigHolder;
 import org.frameworkset.elasticsearch.template.ConfigDSLUtil;
+import org.frameworkset.elasticsearch.template.ConfigHolder;
 import org.frameworkset.elasticsearch.template.ESTemplateHelper;
 import org.junit.Test;
 
@@ -47,7 +47,7 @@ public class TestPianduan {
 		//设置size，最多返回1000条记录
 		params.put("size",1000);
 		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
-		ConfigHolder configHolder = new ConfigHolder();
+		ConfigHolder configHolder = new ConfigHolder("demo");
 		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/outpianduanref.xml");
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"testoutPianduan",params);
 		//打印解析结果
@@ -70,7 +70,7 @@ public class TestPianduan {
 		//设置size，最多返回1000条记录
 		params.put("size",1000);
 		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
-		ConfigHolder configHolder = new ConfigHolder();
+		ConfigHolder configHolder = new ConfigHolder("demo");
 		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/outpianduanref.xml");
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"testinnerPianduan",params);
 		//打印解析结果

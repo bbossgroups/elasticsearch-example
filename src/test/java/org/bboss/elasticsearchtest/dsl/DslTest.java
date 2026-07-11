@@ -18,8 +18,8 @@ package org.bboss.elasticsearchtest.dsl;
 import org.bboss.elasticsearchtest.crud.Demo;
 import org.frameworkset.elasticsearch.ElasticSearchHelper;
 import org.frameworkset.elasticsearch.client.ClientInterface;
-import org.frameworkset.elasticsearch.client.ConfigHolder;
 import org.frameworkset.elasticsearch.entity.ESDatas;
+import org.frameworkset.elasticsearch.template.ConfigHolder;
 import org.frameworkset.elasticsearch.template.ESTemplateHelper;
 import org.frameworkset.elasticsearch.template.ConfigDSLUtil;
 import org.junit.Test;
@@ -102,7 +102,7 @@ public class DslTest {
         params.put("list",list);
         
 		//加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
-		ConfigHolder configHolder = new ConfigHolder();
+		ConfigHolder configHolder = new ConfigHolder("demo");
 		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/dsl.xml");
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
 		//打印解析结果
@@ -115,7 +115,7 @@ public class DslTest {
         params.put("list",list);
 
         //加载配置文件中的dsl信息，解析dsl语句dynamicInnerDsl
-        configHolder = new ConfigHolder();
+        configHolder = new ConfigHolder("demo");
         esUtil = configHolder.getConfigDSLUtil("esmapper/dsl.xml");
         parseResult = ESTemplateHelper.evalTemplate(esUtil,"dynamicInnerDsl",params);
         //打印解析结果
@@ -125,7 +125,7 @@ public class DslTest {
 
 	@Test
 	public void pianduanmlien(){
-		ConfigHolder configHolder = new ConfigHolder();
+		ConfigHolder configHolder = new ConfigHolder("demo");
 		ConfigDSLUtil esUtil = configHolder.getConfigDSLUtil("esmapper/sql.xml");
 		Map params = new HashMap();
 		String parseResult = ESTemplateHelper.evalTemplate(esUtil,"sqlPagineQueryUsePianduan",params);
